@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>UnitCtrl — Technology Information</title>
+<meta name="description" content="See and control the Android phones and tablets at home from your Mac or another phone. No account, no cloud, no ads.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body data-root="../" data-title-key="uc.title">
+
+<a class="banner" href="#beta" data-i18n="banner">UnitCtrl beta is open — join in 3 steps</a>
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../">Technology Information</a>
+    <nav class="links">
+      <a href="./" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="#beta" data-i18n="nav.beta">Join the beta</a>
+    </nav>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="en" lang="en">EN</button>
+      <button data-lang="zh-CN" lang="zh-CN">简</button>
+      <button data-lang="zh-TW" lang="zh-TW">繁</button>
+      <button data-lang="ja" lang="ja">日</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- Screen 1: the Mac lights up, phones slide in, links draw -->
+  <section class="scene uc-hero dark" data-scene>
+    <div class="stick">
+      <div class="copy">
+        <div class="app-id">
+          <img src="../assets/img/unitctrl/icon-256.png" alt="" width="56" height="56">
+          <span data-i18n="uc.name">UnitCtrl</span>
+          <span class="badge" data-i18n="badge.beta">Beta</span>
+        </div>
+        <h1 class="h-1" data-i18n="uc.h">Every Android at home.<br><span class="grad">One window.</span></h1>
+        <p class="lead" data-i18n="uc.lead">See their screens live, click with your mouse, type with your Mac keyboard and hear their sound. No cable once it's set up.</p>
+      </div>
+      <div class="stage">
+        <div class="halo" aria-hidden="true"></div>
+        <div class="laptop">
+          <div class="lid"><div class="screen"><img data-img="unitctrl/mac-apps" alt="UnitCtrl for Mac"></div></div>
+          <div class="base"></div>
+        </div>
+        <svg class="links" viewBox="0 0 100 60" preserveAspectRatio="none" aria-hidden="true">
+          <defs><linearGradient id="lg" x1="0" x2="1"><stop offset="0" stop-color="#2ecbc0"/><stop offset="1" stop-color="#2b6bea"/></linearGradient></defs>
+          <path pathLength="1" d="M 9 27 C 9 12, 22 8, 34 14"/>
+          <path pathLength="1" d="M 91 27 C 91 12, 78 8, 66 14"/>
+        </svg>
+        <div class="phone a"><div class="screen"><img data-img="unitctrl/android-devices" alt="UnitCtrl for Android"></div></div>
+        <div class="phone b"><div class="screen"><img data-img="unitctrl/android-asking" alt=""></div></div>
+      </div>
+      <div class="after">
+        <p class="h-2" data-i18n="uc.after">Your Mac, your phones, your home network.<br><span class="muted">Nothing in between.</span></p>
+        <p style="margin-top:14px"><a class="link-more" href="https://www.youtube.com/watch?v=ALaN3L4hSbw" rel="noopener" data-i18n="video">Watch the 2-minute demo</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Screen 2: nothing gets in without "Allow" -->
+  <section class="scene uc-ask dark" data-scene data-steps="0.12,0.42,0.7">
+    <div class="stick">
+      <div class="ask-grid">
+        <div class="ask-copy">
+          <h2 class="h-1" data-i18n="ask.h">Nothing gets in<br>without your <span class="grad">“Allow”</span>.</h2>
+          <ol class="steps">
+            <li data-step-item="1"><span class="n">1</span><span data-i18n="ask.s1">Pick a device on your Mac.</span></li>
+            <li data-step-item="2"><span class="n">2</span><span data-i18n="ask.s2">The phone asks its owner.</span></li>
+            <li data-step-item="3"><span class="n">3</span><span data-i18n="ask.s3">Only “Allow” lets it in.</span></li>
+          </ol>
+          <div class="chips">
+            <span class="chip" data-i18n="chip.1">Home network only</span>
+            <span class="chip" data-i18n="chip.2">No account</span>
+            <span class="chip" data-i18n="chip.3">No cloud, no servers</span>
+            <span class="chip" data-i18n="chip.4">No microphone or camera</span>
+          </div>
+        </div>
+        <div class="ask-stage">
+          <div class="laptop">
+            <div class="lid"><div class="screen">
+              <img data-img="unitctrl/mac-apps" alt="">
+              <div class="ring r-mac"></div>
+            </div></div>
+            <div class="base"></div>
+          </div>
+          <div class="phone"><div class="screen">
+            <img data-img="unitctrl/android-devices" alt="">
+            <img class="asking" data-img="unitctrl/android-asking" alt="">
+            <div class="ring r-card"></div>
+            <div class="tap tap-allow"></div>
+          </div></div>
+          <div class="beam" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Android controls Android -->
+  <section class="uc-android dark">
+    <div class="wrap and-grid">
+      <div class="and-phone reveal">
+        <div class="phone"><div class="screen">
+          <img data-img="unitctrl/android-devices" alt="" loading="lazy">
+          <div class="tap on" style="left:73%;top:37%"></div>
+        </div></div>
+      </div>
+      <div class="and-copy reveal">
+        <h2 class="h-1" data-i18n="and.h">Android controls Android.</h2>
+        <p class="lead" data-i18n="and.p">Open UnitCtrl on one phone and the others at home are listed as cards. Tap one to see its screen, then tap, swipe and type on it.</p>
+        <p class="lead" data-i18n="and.p2">Handy for helping someone at home, or reaching the old tablet on the shelf.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mac gallery with tabs -->
+  <section class="uc-gallery">
+    <div class="wrap center reveal">
+      <h2 class="h-1" data-i18n="gal.h">Everything about each device,<br>right on your Mac.</h2>
+      <div class="tabs" role="tablist">
+        <button role="tab" data-tab="0" aria-selected="true" data-i18n="gal.t1">Overview</button>
+        <button role="tab" data-tab="1" aria-selected="false" data-i18n="gal.t2">Apps</button>
+        <button role="tab" data-tab="2" aria-selected="false" data-i18n="gal.t3">Photos</button>
+      </div>
+    </div>
+    <div class="gal-stage reveal">
+      <div class="laptop">
+        <div class="lid"><div class="screen">
+          <img class="g on" data-img="unitctrl/mac-overview" alt="" loading="lazy">
+          <img class="g" data-img="unitctrl/mac-apps" alt="" loading="lazy">
+          <img class="g" data-img="unitctrl/mac-photos" alt="" loading="lazy">
+        </div></div>
+        <div class="base"></div>
+      </div>
+      <p class="gal-cap muted">
+        <span class="c on" data-i18n="gal.c1">Screen, apps, storage, network, and when it was used — at a glance.</span>
+        <span class="c" data-i18n="gal.c2">See what's installed. Open, stop, turn off or uninstall an app.</span>
+        <span class="c" data-i18n="gal.c3">Send photos and videos to a phone and watch them arrive.</span>
+      </p>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="uc-feat">
+    <div class="wrap">
+      <h2 class="h-1 center reveal" data-i18n="feat.h">And a few more things.</h2>
+      <div class="tiles">
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg><h3 data-i18n="f1.h">Hear it</h3><p data-i18n="f1.p">Its sound plays on your Mac — only what apps are playing, never the microphone.</p></div>
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><rect x="2.5" y="6" width="19" height="12" rx="2"/><path d="M6 10h1M9 10h1M12 10h1M15 10h1M18 10h0M7 14h10"/></svg><h3 data-i18n="f2.h">Type in any language</h3><p data-i18n="f2.p">Use your Mac keyboard and your usual input method.</p></div>
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><path d="M7 7h11l-3-3M17 17H6l3 3"/></svg><h3 data-i18n="f3.h">Files and text, both ways</h3><p data-i18n="f3.p">Send files and copy text between your Mac and your phones.</p></div>
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></svg><h3 data-i18n="f4.h">From any browser at home</h3><p data-i18n="f4.p">Open an address in any browser at home to send photos and text to a phone.</p></div>
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg><h3 data-i18n="f5.h">Mac folders on the phone</h3><p data-i18n="f5.p">Shared Mac folders show up in apps' “Open file” (read-only).</p></div>
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg><h3 data-i18n="f6.h">You choose each device's role</h3><p data-i18n="f6.p">Control others, be controlled, or both — and start by itself after a restart if you want.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="uc-faq">
+    <div class="wrap narrow">
+      <h2 class="h-1 center reveal" data-i18n="faq.h">Questions.</h2>
+      <details class="reveal"><summary data-i18n="q1">Why does it ask for Accessibility?</summary><p data-i18n="a1"></p></details>
+      <details class="reveal"><summary data-i18n="q2">Do I need an account or the internet?</summary><p data-i18n="a2"></p></details>
+      <details class="reveal"><summary data-i18n="q3">Is it free?</summary><p data-i18n="a3"></p></details>
+      <details class="reveal"><summary data-i18n="q4">What do I need?</summary><p data-i18n="a4"></p></details>
+      <details class="reveal"><summary data-i18n="q5">Can I use it on public Wi-Fi?</summary><p data-i18n="a5"></p></details>
+    </div>
+  </section>
+
+  <!-- Join the beta -->
+  <section class="beta" id="beta">
+    <div class="wrap">
+      <div class="center reveal">
+        <h2 class="h-1" data-i18n="beta.h">Join the beta.</h2>
+        <p class="lead" data-i18n="beta.sub">UnitCtrl for Android is being tested on Google Play. It takes three steps.</p>
+      </div>
+      <div class="cards">
+        <div class="card reveal">
+          <div class="num">1</div>
+          <h3 data-i18n="beta.1h">Join the test group</h3>
+          <p data-i18n="beta.1p">Tap “Join group” — no approval needed.</p>
+          <a class="btn" href="https://groups.google.com/g/unitctrl-testers" rel="noopener" data-i18n="beta.1b">Open the group</a>
+        </div>
+        <div class="card reveal">
+          <div class="num">2</div>
+          <h3 data-i18n="beta.2h">Become a tester</h3>
+          <p data-i18n="beta.2p">Open the test link and tap “Become a tester”.</p>
+          <a class="btn" href="https://play.google.com/apps/testing/app.unitctrl" rel="noopener" data-i18n="beta.2b">Open the test link</a>
+        </div>
+        <div class="card reveal">
+          <div class="num">3</div>
+          <h3 data-i18n="beta.3h">Install from Google Play</h3>
+          <p data-i18n="beta.3p">Use the same Google account, and keep it installed for 14 days. Android 10 or later.</p>
+          <a class="btn" href="https://play.google.com/store/apps/details?id=app.unitctrl" rel="noopener" data-i18n="beta.3b">Open Google Play</a>
+        </div>
+      </div>
+      <p class="note reveal" data-i18n="beta.note">Why it helps: a new app from an individual developer needs 12 testers for 14 days before it can be published. Thank you!</p>
+      <div class="card mac-card reveal">
+        <div class="ico" aria-hidden="true"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><rect x="4" y="5" width="16" height="11" rx="1.5"/><path d="M2 19h20"/></svg></div>
+        <div>
+          <h3 data-i18n="mac.h">On a Mac? No beta needed.</h3>
+          <p data-i18n="mac.p">UnitCtrl for Mac is free. macOS 14 or later.</p>
+        </div>
+        <a class="btn" href="https://github.com/techinfo-apps/UnitCtrl/releases/latest" rel="noopener" data-i18n="btn.mac">Download for Mac</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <a href="https://www.youtube.com/@technologyinformation2008" rel="noopener">YouTube</a>
+    <a href="https://x.com/ChinaSuperBost" rel="noopener">X</a>
+    <a href="https://github.com/zhaoweijia1997/UnitCtrl-Support" rel="noopener" data-i18n="foot.privacy">Privacy</a>
+    <a href="mailto:sublueai@gmail.com"><span data-i18n="foot.contact">Contact</span> · sublueai@gmail.com</a>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<script src="../assets/strings.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>
