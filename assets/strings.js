@@ -106,7 +106,8 @@ window.TI_STRINGS = {
     "home.desc": "Small, lovely apps and games. Free forever. No ads, ever. Your data stays on your own devices.",
     "win.h": "On Windows? No beta needed either.",
     "win.p": "UnitCtrl for Windows is free. Windows 10 (2004 or later) or Windows 11, x64 or ARM64: unzip and run, nothing to install. It isn't code-signed yet: if Windows says it protected your PC, click More info → Run anyway.",
-    "btn.win": "Download for Windows"
+    "btn.win": "Download for Windows",
+    "history": "What's new in each version: <a href=\"https://github.com/techinfo-apps/UnitCtrl/blob/main/CHANGELOG.md\" rel=\"noopener\">version history</a>."
   },
   "zh-CN": {
     "and.h": "安卓控制安卓。",
@@ -213,7 +214,8 @@ window.TI_STRINGS = {
     "home.desc": "只做小而美的软件和小游戏。永远免费，永远没有广告，数据只留在你自己的设备上。",
     "win.h": "用 Windows？也不用内测。",
     "win.p": "Windows 版免费。需要 Windows 10（2004 或更新）或 Windows 11，x64 和 ARM64 都有：解压就能用，不用安装。还没有代码签名：如果提示“Windows 已保护你的电脑”，点“更多信息”→“仍要运行”。",
-    "btn.win": "下载 Windows 版"
+    "btn.win": "下载 Windows 版",
+    "history": "每个版本加了什么，见<a href=\"https://github.com/techinfo-apps/UnitCtrl/blob/main/CHANGELOG.zh-CN.md\" rel=\"noopener\">版本记录</a>。"
   },
   "zh-TW": {
     "and.h": "Android 控制 Android。",
@@ -320,7 +322,8 @@ window.TI_STRINGS = {
     "home.desc": "只做小而美的軟體和小遊戲。永遠免費，永遠沒有廣告，資料只留在你自己的裝置上。",
     "win.h": "用 Windows？也不用內測。",
     "win.p": "Windows 版免費。需要 Windows 10（2004 或更新）或 Windows 11，x64 和 ARM64 都有：解壓縮就能用，不用安裝。還沒有程式碼簽章：如果出現「Windows 已保護您的電腦」，請按「其他資訊」→「仍要執行」。",
-    "btn.win": "下載 Windows 版"
+    "btn.win": "下載 Windows 版",
+    "history": "每個版本加了什麼，見<a href=\"https://github.com/techinfo-apps/UnitCtrl/blob/main/CHANGELOG.zh-TW.md\" rel=\"noopener\">版本紀錄</a>。"
   },
   "ja": {
     "and.h": "Android から Android を。",
@@ -427,7 +430,8 @@ window.TI_STRINGS = {
     "home.desc": "小さくて美しいアプリと小さなゲーム。ずっと無料、ずっと広告なし。データはあなたのデバイスの中だけに。",
     "win.h": "Windows でも、テストは不要です。",
     "win.p": "Windows 版は無料です。Windows 10（2004 以降）または Windows 11、x64 と ARM64 に対応。展開するだけで使え、インストールは不要です。まだコード署名していないため、「Windows によって PC が保護されました」と表示されたら「詳細情報」→「実行」を押してください。",
-    "btn.win": "Windows 版をダウンロード"
+    "btn.win": "Windows 版をダウンロード",
+    "history": "各バージョンの変更点は<a href=\"https://github.com/techinfo-apps/UnitCtrl/blob/main/CHANGELOG.ja.md\" rel=\"noopener\">バージョン履歴</a>にあります。"
   },
   "ko": {
     "story.1": "어떤 무료는<br><span class=\"warn\">당신의 프라이버시</span>로 값을 치릅니다.",
