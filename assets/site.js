@@ -40,8 +40,10 @@
         if (v != null) el.setAttribute(p[0], v);
       });
     });
-    var imgLang = IMG_LANGS.indexOf(lang) >= 0 ? lang : "en";
     document.querySelectorAll("[data-img]").forEach(function (el) {
+      /* an image can list the languages it exists in (data-img-langs); the others show English */
+      var langs = el.hasAttribute("data-img-langs") ? el.getAttribute("data-img-langs").split(",") : IMG_LANGS;
+      var imgLang = langs.indexOf(lang) >= 0 ? lang : "en";
       el.src = root + "assets/img/" + el.getAttribute("data-img") + "-" + imgLang + ".webp";
     });
     var tk = document.body.getAttribute("data-title-key");

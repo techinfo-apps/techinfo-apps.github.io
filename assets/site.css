@@ -363,6 +363,28 @@ details p { margin: 12px 0 0; color: var(--fg-2); }
 .mac-card h3 { margin: 0; }
 @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } .mac-card { grid-template-columns: 1fr; } }
 
+/* ---------- Broomy: its screenshots in a Mac window (they have no title bar of their own) ---------- */
+.mac-window { position: relative; z-index: 1; border-radius: 12px; overflow: hidden; background: #ececec;
+  box-shadow: 0 40px 90px rgba(0,0,0,.45), 0 0 0 1px rgba(255,255,255,.1); }
+.mac-window .bar { height: 26px; display: flex; gap: 8px; align-items: center; padding: 0 12px; background: #e4e4e4;
+  border-bottom: 1px solid rgba(0,0,0,.08); }
+.mac-window .bar i { width: 12px; height: 12px; border-radius: 50%; background: #ff5f57; }
+.mac-window .bar i + i { background: #febc2e; }
+.mac-window .bar i + i + i { background: #28c840; }
+.mac-window .screen { position: relative; aspect-ratio: 780 / 680; background: #ececec; }
+.mac-window .screen img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.sw-stage { position: relative; width: min(760px, 90vw); margin: 56px auto 0; }
+.sw-stage .halo { position: absolute; inset: 6% 0 -4%; border-radius: 50%; z-index: 0; pointer-events: none;
+  background: radial-gradient(closest-side, rgba(46,203,192,.32), rgba(43,107,234,.16) 60%, transparent); filter: blur(28px); }
+.sw-hero { padding: 90px 0 120px; text-align: center; overflow: hidden; }
+.sw-hero .h-1 { font-size: clamp(34px, 5.4vw, 64px); }
+.sw-hero .lead { margin: 18px auto 0; max-width: 760px; }
+.sw-hero .req { margin: 16px 0 0; font-size: 14px; color: var(--fg-2); }
+.sw-gallery .gal-stage { width: min(760px, 92vw); }
+.sw-gallery .tabs { flex-wrap: wrap; justify-content: center; border-radius: 24px; }
+.sw-ico { width: 54px; height: 54px; border-radius: 13px; }
+.showcase .sw-stage { margin-top: 56px; }
+
 /* ---------- footer ---------- */
 .foot { padding: 34px 0 48px; border-top: 1px solid var(--line); font-size: 13px; color: var(--fg-2); }
 .foot .wrap { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: center; }
