@@ -9,7 +9,7 @@
 <link rel="icon" href="../assets/img/favicon-64.png">
 <link rel="stylesheet" href="../assets/site.css">
 </head>
-<body data-root="../" data-title-key="uc.title">
+<body data-root="../" data-title-key="uc.title" data-langs="en,zh-CN,zh-TW,ja">
 
 <a class="banner" href="#beta" data-i18n="banner">UnitCtrl beta is open — join in 3 steps</a>
 
@@ -20,12 +20,15 @@
       <a href="./" data-i18n="nav.unitctrl">UnitCtrl</a>
       <a href="#beta" data-i18n="nav.beta">Join the beta</a>
     </nav>
-    <div class="lang" role="group" aria-label="Language">
-      <button data-lang="en" lang="en">EN</button>
-      <button data-lang="zh-CN" lang="zh-CN">简</button>
-      <button data-lang="zh-TW" lang="zh-TW">繁</button>
-      <button data-lang="ja" lang="ja">日</button>
-    </div>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+      </select>
+    </label>
   </div>
 </header>
 

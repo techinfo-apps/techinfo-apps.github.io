@@ -1,11 +1,15 @@
-/* Technology Information — language switch, scroll scenes, reveal on scroll.
+/* Technology Information — language switch, scroll scenes, reveal on scroll, the coffee dialog.
    No trackers, no cookies. The chosen language is kept in localStorage only (it may be unavailable). */
 (function () {
   "use strict";
 
-  var LANGS = ["en", "zh-CN", "zh-TW", "ja"];
+  var LANGS = ["en", "zh-CN", "zh-TW", "ja", "ko", "es", "fr"];
+  /* Screenshots exist in these; the others show the English ones. */
+  var IMG_LANGS = ["en", "zh-CN", "zh-TW", "ja"];
   var T = window.TI_STRINGS || {};
   var root = document.body.getAttribute("data-root") || "";
+  /* A page can be in fewer languages (data-langs="en,zh-CN,…"): it shows English for the others. */
+  var pageLangs = (document.body.getAttribute("data-langs") || LANGS.join(",")).split(",");
 
   function pickLang() {
     var saved = null;
@@ -16,11 +20,12 @@
     if (want.indexOf("zh") === 0) {
       return /tw|hk|mo|hant/.test(want) ? "zh-TW" : "zh-CN";
     }
-    if (want.indexOf("ja") === 0) return "ja";
-    return "en";
+    var short = want.slice(0, 2);
+    return ["ja", "ko", "es", "fr"].indexOf(short) >= 0 ? short : "en";
   }
 
-  function apply(lang) {
+  function apply(chosen) {
+    var lang = pageLangs.indexOf(chosen) >= 0 ? chosen : "en";
     var dict = T[lang] || T.en || {};
     var en = T.en || {};
     document.documentElement.lang = lang;
@@ -35,22 +40,21 @@
         if (v != null) el.setAttribute(p[0], v);
       });
     });
+    var imgLang = IMG_LANGS.indexOf(lang) >= 0 ? lang : "en";
     document.querySelectorAll("[data-img]").forEach(function (el) {
-      el.src = root + "assets/img/" + el.getAttribute("data-img") + "-" + lang + ".webp";
+      el.src = root + "assets/img/" + el.getAttribute("data-img") + "-" + imgLang + ".webp";
     });
     var tk = document.body.getAttribute("data-title-key");
     var title = tk && (dict[tk] != null ? dict[tk] : en[tk]);
     if (title) document.title = title;
-    document.querySelectorAll(".lang button").forEach(function (b) {
-      b.setAttribute("aria-pressed", b.getAttribute("data-lang") === lang ? "true" : "false");
-    });
+    document.querySelectorAll("select.lang-pick").forEach(function (s) { s.value = lang; });
   }
 
   var current = pickLang();
   apply(current);
-  document.querySelectorAll(".lang button").forEach(function (b) {
-    b.addEventListener("click", function () {
-      current = b.getAttribute("data-lang");
+  document.querySelectorAll("select.lang-pick").forEach(function (s) {
+    s.addEventListener("change", function () {
+      current = s.value;
       try { localStorage.setItem("ti-lang", current); } catch (e) {}
       apply(current);
     });
@@ -69,6 +73,14 @@
     });
   });
 
+  /* “Buy the Developer a Coffee…”: the codes, one click away */
+  document.querySelectorAll("[data-open]").forEach(function (b) {
+    var d = document.getElementById(b.getAttribute("data-open"));
+    if (!d || typeof d.showModal !== "function") return;
+    b.addEventListener("click", function () { d.showModal(); });
+    d.addEventListener("click", function (e) { if (e.target === d) d.close(); });
+  });
+
   var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   /* reveal on scroll */
@@ -85,13 +97,24 @@
   }
 
   /* scroll scenes: --p goes 0..1 while the scene's sticky stage is pinned.
-     data-steps="0.2,0.45,0.7" turns --p into data-step 0..3 for step-by-step scenes. */
+     data-steps="0.2,0.45,0.7" turns --p into data-step 0..3 for step-by-step scenes:
+     [data-step-item] stay on once reached, [data-beat] are on only at their own step (“now”). */
   var scenes = Array.prototype.slice.call(document.querySelectorAll("[data-scene]"));
+  function mark(s, step) {
+    s.setAttribute("data-step", String(step));
+    s.querySelectorAll("[data-step-item]").forEach(function (li) {
+      li.classList.toggle("on", reduce || parseInt(li.getAttribute("data-step-item"), 10) <= step);
+    });
+    s.querySelectorAll("[data-beat]").forEach(function (b) {
+      var i = parseInt(b.getAttribute("data-beat"), 10);
+      b.classList.toggle("now", reduce || i === step);
+      b.classList.toggle("past", !reduce && i < step);
+    });
+  }
   if (reduce) {
     scenes.forEach(function (s) {
       var th = s.getAttribute("data-steps");
-      if (th) s.setAttribute("data-step", String(th.split(",").length));
-      s.querySelectorAll("[data-step-item]").forEach(function (li) { li.classList.add("on"); });
+      mark(s, th ? th.split(",").length : 0);
     });
     return;
   }
@@ -109,12 +132,7 @@
       if (th) {
         var step = 0;
         th.split(",").forEach(function (t) { if (p >= parseFloat(t)) step++; });
-        if (s.getAttribute("data-step") !== String(step)) {
-          s.setAttribute("data-step", String(step));
-          s.querySelectorAll("[data-step-item]").forEach(function (li) {
-            li.classList.toggle("on", parseInt(li.getAttribute("data-step-item"), 10) <= step);
-          });
-        }
+        if (s.getAttribute("data-step") !== String(step)) mark(s, step);
       }
     });
   }
