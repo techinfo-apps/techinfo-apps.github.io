@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AI Ban Simulator — Technology Information</title>
+<meta name="description" content="A little card game about shipping your project before the automatic review ships you. Fully offline, free, no ads.">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../assets/site.css">
+</head>
+<body data-root="../" data-title-key="gm.title" data-langs="en,zh-CN,zh-TW,ja,ko,es,fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../">Technology Information</a>
+    <nav class="links">
+      <a href="../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="./" data-i18n="nav.aiban">AI Ban Simulator</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="sw-hero gm-hero dark">
+    <div class="wrap reveal">
+      <p class="eyebrow grad" data-i18n="games.slogan">A little joy, for everyone.</p>
+      <div class="app-id">
+        <img src="../assets/img/aiban/icon-256.png" alt="" width="56" height="56">
+        <span data-i18n="gm.name">AI Ban Simulator</span>
+        <span class="badge" data-i18n="badge.beta">Beta</span>
+      </div>
+      <h1 class="h-1" data-i18n="gm.h">Ship your project<br><span class="grad">before the review ships you.</span></h1>
+      <p class="lead" data-i18n="gm.lead">One event card a day, two answers.</p>
+      <div class="btns" style="margin-top:30px">
+        <a class="btn" href="#test" data-i18n="btn.test">Join the test</a>
+      </div>
+      <p class="req" data-i18n="gm.req">Free · Android 8 or later</p>
+    </div>
+    <div class="gm-row reveal">
+      <div class="phone l"><div class="screen"><img data-img="aiban/odd" alt="" loading="lazy"></div></div>
+      <div class="phone mid"><div class="screen"><img data-img="aiban/card" alt="AI Ban Simulator" loading="lazy"></div></div>
+      <div class="phone r"><div class="screen"><img data-img="aiban/banned" alt="" loading="lazy"></div></div>
+    </div>
+  </section>
+
+  <!-- A day in the life of an account: a gallery with tabs -->
+  <section class="uc-gallery gm-gallery">
+    <div class="wrap center reveal">
+      <h2 class="h-1" data-i18n="gmg.h">A day in the life<br>of an account.</h2>
+      <div class="tabs" role="tablist">
+        <button role="tab" data-tab="0" aria-selected="true" data-i18n="gmg.t1">Odd things</button>
+        <button role="tab" data-tab="1" aria-selected="false" data-i18n="gmg.t2">Slow network</button>
+        <button role="tab" data-tab="2" aria-selected="false" data-i18n="gmg.t3">People</button>
+        <button role="tab" data-tab="3" aria-selected="false" data-i18n="gmg.t4">Banned</button>
+        <button role="tab" data-tab="4" aria-selected="false" data-i18n="gmg.t5">Human check</button>
+        <button role="tab" data-tab="5" aria-selected="false" data-i18n="gmg.t6">Mystery boxes</button>
+      </div>
+    </div>
+    <div class="gal-stage reveal">
+      <div class="phone">
+        <div class="screen">
+          <img class="g on" data-img="aiban/odd" alt="" loading="lazy">
+          <img class="g" data-img="aiban/timeout" alt="" loading="lazy">
+          <img class="g" data-img="aiban/card" alt="" loading="lazy">
+          <img class="g" data-img="aiban/banned" alt="" loading="lazy">
+          <img class="g" data-img="aiban/verify" alt="" loading="lazy">
+          <img class="g" data-img="aiban/box" alt="" loading="lazy">
+        </div>
+      </div>
+      <p class="gal-cap muted">
+        <span class="c on" data-i18n="gmg.c1"></span>
+        <span class="c" data-i18n="gmg.c2"></span>
+        <span class="c" data-i18n="gmg.c3"></span>
+        <span class="c" data-i18n="gmg.c4"></span>
+        <span class="c" data-i18n="gmg.c5"></span>
+        <span class="c" data-i18n="gmg.c6"></span>
+      </p>
+    </div>
+  </section>
+
+  <!-- What's in it -->
+  <section class="uc-feat">
+    <div class="wrap">
+      <h2 class="h-1 center reveal" data-i18n="gmf.h">What's in it.</h2>
+      <div class="tiles">
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><rect x="5" y="3" width="12" height="16" rx="2"/><path d="M8 21h9a2 2 0 0 0 2-2V7"/><path d="M8 8h6M8 11h6M8 14h3"/></svg><h3 data-i18n="gmf.1h">118 event cards</h3><p data-i18n="gmf.1p"></p></div>
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><circle cx="8" cy="8" r="3"/><circle cx="16" cy="8" r="3"/><path d="M3 20c0-3 2.2-5 5-5s5 2 5 5M11 20c0-3 2.2-5 5-5s5 2 5 5"/></svg><h3 data-i18n="gmf.2h">Four roles, more scenes</h3><p data-i18n="gmf.2p"></p></div>
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M9 3v4M15 3v4"/><path d="M9 14l2 2 4-4"/></svg><h3 data-i18n="gmf.3h">Daily challenge</h3><p data-i18n="gmf.3p"></p></div>
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><h3 data-i18n="gmf.4h">Appeals</h3><p data-i18n="gmf.4p"></p></div>
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><path d="M9 18V6l11-2v12"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg><h3 data-i18n="gmf.5h">8-bit sound</h3><p data-i18n="gmf.5p"></p></div>
+        <div class="tile reveal"><svg viewBox="0 0 24 24"><path d="M2 8.5a15 15 0 0 1 20 0M5.5 12a10 10 0 0 1 13 0M9 15.5a5 5 0 0 1 6 0"/><path d="M12 19h.01"/><path d="M3 3l18 18"/></svg><h3 data-i18n="gmf.6h">Fully offline</h3><p data-i18n="gmf.6p"></p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section class="uc-faq">
+    <div class="wrap narrow">
+      <h2 class="h-1 center reveal" data-i18n="faq.h">Questions.</h2>
+      <details class="reveal"><summary data-i18n="gmq1">Is it free?</summary><p data-i18n="gma1"></p></details>
+      <details class="reveal"><summary data-i18n="gmq2">Is any of it real?</summary><p data-i18n="gma2"></p></details>
+      <details class="reveal"><summary data-i18n="gmq3">Does it collect anything?</summary><p data-i18n="gma3"></p></details>
+      <details class="reveal"><summary data-i18n="gmq4">Which languages?</summary><p data-i18n="gma4"></p></details>
+    </div>
+  </section>
+
+  <!-- Join the test -->
+  <section class="beta" id="test">
+    <div class="wrap">
+      <div class="center reveal">
+        <h2 class="h-1" data-i18n="gmt.h">Join the test.</h2>
+        <p class="lead" data-i18n="gmt.sub">AI Ban Simulator is being tested on Google Play. It takes three steps.</p>
+      </div>
+      <div class="cards">
+        <div class="card reveal">
+          <div class="num">1</div>
+          <h3 data-i18n="gmt.1h">Join the test group</h3>
+          <p data-i18n="gmt.1p"></p>
+          <a class="btn" href="https://groups.google.com/g/ai-ban-simulator-testers" rel="noopener" data-i18n="gmt.1b">Open the group</a>
+        </div>
+        <div class="card reveal">
+          <div class="num">2</div>
+          <h3 data-i18n="gmt.2h">Become a tester</h3>
+          <p data-i18n="gmt.2p"></p>
+          <a class="btn" href="https://play.google.com/apps/testing/com.weijiazhao.bansim" rel="noopener" data-i18n="gmt.2b">Open the test link</a>
+        </div>
+        <div class="card reveal">
+          <div class="num">3</div>
+          <h3 data-i18n="gmt.3h">Install from Google Play</h3>
+          <p data-i18n="gmt.3p"></p>
+        </div>
+      </div>
+      <p class="note reveal" data-i18n="gmt.note">Every tester helps it get published. Thank you!</p>
+    </div>
+  </section>
+
+  <section class="promise dark">
+    <div class="glow" aria-hidden="true"></div>
+    <div class="wrap center reveal">
+      <p class="h-1"><span class="grad" data-i18n="games.slogan">A little joy, for everyone.</span></p>
+      <p class="lead" data-i18n="slogan">Free forever. No ads, ever.</p>
+    </div>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <a href="https://www.youtube.com/@technologyinformation2008" rel="noopener">YouTube</a>
+    <a href="https://x.com/ChinaSuperBost" rel="noopener">X</a>
+    <a href="mailto:sublueai@gmail.com"><span data-i18n="foot.contact">Contact</span> · sublueai@gmail.com</a>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<script src="../assets/strings.js"></script>
+<script src="../assets/site.js"></script>
+</body>
+</html>

@@ -421,3 +421,17 @@ details p { margin: 12px 0 0; color: var(--fg-2); }
   .story .glow { opacity: .4; animation: none; }
   .noise, .rail, .story .cue { display: none; }
 }
+
+/* ---------- Games: their own slogan, then each game on three phones ---------- */
+.games-head { padding: 150px 0 0; }
+.games-head .eyebrow { color: var(--fg-2); }
+.gm-row { display: flex; justify-content: center; align-items: flex-end; gap: clamp(12px, 3vw, 36px); width: min(820px, 92vw); margin: 56px auto 0; }
+.gm-row .phone { width: 28%; }
+.gm-row .phone.mid { width: 33%; }
+.gm-row .phone.l { transform: rotate(-4deg); }
+.gm-row .phone.r { transform: rotate(4deg); }
+.gm-hero .eyebrow { margin-bottom: 18px; }
+.gm-gallery .gal-stage { width: min(340px, 74vw); }
+.gm-gallery .gal-cap { max-width: 520px; margin-left: auto; margin-right: auto; }
+.gm-gallery .tabs { flex-wrap: wrap; justify-content: center; border-radius: 24px; }
+
