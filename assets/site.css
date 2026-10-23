@@ -433,5 +433,8 @@ details p { margin: 12px 0 0; color: var(--fg-2); }
 .gm-hero .eyebrow { margin-bottom: 18px; }
 .gm-gallery .gal-stage { width: min(340px, 74vw); }
 .gm-gallery .gal-cap { max-width: 520px; margin-left: auto; margin-right: auto; }
+/* the captions are of different lengths: stack them in one grid cell so the box is as tall as the longest */
+.gm-gallery .gal-cap { display: grid; }
+.gm-gallery .gal-cap .c { position: static; grid-area: 1 / 1; }
 .gm-gallery .tabs { flex-wrap: wrap; justify-content: center; border-radius: 24px; }
 
