@@ -391,6 +391,10 @@ details p { margin: 12px 0 0; color: var(--fg-2); }
 .foot a { color: var(--fg-2); }
 .foot a:hover { color: var(--fg); }
 .foot .copy { margin-left: auto; }
+.foot .social { display: inline-flex; gap: 4px; margin-left: -6px; }
+.foot .ico { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 8px; color: var(--fg-2); }
+.foot .ico:hover { color: var(--fg); background: var(--line); }
+.foot .ico svg { width: 19px; height: 19px; display: block; }
 
 /* ---------- reveal on scroll ---------- */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity .9s, transform .9s cubic-bezier(.2,.7,.2,1); }
