@@ -14,7 +14,9 @@
     if (l !== "en") q += "&cc_load_policy=1&cc_lang_pref=" + cc;
     if (start) q += "&start=" + start;
     var f = document.createElement("iframe");
-    f.src = "https://www.youtube-nocookie.com/embed/" + box.getAttribute("data-yt") + "?" + q;
+    /* youtube.com, not youtube-nocookie.com: without the visitor's YouTube sign-in the privacy-mode player
+       asks people on shared or office networks to sign in to prove they are not a bot (seen 2026-10-27) */
+    f.src = "https://www.youtube.com/embed/" + box.getAttribute("data-yt") + "?" + q;
     f.title = box.getAttribute("data-title") || "YouTube";
     f.allow = "autoplay; encrypted-media; picture-in-picture; fullscreen";
     f.allowFullscreen = true;
