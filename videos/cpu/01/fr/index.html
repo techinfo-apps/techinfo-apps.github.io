@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Comment 8 interrupteurs additionnent, sans puce ni code — D&#x27;un interrupteur à un processeur #1</title>
+<meta name="description" content="Huit interrupteurs, cinq lampes et aucune puce : à la fin de cette vidéo, vous saurez exactement comment ils additionnent deux nombres. Nous partons d&#x27;un interrupteur et d&#x27;une lampe, construisons les portes AND, OR et NOT, apprenons à compter en binaire, puis assemblons un demi-additionneur, un additionneur complet et un additionneur 4 bits.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/01/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/01/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/01/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/01/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/01/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/01/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/01/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/01/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/01/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Comment 8 interrupteurs additionnent, sans puce ni code — D&#x27;un interrupteur à un processeur #1">
+<meta property="og:description" content="Huit interrupteurs, cinq lampes et aucune puce : à la fin de cette vidéo, vous saurez exactement comment ils additionnent deux nombres. Nous partons d&#x27;un interrupteur et d&#x27;une lampe, construisons les portes AND, OR et NOT, apprenons à compter en binaire, puis assemblons un demi-additionneur, un additionneur complet et un additionneur 4 bits.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/01/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Comment 8 interrupteurs additionnent, sans puce ni code", "description": "Huit interrupteurs, cinq lampes et aucune puce : à la fin de cette vidéo, vous saurez exactement comment ils additionnent deux nombres. Nous partons d'un interrupteur et d'une lampe, construisons les portes AND, OR et NOT, apprenons à compter en binaire, puis assemblons un demi-additionneur, un additionneur complet et un additionneur 4 bits.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp"], "uploadDate": "2026-10-25T22:35:00+08:00", "duration": "PT9M24S", "embedUrl": "https://www.youtube.com/embed/9xtOaLQJl_4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;un interrupteur à un processeur · Épisode 1</p>
+      <h1 class="ep-title">Comment 8 interrupteurs additionnent, sans puce ni code</h1>
+      <div class="vplayer" data-yt="9xtOaLQJl_4" data-title="Comment 8 interrupteurs additionnent, sans puce ni code">
+        <button type="button" class="vplay" aria-label="Lire: Comment 8 interrupteurs additionnent, sans puce ni code">
+          <img src="../../../../assets/img/videos/cpu-01.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/9xtOaLQJl_4" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Huit interrupteurs, cinq lampes et aucune puce : à la fin de cette vidéo, vous saurez exactement comment ils additionnent deux nombres.<br>Nous partons d&#x27;un interrupteur et d&#x27;une lampe, construisons les portes AND, OR et NOT, apprenons à compter en binaire, puis assemblons un demi-additionneur, un additionneur complet et un additionneur 4 bits.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Huit interrupteurs qui additionnent</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=23" data-t="23" rel="noopener"><span class="t">0:23</span>Un interrupteur, c&#x27;est un bit</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>La porte AND</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=123" data-t="123" rel="noopener"><span class="t">2:03</span>La porte OR</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=150" data-t="150" rel="noopener"><span class="t">2:30</span>La porte NOT</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=173" data-t="173" rel="noopener"><span class="t">2:53</span>Des interrupteurs actionnés par l&#x27;électricité</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=235" data-t="235" rel="noopener"><span class="t">3:55</span>Compter avec seulement 0 et 1</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=316" data-t="316" rel="noopener"><span class="t">5:16</span>Additionner deux bits</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=378" data-t="378" rel="noopener"><span class="t">6:18</span>Le XOR et le demi-additionneur</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=418" data-t="418" rel="noopener"><span class="t">6:58</span>L&#x27;additionneur complet</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=466" data-t="466" rel="noopener"><span class="t">7:46</span>Un additionneur 4 bits</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=532" data-t="532" rel="noopener"><span class="t">8:52</span>Récapitulatif et suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Ces huit interrupteurs peuvent additionner deux nombres. Cinq, et trois. Clic, clic, clic, clic... et les lampes affichent huit. Pas de puce. Pas de code. Juste des interrupteurs, et une boîte que nous ouvrirons à la fin. À la fin de cette vidéo, vous saurez exactement ce qu&#x27;il y a dedans.</p>
+        <p>Commençons par le circuit le plus simple qui soit : une pile, un fil, une lampe et un interrupteur. Fermez l&#x27;interrupteur : le courant circule tout autour du circuit et la lampe s&#x27;allume. Nous appellerons cela 1. Ouvrez l&#x27;interrupteur : le courant s&#x27;arrête et la lampe s&#x27;éteint. C&#x27;est le 0. Un interrupteur ne peut dire que deux choses : allumé ou éteint, 1 ou 0. Ce simple oui ou non s&#x27;appelle un bit. C&#x27;est la plus petite information qu&#x27;un ordinateur puisse conserver. Chaque photo, chaque mot, chaque jeu sur un ordinateur est construit avec des bits comme celui-ci.</p>
+        <p>Ajoutons maintenant un deuxième interrupteur, à la suite du premier. Nous les appellerons A et B. Fermez seulement A... rien. Seulement B... toujours rien. Fermez les deux, et la lampe s&#x27;allume. Le courant doit traverser A, puis B. Si l&#x27;un des deux est ouvert, le chemin est coupé. Écrivons les quatre cas dans un tableau. 0 et 0 donne 0. 0 et 1, 0. 1 et 0, 0. 1 et 1 donne 1. Voici une porte AND. La sortie vaut 1 seulement quand A et B valent tous les deux 1.</p>
+        <p>Maintenant, plaçons les deux interrupteurs côte à côte, pour que le courant ait deux chemins vers la lampe. Fermez A, et la lampe s&#x27;allume. Fermez B à la place, et elle s&#x27;allume aussi. Fermez les deux : elle reste allumée. Ce n&#x27;est que lorsque les deux sont ouverts que la lampe s&#x27;éteint. Voici une porte OR : la sortie vaut 1 quand A vaut 1, ou B vaut 1, ou les deux.</p>
+        <p>Encore un. Ce bouton est câblé à l&#x27;envers : il est fermé tant qu&#x27;on n&#x27;appuie pas dessus. Donc la lampe est allumée... appuyez sur le bouton, et la lampe s&#x27;éteint. Voici une porte NOT. Ce qui entre ressort à l&#x27;opposé. Le 1 devient 0, le 0 devient 1.</p>
+        <p>Jusqu&#x27;ici, nous avons actionné ces interrupteurs nous-mêmes. Dans un vrai ordinateur, personne n&#x27;y touche. Les interrupteurs sont actionnés par l&#x27;électricité. Un transistor est un minuscule interrupteur qui se ferme quand un signal arrive sur un troisième fil. Cela change tout. Parce que, désormais, la sortie d&#x27;une porte peut actionner les interrupteurs de la porte suivante. Des portes peuvent commander d&#x27;autres portes. Et cela veut dire qu&#x27;on peut les enchaîner pour former des circuits de plus en plus grands. Pour simplifier les dessins, les ingénieurs donnent à chaque porte son propre symbole. Voici AND, voici OR, et ce petit triangle avec un cercle, c&#x27;est NOT. Une puce moderne contient des milliards de ces interrupteurs, et chacun peut basculer des milliards de fois par seconde. Mais avant de construire quoi que ce soit de grand, il faut savoir compter avec eux.</p>
+        <p>Nous comptons par dizaines. La colonne de droite compte les unités. Quand elle dépasse neuf, elle revient à zéro et ajoute un à la colonne suivante : les dizaines. Ainsi, deux cent cinquante-trois signifie deux centaines, cinq dizaines et trois unités. Imaginez maintenant que vous n&#x27;avez que deux chiffres : zéro et un. C&#x27;est tout ce qu&#x27;un interrupteur peut afficher. Cela fonctionne de la même façon. La colonne de droite compte les unités. Mais elle passe à la colonne suivante après un, et non après neuf. Ainsi, chaque colonne vaut le double de la précédente : un, deux, quatre, huit. Comptons avec quatre lampes. Zéro. Un. Maintenant la première colonne est pleine, donc on fait une retenue : deux s&#x27;écrit 1, 0. Trois s&#x27;écrit 1, 1. Quatre s&#x27;écrit 1, 0, 0. En continuant, quatre lampes peuvent compter de zéro jusqu&#x27;à quinze. Cinq, c&#x27;est quatre plus un : 0, 1, 0, 1. Trois, c&#x27;est deux plus un : 0, 0, 1, 1. C&#x27;est exactement ce que nos interrupteurs affichaient au début. Cela s&#x27;appelle le binaire.</p>
+        <p>Passons à l&#x27;addition. Commençons par la plus petite somme possible : un bit plus un bit. Il n&#x27;y a que quatre cas. Zéro plus zéro égale zéro. Zéro plus un égale un. Un plus zéro égale un. Et un plus un égale deux, ce qui s&#x27;écrit 1, 0 en binaire. On écrit 0, et on retient le 1. Donc toute addition d&#x27;un bit a deux sorties : le bit de somme et le bit de retenue. Regardez la colonne de la retenue : 0, 0, 0, 1. Nous avons déjà vu ce motif. C&#x27;est une porte AND. Et la colonne de la somme : 0, 1, 1, 0. Elle vaut 1 seulement quand les deux entrées sont différentes.</p>
+        <p>Nous n&#x27;avons pas encore de porte pour cela, mais nous pouvons en construire une avec les trois que nous avons. Prenez A OR B. Cela vaut 1 quand au moins une entrée est active. Puis bloquez le cas où les deux sont actives, avec AND et NOT. Le résultat vaut 1 seulement quand les entrées sont différentes. C&#x27;est ce qu&#x27;on appelle le OR exclusif, XOR en abrégé, et il a son propre symbole. Placez un XOR et un AND côte à côte, donnez-leur les mêmes deux bits, et vous obtenez la somme et la retenue. C&#x27;est un demi-additionneur.</p>
+        <p>Pourquoi seulement un demi ? Pensez à la façon dont on additionne de plus grands nombres sur papier. On commence à droite, on additionne la colonne, et on reporte la retenue sur la suivante. Ainsi, chaque colonne après la première a trois nombres à additionner : A, B et la retenue entrante. Un demi-additionneur n&#x27;en prend que deux. Alors on en utilise deux. Le premier demi-additionneur additionne A et B. Le second additionne ce résultat avec la retenue entrante. Si l&#x27;un des deux a produit une retenue, on transmet une retenue. Une porte OR s&#x27;en charge. Deux demi-additionneurs et une porte OR : c&#x27;est un additionneur complet. Trois bits en entrée, une somme et une retenue en sortie.</p>
+        <p>Alignons maintenant quatre additionneurs complets, un par colonne, et relions chaque retenue de sortie à la retenue d&#x27;entrée suivante. Vous vous souvenez de la boîte du début ? Ouvrons-la. Voilà ce qu&#x27;il y avait dedans depuis le début : quatre additionneurs complets alignés. Cinq plus trois, encore une fois. Première colonne : un plus un. Somme 0, retenue 1. La retenue se déplace vers la gauche, comme un témoin dans une course de relais. Zéro plus un, plus la retenue : somme 0, retenue 1. Et encore une fois dans la colonne suivante. Jusqu&#x27;à la dernière colonne : zéro plus zéro plus la retenue donne 1. Les lampes affichent 0, 1, 0, 0, 0. C&#x27;est huit. Les vrais ordinateurs font la même chose avec soixante-quatre colonnes au lieu de quatre. L&#x27;idée ne change pas.</p>
+        <p>Reprenons. Un interrupteur nous a donné un bit. Des interrupteurs à la suite et côte à côte nous ont donné des portes. Des portes qui actionnent des portes nous ont donné un additionneur. Pas une seule fois nous n&#x27;avons quitté le monde de l&#x27;allumé et de l&#x27;éteint. Mais il y a un problème. Il n&#x27;y a aucun signe moins dans ce circuit. Alors comment un ordinateur fait-il une soustraction, ou même stocke-t-il un nombre négatif ? Ce sera l&#x27;objet du prochain épisode. À bientôt.</p>
+        <p>Qu&#x27;y a-t-il dans la boîte ? Quatre petits additionneurs, qui se passent une retenue de droite à gauche. Tout ordinateur additionne ainsi. L&#x27;histoire complète commence avec un seul interrupteur.</p>
+        <p>Quatre lampes peuvent compter jusqu&#x27;à quinze. Voici comment. C&#x27;est le binaire, et c&#x27;est ainsi que tout ordinateur compte.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : les nombres négatifs, et comment le même additionneur apprend à soustraire.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg next" href="../../02/fr/"><span>Suivant · Épisode 2</span><b>Pourquoi 6 + 3 = −7 ? Nombres négatifs et soustraction</b></a></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>스위치 8개로 두 수를 더하는 방법 (칩도 코드도 없이) — 스위치 하나에서 CPU까지 #1</title>
+<meta name="description" content="스위치 여덟 개, 전구 다섯 개, 칩은 하나도 없어요. 이 영상이 끝날 때쯤이면 이것들이 두 수를 어떻게 더하는지 정확히 알게 될 거예요. 스위치 하나와 전구 하나에서 시작해서 AND, OR, NOT 게이트를 만들고, 이진법으로 세는 법을 배운 다음, 반가산기, 전가산기, 4비트 가산기를 만들어요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/01/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/01/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/01/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/01/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/01/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/01/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/01/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/01/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/01/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="스위치 8개로 두 수를 더하는 방법 (칩도 코드도 없이) — 스위치 하나에서 CPU까지 #1">
+<meta property="og:description" content="스위치 여덟 개, 전구 다섯 개, 칩은 하나도 없어요. 이 영상이 끝날 때쯤이면 이것들이 두 수를 어떻게 더하는지 정확히 알게 될 거예요. 스위치 하나와 전구 하나에서 시작해서 AND, OR, NOT 게이트를 만들고, 이진법으로 세는 법을 배운 다음, 반가산기, 전가산기, 4비트 가산기를 만들어요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/01/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "스위치 8개로 두 수를 더하는 방법 (칩도 코드도 없이)", "description": "스위치 여덟 개, 전구 다섯 개, 칩은 하나도 없어요. 이 영상이 끝날 때쯤이면 이것들이 두 수를 어떻게 더하는지 정확히 알게 될 거예요. 스위치 하나와 전구 하나에서 시작해서 AND, OR, NOT 게이트를 만들고, 이진법으로 세는 법을 배운 다음, 반가산기, 전가산기, 4비트 가산기를 만들어요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp"], "uploadDate": "2026-10-25T22:35:00+08:00", "duration": "PT9M24S", "embedUrl": "https://www.youtube.com/embed/9xtOaLQJl_4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 1편</p>
+      <h1 class="ep-title">스위치 8개로 두 수를 더하는 방법 (칩도 코드도 없이)</h1>
+      <div class="vplayer" data-yt="9xtOaLQJl_4" data-title="스위치 8개로 두 수를 더하는 방법 (칩도 코드도 없이)">
+        <button type="button" class="vplay" aria-label="재생: 스위치 8개로 두 수를 더하는 방법 (칩도 코드도 없이)">
+          <img src="../../../../assets/img/videos/cpu-01.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/9xtOaLQJl_4" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">스위치 여덟 개, 전구 다섯 개, 칩은 하나도 없어요. 이 영상이 끝날 때쯤이면 이것들이 두 수를 어떻게 더하는지 정확히 알게 될 거예요.<br>스위치 하나와 전구 하나에서 시작해서 AND, OR, NOT 게이트를 만들고, 이진법으로 세는 법을 배운 다음, 반가산기, 전가산기, 4비트 가산기를 만들어요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>덧셈하는 스위치 여덟 개</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=23" data-t="23" rel="noopener"><span class="t">0:23</span>스위치 하나가 비트 하나</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>AND 게이트</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=123" data-t="123" rel="noopener"><span class="t">2:03</span>OR 게이트</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=150" data-t="150" rel="noopener"><span class="t">2:30</span>NOT 게이트</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=173" data-t="173" rel="noopener"><span class="t">2:53</span>전기로 움직이는 스위치</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=235" data-t="235" rel="noopener"><span class="t">3:55</span>0과 1만으로 세기</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=316" data-t="316" rel="noopener"><span class="t">5:16</span>두 비트 더하기</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=378" data-t="378" rel="noopener"><span class="t">6:18</span>XOR와 반가산기</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=418" data-t="418" rel="noopener"><span class="t">6:58</span>전가산기</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=466" data-t="466" rel="noopener"><span class="t">7:46</span>4비트 가산기</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=532" data-t="532" rel="noopener"><span class="t">8:52</span>정리와 다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>이 스위치 여덟 개로 두 수를 더할 수 있어요. 5와 3. 딸깍, 딸깍, 딸깍, 딸깍… 그러면 불빛이 8을 보여 줘요. 칩도, 코드도 없어요. 스위치만 있고, 마지막에 열어 볼 상자가 하나 있어요. 이 영상이 끝날 때쯤이면, 그 안에 뭐가 들어 있는지 정확히 알게 될 거예요.</p>
+        <p>가장 간단한 회로부터 시작해 볼게요. 건전지, 전선, 전구, 그리고 스위치예요. 스위치를 닫으면 전류가 한 바퀴 쭉 흘러서 전구가 켜져요. 이걸 1이라고 부를게요. 스위치를 열면 흐름이 멈추고 전구가 꺼져요. 이게 0이에요. 스위치 하나가 말할 수 있는 건 두 가지뿐이에요. 켜짐 아니면 꺼짐, 1 아니면 0이요. 이 하나의 &#x27;예, 아니요&#x27;를 비트라고 해요. 컴퓨터가 담을 수 있는 가장 작은 정보 조각이에요. 컴퓨터 속의 모든 사진, 모든 글자, 모든 게임이 이런 비트로 만들어져 있어요.</p>
+        <p>이제 두 번째 스위치를 첫 번째 스위치와 한 줄로 이어 볼게요. 이름은 A와 B라고 할게요. A만 닫으면… 아무 일도 없어요. B만 닫아도… 역시 아무 일도 없어요. 둘 다 닫으면 전구가 켜져요. 전류는 A를 지나고 나서 B도 지나가야 해요. 둘 중 하나라도 열려 있으면 길이 끊겨요. 네 가지 경우를 표로 써 볼게요. 0과 0은 0. 0과 1은 0. 1과 0은 0. 1과 1은 1이 돼요. 이것이 AND 게이트예요. A와 B가 둘 다 1일 때만 출력이 1이에요.</p>
+        <p>이번에는 두 스위치를 나란히 놓아서, 전류가 전구로 가는 길이 두 개가 되게 해요. A를 닫으면 전구가 켜져요. 대신 B를 닫아도 켜져요. 둘 다 닫아도 여전히 켜져 있어요. 둘 다 열려 있을 때만 전구가 꺼져요. 이것이 OR 게이트예요. A가 1이거나, B가 1이거나, 둘 다 1이면 출력이 1이에요.</p>
+        <p>하나만 더 볼게요. 이 버튼은 반대로 연결되어 있어요. 누르기 전까지는 닫혀 있어요. 그래서 전구는 켜져 있어요… 버튼을 누르면 전구가 꺼져요. 이것이 NOT 게이트예요. 무엇을 넣든 반대가 나와요. 1은 0이 되고, 0은 1이 돼요.</p>
+        <p>지금까지는 우리가 직접 스위치를 눌렀어요. 진짜 컴퓨터에서는 아무도 건드리지 않아요. 스위치를 움직이는 건 전기예요. 트랜지스터는 아주 작은 스위치로, 세 번째 선에 신호가 오면 닫혀요. 이게 모든 걸 바꿔 놓아요. 이제 한 게이트의 출력이 다음 게이트의 스위치를 움직일 수 있으니까요. 게이트가 다른 게이트를 움직일 수 있어요. 그러면 게이트를 줄줄이 이어서 점점 더 큰 회로를 만들 수 있다는 뜻이에요. 그림을 간단하게 하려고, 엔지니어들은 게이트마다 고유한 기호를 정해 두었어요. 이건 AND, 이건 OR, 그리고 동그라미가 달린 이 작은 삼각형은 NOT이에요. 요즘 칩 하나에는 이런 스위치가 수십억 개 들어 있고, 하나하나가 1초에 수십억 번 켜졌다 꺼져요. 하지만 큰 걸 만들기 전에, 이걸로 수를 세는 방법부터 알아야 해요.</p>
+        <p>우리는 10씩 묶어서 세요. 오른쪽 자리는 일의 자리를 세요. 9를 넘으면 0으로 돌아가고, 다음 자리인 십의 자리에 1을 더해요. 그래서 253은 백이 두 개, 십이 다섯 개, 일이 세 개라는 뜻이에요. 이제 숫자가 0과 1, 두 개뿐이라고 상상해 보세요. 스위치가 보여 줄 수 있는 건 그게 전부예요. 방식은 똑같아요. 오른쪽 자리는 일의 자리를 세요. 다만 9가 아니라 1을 넘으면 자리가 올라가요. 그래서 각 자리는 바로 오른쪽 자리의 두 배만큼의 값이에요. 1, 2, 4, 8이에요. 전구 네 개로 세어 볼게요. 0. 1. 이제 첫 번째 자리가 가득 찼으니까 자리올림을 해요. 2는 1, 0. 3은 1, 1. 4는 1, 0, 0이에요. 계속 세면, 전구 네 개로 0부터 15까지 셀 수 있어요. 5는 4 더하기 1이라서 0, 1, 0, 1이에요. 3은 2 더하기 1이라서 0, 0, 1, 1이에요. 이게 바로 처음에 스위치들이 보여 주던 거예요. 이것을 이진법이라고 해요.</p>
+        <p>이제 덧셈이에요. 가장 작은 덧셈부터 시작해요. 1비트 더하기 1비트예요. 경우는 네 가지뿐이에요. 0 더하기 0은 0. 0 더하기 1은 1. 1 더하기 0은 1. 그리고 1 더하기 1은 2인데, 이진법으로는 1, 0이에요. 0을 적고, 1은 자리올림해요. 그러니까 1비트 덧셈에는 출력이 두 개 있어요. 합 비트와 자리올림 비트예요. 자리올림 열을 보세요. 0, 0, 0, 1. 이 패턴은 본 적이 있어요. AND 게이트예요. 이번엔 합 열이에요. 0, 1, 1, 0. 두 입력이 다를 때만 1이에요.</p>
+        <p>이런 게이트는 아직 없지만, 가진 세 가지로 만들 수 있어요. 먼저 A OR B를 해요. 입력이 하나라도 켜져 있으면 1이에요. 그다음 AND와 NOT을 써서 둘 다 켜진 경우를 막아요. 결과는 입력이 다를 때만 1이에요. 이걸 배타적 논리합, 줄여서 XOR이라고 하고, 전용 기호도 있어요. XOR와 AND를 나란히 놓고 똑같은 두 비트를 넣으면 합과 자리올림이 나와요. 이것이 반가산기예요.</p>
+        <p>왜 &#x27;반&#x27;일까요? 종이에 더 큰 수를 더할 때를 떠올려 보세요. 오른쪽부터 시작해서 그 자리를 더하고, 다음 자리로 자리올림을 해요. 그래서 첫 번째 자리 다음부터는 모든 자리에서 세 수를 더해야 해요. A, B, 그리고 들어오는 자리올림이에요. 반가산기는 둘만 받을 수 있어요. 그래서 두 개를 써요. 첫 번째 반가산기는 A와 B를 더해요. 두 번째는 그 결과를 들어오는 자리올림과 더해요. 둘 중 하나라도 자리올림을 만들었다면, 자리올림을 넘겨 줘요. OR 게이트 하나면 돼요. 반가산기 두 개와 OR 게이트 하나. 이것이 전가산기예요. 3비트가 들어가고, 합과 자리올림이 나와요.</p>
+        <p>이제 전가산기 네 개를 한 줄로 세워요. 자리마다 하나씩이에요. 그리고 각각의 자리올림 출력을 다음 자리올림 입력에 이어요. 처음에 봤던 상자 기억나요? 열어 볼게요. 그 안에는 처음부터 이게 들어 있었어요. 나란히 놓인 전가산기 네 개요. 다시 5 더하기 3이에요. 첫 번째 자리는 1 더하기 1. 합은 0, 자리올림은 1이에요. 자리올림은 이어달리기의 바통처럼 왼쪽으로 넘어가요. 0 더하기 1, 더하기 자리올림. 합은 0, 자리올림은 1이에요. 다음 자리에서도 똑같아요. 마지막 자리에 이를 때까지요. 0 더하기 0, 더하기 자리올림은 1이에요. 불빛은 0, 1, 0, 0, 0을 보여 줘요. 이게 8이에요. 진짜 컴퓨터도 똑같이 해요. 4자리 대신 64자리로요. 원리는 달라지지 않아요.</p>
+        <p>돌아볼게요. 스위치 하나가 비트 하나를 줬어요. 한 줄로, 나란히 놓은 스위치들은 게이트를 줬어요. 게이트가 게이트를 움직여서 가산기가 생겼어요. 우리는 한 번도 켜짐과 꺼짐의 세계를 벗어나지 않았어요. 그런데 문제가 있어요. 이 회로 어디에도 마이너스 기호가 없어요. 그럼 컴퓨터는 어떻게 뺄셈을 할까요? 음수를 저장하는 건 또 어떻게 할까요? 그건 다음 편에서 다뤄요. 거기서 만나요.</p>
+        <p>상자 안에는 뭐가 있을까요? 작은 가산기 네 개가 자리올림을 오른쪽에서 왼쪽으로 넘겨요. 모든 컴퓨터가 이렇게 더해요. 전체 이야기는 스위치 하나에서 시작해요.</p>
+        <p>전구 네 개로 15까지 셀 수 있어요. 방법은 이래요. 이게 이진법이고, 모든 컴퓨터가 이렇게 수를 세요.</p>
+        </div>
+        <p class="ep-close">다음 편: 음수, 그리고 같은 가산기가 뺄셈을 배우는 방법.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg next" href="../../02/ko/"><span>다음 편 · 2편</span><b>컴퓨터에서 6 + 3 = −7이 되는 이유: 음수와 뺄셈</b></a></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

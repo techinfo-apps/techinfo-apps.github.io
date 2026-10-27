@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pourquoi 6 + 3 = −7 ? Nombres négatifs et soustraction — D&#x27;un interrupteur à un processeur #2</title>
+<meta name="description" content="Il n&#x27;y a aucun signe moins dans un circuit. Alors comment un ordinateur stocke-t-il −3, et comment un additionneur soustrait-il ? Nous essayons d&#x27;abord l&#x27;idée la plus évidente (un bit de signe) et voyons pourquoi elle échoue, nous comptons en arrière autour d&#x27;un cercle de seize nombres, nous découvrons le complément à deux, nous transformons notre additionneur en additionneur-soustracteur avec quatre portes XOR et un fil, et nous cherchons pourquoi 6 + 3 peut donner −7.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/02/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/02/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/02/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/02/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/02/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/02/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/02/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/02/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/02/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Pourquoi 6 + 3 = −7 ? Nombres négatifs et soustraction — D&#x27;un interrupteur à un processeur #2">
+<meta property="og:description" content="Il n&#x27;y a aucun signe moins dans un circuit. Alors comment un ordinateur stocke-t-il −3, et comment un additionneur soustrait-il ? Nous essayons d&#x27;abord l&#x27;idée la plus évidente (un bit de signe) et voyons pourquoi elle échoue, nous comptons en arrière autour d&#x27;un cercle de seize nombres, nous découvrons le complément à deux, nous transformons notre additionneur en additionneur-soustracteur avec quatre portes XOR et un fil, et nous cherchons pourquoi 6 + 3 peut donner −7.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-02.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/02/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Pourquoi 6 + 3 = −7 ? Nombres négatifs et soustraction", "description": "Il n'y a aucun signe moins dans un circuit. Alors comment un ordinateur stocke-t-il −3, et comment un additionneur soustrait-il ? Nous essayons d'abord l'idée la plus évidente (un bit de signe) et voyons pourquoi elle échoue, nous comptons en arrière autour d'un cercle de seize nombres, nous découvrons le complément à deux, nous transformons notre additionneur en additionneur-soustracteur avec quatre portes XOR et un fil, et nous cherchons pourquoi 6 + 3 peut donner −7.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-02.webp"], "uploadDate": "2026-10-26T21:00:00+08:00", "duration": "PT8M30S", "embedUrl": "https://www.youtube.com/embed/YvoT53qUBrA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;un interrupteur à un processeur · Épisode 2</p>
+      <h1 class="ep-title">Pourquoi 6 + 3 = −7 ? Nombres négatifs et soustraction</h1>
+      <div class="vplayer" data-yt="YvoT53qUBrA" data-title="Pourquoi 6 + 3 = −7 ? Nombres négatifs et soustraction">
+        <button type="button" class="vplay" aria-label="Lire: Pourquoi 6 + 3 = −7 ? Nombres négatifs et soustraction">
+          <img src="../../../../assets/img/videos/cpu-02.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/YvoT53qUBrA" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Il n&#x27;y a aucun signe moins dans un circuit. Alors comment un ordinateur stocke-t-il −3, et comment un additionneur soustrait-il ?<br>Nous essayons d&#x27;abord l&#x27;idée la plus évidente (un bit de signe) et voyons pourquoi elle échoue, nous comptons en arrière autour d&#x27;un cercle de seize nombres, nous découvrons le complément à deux, nous transformons notre additionneur en additionneur-soustracteur avec quatre portes XOR et un fil, et nous cherchons pourquoi 6 + 3 peut donner −7.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Un additionneur qui soustrait</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=40" data-t="40" rel="noopener"><span class="t">0:40</span>Pas de signe moins dans un circuit</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=65" data-t="65" rel="noopener"><span class="t">1:05</span>Le bit de signe et ses problèmes</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=127" data-t="127" rel="noopener"><span class="t">2:07</span>Compter en arrière</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=210" data-t="210" rel="noopener"><span class="t">3:30</span>Le complément à deux</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=282" data-t="282" rel="noopener"><span class="t">4:42</span>Soustraire, c&#x27;est additionner</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=398" data-t="398" rel="noopener"><span class="t">6:38</span>Le dépassement de capacité</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=483" data-t="483" rel="noopener"><span class="t">8:03</span>Récapitulatif et suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Voici le même additionneur que la dernière fois. Pas une seule pièce nouvelle. Cinq... et moins trois. Clic... et les lampes affichent deux. L&#x27;additionneur sait soustraire. Le secret, c&#x27;est la façon d&#x27;écrire moins trois. Voyons ce que c&#x27;est.</p>
+        <p>La dernière fois, nous avons construit ceci : quatre additionneurs complets alignés, qui se passent une retenue de droite à gauche. Il peut additionner deux nombres quelconques de zéro à quinze.</p>
+        <p>Mais les nombres réels peuvent être négatifs. Une température peut descendre sous zéro. Un ascenseur peut descendre sous le rez-de-chaussée. Un circuit n&#x27;a aucun endroit où écrire un signe moins. Il n&#x27;a que des lampes allumées ou éteintes. Il faut donc que le signe moins lui-même devienne un bit. L&#x27;idée la plus évidente : utiliser la lampe tout à gauche pour le signe.</p>
+        <p>Lampe de gauche éteinte, c&#x27;est plus. Allumée, c&#x27;est moins. Les trois autres lampes donnent la grandeur. Ainsi, plus trois s&#x27;écrit 0, 0, 1, 1. Et moins trois s&#x27;écrit 1, 0, 1, 1. Cela semble raisonnable. Mais il y a deux problèmes. D&#x27;abord, zéro apparaît deux fois : plus zéro et moins zéro. Deux motifs pour le même nombre, c&#x27;est du gaspillage, et cela rend la comparaison des nombres pénible. Ensuite, essayons notre additionneur avec trois plus moins trois. La réponse devrait être zéro. Or, les lampes affichent 1, 1, 1, 0. Lu avec la règle du signe, c&#x27;est moins six. Pour l&#x27;utiliser, il faudrait un tout nouveau circuit rien que pour les nombres négatifs. Il y a une meilleure solution.</p>
+        <p>Imaginez un vieux compteur mécanique, qui affiche 0, 0, 0, 0. Faites-le reculer d&#x27;un cran. Il ne s&#x27;arrête pas à zéro. Il passe à 9, 9, 9, 9. Un compteur binaire fait la même chose. Reculez d&#x27;un cran depuis tous les zéros, et vous obtenez tous les uns. Alors appelons simplement cela moins un. Un cran de plus en arrière donne 1, 1, 1, 0 : moins deux. Puis moins trois, et ainsi de suite. Disposez les seize motifs en cercle. Du côté droit, de zéro à sept. Du côté gauche, de moins un à moins huit. Et regardez : le bit tout à gauche vaut toujours 1 pour chaque nombre négatif. Nous avons gardé la lampe de signe gratuitement. Additionner, c&#x27;est simplement avancer dans le sens des aiguilles d&#x27;une montre sur le cercle. Moins trois se trouve à treize pas de zéro, donc l&#x27;additionner revient à avancer de treize pas. Sur un cercle de seize, avancer de treize pas mène exactement là où reculer de trois pas mènerait. À partir de trois, c&#x27;est zéro.</p>
+        <p>Cette façon d&#x27;écrire les nombres négatifs s&#x27;appelle le complément à deux. Presque tous les ordinateurs que vous avez utilisés fonctionnent ainsi. Pas besoin du cercle pour le trouver. Il existe une recette en deux étapes : inverser chaque bit, puis ajouter un. Trois s&#x27;écrit 0, 0, 1, 1. Inversons chaque bit : 1, 1, 0, 0. Ajoutons un : 1, 1, 0, 1. C&#x27;est moins trois. Pourquoi cela marche-t-il ? Ajoutez un nombre quelconque à sa version inversée, et chaque colonne devient 1, sans aucune retenue. Tous les uns, c&#x27;est moins un. Donc la version inversée vaut moins un moins le nombre. Ajoutez encore un, et vous obtenez exactement l&#x27;opposé du nombre. Et zéro ? Inversé, il devient tous les uns ; on ajoute un, et il repasse à tous les zéros. La retenue tombe par le bout. Il n&#x27;y a qu&#x27;un seul zéro. Problème résolu.</p>
+        <p>La soustraction devient facile. A moins B, c&#x27;est la même chose que A plus moins B. Et moins B, c&#x27;est simplement B inversé, plus un. Donc A moins B égale A, plus B inversé, plus un. Inverser est facile : c&#x27;est ce que font les portes NOT. Mais nous voulons un circuit qui puisse encore additionner, lui aussi. Voici l&#x27;astuce. Vous vous souvenez du XOR ? Si une entrée vaut 0, l&#x27;autre passe tout droit. Si une entrée vaut 1, l&#x27;autre ressort inversée. Alors mettons un XOR sur chacun des fils de B, et relions-les tous à une même ligne de commande. Nous l&#x27;appellerons « soustraire ». Quand « soustraire » vaut 0, B passe sans changement et le circuit additionne. Quand « soustraire » vaut 1, chaque bit de B est inversé. Et le « plus un » ? Le premier additionneur a une entrée de retenue que nous n&#x27;avons jamais utilisée. Relions-y la même ligne de commande. Un seul fil. Inverser et ajouter un, en même temps. Cinq moins trois. Cinq s&#x27;écrit 0, 1, 0, 1. Trois, inversé, donne 1, 1, 0, 0. Plus le un de la ligne de commande. Les additionneurs font leur relais, et le résultat est 1, 0, 0, 1, 0. La retenue en trop à gauche tombe simplement, et il reste 0, 0, 1, 0. Deux. Au début, nous avions saisi moins trois à la main. Maintenant, le circuit inverse tout seul : quatre portes XOR et une ligne de commande transforment notre additionneur en additionneur-soustracteur.</p>
+        <p>Il y a un hic. Quatre bits ne peuvent contenir que seize motifs : de moins huit à sept. Alors, que font six plus trois ? 0, 1, 1, 0 plus 0, 0, 1, 1 donne 1, 0, 0, 1. Lu en complément à deux, c&#x27;est moins sept. Pas neuf. Sur le cercle, nous avons dépassé sept et sommes tombés par-dessus le bord, du côté négatif. C&#x27;est ce qu&#x27;on appelle un dépassement de capacité. La solution, c&#x27;est de le repérer. Deux nombres positifs ne devraient jamais donner un nombre négatif. Et deux nombres négatifs ne devraient jamais donner un nombre positif. Quelques portes supplémentaires surveillent justement cela, et allument un voyant d&#x27;alerte : l&#x27;indicateur de dépassement. La plupart des processeurs en ont un. Les vrais ordinateurs utilisent trente-deux ou soixante-quatre bits, donc la plage est énorme. Trente-deux bits dépassent deux milliards. Mais cela arrive quand même. En 2014, une vidéo de ce même site a reçu tellement de vues que son compteur allait déborder, et il a fallu le faire passer à soixante-quatre bits.</p>
+        <p>Notre petit circuit sait maintenant additionner et soustraire, avec des nombres négatifs, et il sait quand la réponse ne tient pas. Mais un ordinateur fait bien plus qu&#x27;additionner et soustraire. Il compare des nombres. Il fait des AND et des OR sur des rangées entières de bits. Comment un circuit sait-il quelle tâche accomplir à chaque instant ? La prochaine fois : des circuits qui choisissent. À bientôt.</p>
+        <p>Ce circuit ne sait qu&#x27;additionner. Regardez-le soustraire. L&#x27;astuce, c&#x27;est la façon dont les ordinateurs écrivent les nombres négatifs : inverser chaque bit, puis ajouter un. Ajoutez cela à cinq, laissez tomber la retenue en trop, et vous obtenez deux. Presque tous les ordinateurs soustraient ainsi.</p>
+        <p>Dans un ordinateur de quatre bits, six plus trois font moins sept. Voici pourquoi. Les vrais ordinateurs ont plus de bits, et un voyant d&#x27;alerte appelé l&#x27;indicateur de dépassement.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : des circuits qui choisissent — construire une ALU.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../01/fr/"><span>Précédent · Épisode 1</span><b>Comment 8 interrupteurs additionnent, sans puce ni code</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 3 sort le <time datetime="2026-10-27T21:00:00+08:00" data-at="2026-10-27T21:00:00+08:00" data-fmt="when">10-27 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

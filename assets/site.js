@@ -11,7 +11,12 @@
   /* A page can be in fewer languages (data-langs="en,zh-CN,…"): it shows English for the others. */
   var pageLangs = (document.body.getAttribute("data-langs") || LANGS.join(",")).split(",");
 
+  /* A page written in one language (the tutorial episodes: a page per language) stays in that language;
+     choosing another one goes to that language's page. */
+  var pageLang = document.body.getAttribute("data-page-lang");
+
   function pickLang() {
+    if (pageLang) return pageLang;
     var saved = null;
     try { saved = localStorage.getItem("ti-lang"); } catch (e) {}
     if (saved && LANGS.indexOf(saved) >= 0) return saved;
@@ -46,6 +51,10 @@
       var imgLang = langs.indexOf(lang) >= 0 ? lang : "en";
       el.src = root + "assets/img/" + el.getAttribute("data-img") + "-" + imgLang + ".webp";
     });
+    /* links to pages that exist per language follow the chosen one */
+    document.querySelectorAll("[data-lang-href]").forEach(function (a) {
+      a.href = root + a.getAttribute("data-lang-href") + (lang === "en" ? "" : lang.toLowerCase() + "/");
+    });
     var tk = document.body.getAttribute("data-title-key");
     var title = tk && (dict[tk] != null ? dict[tk] : en[tk]);
     if (title) document.title = title;
@@ -58,6 +67,8 @@
     s.addEventListener("change", function () {
       current = s.value;
       try { localStorage.setItem("ti-lang", current); } catch (e) {}
+      var other = pageLang && document.querySelector('link[rel="alternate"][data-lang="' + current + '"]');
+      if (other) { location.href = other.getAttribute("data-href"); return; }
       apply(current);
     });
   });

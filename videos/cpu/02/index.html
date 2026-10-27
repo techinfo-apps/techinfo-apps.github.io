@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Why 6 + 3 = −7 in a Computer: Negative Numbers and Subtraction — From One Switch to a CPU #2</title>
+<meta name="description" content="A circuit has no minus sign. So how does a computer store −3, and how does an adder subtract? We try the obvious idea (a sign bit) and see why it fails, count backwards around a circle of sixteen numbers, meet two&#x27;s complement, turn our adder into an adder and subtractor with four X-OR gates and one wire, and find out why 6 + 3 can come out as −7.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/02/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/02/" data-lang="en" data-href="./">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/02/zh-cn/" data-lang="zh-CN" data-href="./zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/02/zh-tw/" data-lang="zh-TW" data-href="./zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/02/ja/" data-lang="ja" data-href="./ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/02/ko/" data-lang="ko" data-href="./ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/02/es/" data-lang="es" data-href="./es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/02/fr/" data-lang="fr" data-href="./fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/02/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Why 6 + 3 = −7 in a Computer: Negative Numbers and Subtraction — From One Switch to a CPU #2">
+<meta property="og:description" content="A circuit has no minus sign. So how does a computer store −3, and how does an adder subtract? We try the obvious idea (a sign bit) and see why it fails, count backwards around a circle of sixteen numbers, meet two&#x27;s complement, turn our adder into an adder and subtractor with four X-OR gates and one wire, and find out why 6 + 3 can come out as −7.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-02.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/02/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Why 6 + 3 = −7 in a Computer: Negative Numbers and Subtraction", "description": "A circuit has no minus sign. So how does a computer store −3, and how does an adder subtract? We try the obvious idea (a sign bit) and see why it fails, count backwards around a circle of sixteen numbers, meet two's complement, turn our adder into an adder and subtractor with four X-OR gates and one wire, and find out why 6 + 3 can come out as −7.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-02.webp"], "uploadDate": "2026-10-26T21:00:00+08:00", "duration": "PT8M30S", "embedUrl": "https://www.youtube.com/embed/YvoT53qUBrA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../" data-page-lang="en">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../videos/">All episodes</a> · From One Switch to a CPU · Episode 2</p>
+      <h1 class="ep-title">Why 6 + 3 = −7 in a Computer: Negative Numbers and Subtraction</h1>
+      <div class="vplayer" data-yt="YvoT53qUBrA" data-title="Why 6 + 3 = −7 in a Computer: Negative Numbers and Subtraction">
+        <button type="button" class="vplay" aria-label="Play: Why 6 + 3 = −7 in a Computer: Negative Numbers and Subtraction">
+          <img src="../../../assets/img/videos/cpu-02.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Pressing play loads the video from YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/YvoT53qUBrA" rel="noopener">Watch on YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">Subscribe on YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">A circuit has no minus sign. So how does a computer store −3, and how does an adder subtract?<br>We try the obvious idea (a sign bit) and see why it fails, count backwards around a circle of sixteen numbers, meet two&#x27;s complement, turn our adder into an adder and subtractor with four X-OR gates and one wire, and find out why 6 + 3 can come out as −7.</p>
+      <p class="ep-ai">Every animation in this video is drawn by code, and the narration is an AI voice.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapters</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>An adder that subtracts</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=40" data-t="40" rel="noopener"><span class="t">0:40</span>No minus sign in a circuit</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=65" data-t="65" rel="noopener"><span class="t">1:05</span>The sign bit and its problems</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=127" data-t="127" rel="noopener"><span class="t">2:07</span>Counting backwards</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=210" data-t="210" rel="noopener"><span class="t">3:30</span>Two&#x27;s complement</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=282" data-t="282" rel="noopener"><span class="t">4:42</span>Subtraction is addition</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=398" data-t="398" rel="noopener"><span class="t">6:38</span>Overflow</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=483" data-t="483" rel="noopener"><span class="t">8:03</span>Recap and what&#x27;s next</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcript</h2>
+        <div class="ep-text">
+        <p>This is the same adder from last time. Not a single new part. Five... and minus three. Flip... and the lights say two. The adder can subtract. The secret is in how we write minus three. Let&#x27;s find out what that is.</p>
+        <p>Last time, we built this: four full adders in a row, passing a carry from right to left. It can add any two numbers from zero to fifteen.</p>
+        <p>But real numbers can be negative. A temperature can drop below zero. An elevator can go below the ground floor. A circuit has no place to write a minus sign. It only has lights that are on or off. So the minus sign itself has to become a bit. The obvious idea: use the leftmost light for the sign.</p>
+        <p>Leftmost light off means plus. On means minus. The other three lights hold the size. So plus three is zero, zero, one, one. And minus three is one, zero, one, one. Looks reasonable. But there are two problems. First, zero shows up twice: plus zero, and minus zero. Two patterns for the same number is a waste, and it makes comparing numbers awkward. Second, try our adder on three plus minus three. The answer should be zero. Instead, the lights say one, one, one, zero. Read with the sign rule, that&#x27;s minus six. To use this, we&#x27;d need a whole new circuit just for negative numbers. There&#x27;s a better way.</p>
+        <p>Picture an old mechanical counter, showing zero, zero, zero, zero. Roll it back by one. It doesn&#x27;t stop at zero. It wraps around to nine, nine, nine, nine. A binary counter does the same thing. Roll back one from all zeros, and you get all ones. So let&#x27;s simply call that minus one. One more step back gives one, one, one, zero: minus two. Then minus three, and so on. Lay all sixteen patterns around a circle. On the right side, zero up to seven. On the left side, minus one down to minus eight. And look: the leftmost bit is still one for every negative number. We kept the sign light for free. Adding is just walking clockwise around the circle. Minus three sits thirteen steps from zero, so adding it means walking thirteen steps forward. On a circle of sixteen, thirteen steps forward lands exactly where three steps back would. From three, that&#x27;s zero.</p>
+        <p>This way of writing negative numbers is called two&#x27;s complement. Almost every computer you&#x27;ve ever used works this way. You don&#x27;t need the circle to find it. There&#x27;s a two-step recipe: flip every bit, then add one. Three is zero, zero, one, one. Flip every bit: one, one, zero, zero. Add one: one, one, zero, one. That&#x27;s minus three. Why does it work? Add any number to its flipped version, and every column becomes one, with no carries. All ones is minus one. So the flipped version is minus one minus the number. Add one more, and you get exactly minus the number. And zero? Flip it to all ones, add one, and it rolls over to all zeros. The carry falls off the end. Only one zero. Problem solved.</p>
+        <p>Now subtraction is easy. A minus B is the same as A plus minus B. And minus B is just B flipped, plus one. So A minus B equals A, plus B flipped, plus one. Flipping is easy: that&#x27;s what NOT gates do. But we want a circuit that can still add, too. Here&#x27;s the trick. Remember X-OR? If one input is zero, the other passes straight through. If one input is one, the other comes out flipped. So put an X-OR on each of the B wires, and connect all of them to one control line. We&#x27;ll call it subtract. When subtract is zero, B passes through unchanged and the circuit adds. When subtract is one, every bit of B gets flipped. What about the plus one? The first adder has a carry input that we never used. Connect the same control line to it. One wire. Flip, and add one, together. Five minus three. Five is zero, one, zero, one. Three, flipped, is one, one, zero, zero. Plus the one from the control line. The adders do their relay, and the result is one, zero, zero, one, zero. The extra carry on the left simply falls off, and we&#x27;re left with zero, zero, one, zero. Two. At the start, we typed minus three in by hand. Now the circuit does the flipping itself: four X-OR gates and one control line turn our adder into an adder and subtractor.</p>
+        <p>There&#x27;s one catch. Four bits can only hold sixteen patterns: minus eight up to seven. So what&#x27;s six plus three? Zero, one, one, zero, plus zero, zero, one, one, gives one, zero, zero, one. Read as two&#x27;s complement, that&#x27;s minus seven. Not nine. On the circle, we walked past seven and fell over the edge into the negative side. This is called overflow. The fix is to notice it. Two positive numbers should never add up to a negative one. And two negatives should never give a positive. A few extra gates watch for exactly that, and switch on a warning light: the overflow flag. Most processors have one. Real computers use thirty-two or sixty-four bits, so the range is enormous. Thirty-two bits go past two billion. But it still happens. In twenty fourteen, one video on this very site got so many views that its counter was about to overflow, and it had to be upgraded to sixty-four bits.</p>
+        <p>So now our little circuit can add and subtract, with negative numbers, and it knows when the answer doesn&#x27;t fit. But a computer does much more than add and subtract. It compares numbers. It does AND and OR on whole rows of bits. How does one circuit know which job to do at each moment? Next time: circuits that choose. See you there.</p>
+        <p>This circuit can only add. Watch it subtract. The trick is how computers write negative numbers: flip every bit, then add one. Add that to five, drop the extra carry, and you get two. Almost every computer subtracts this way.</p>
+        <p>In a four-bit computer, six plus three is minus seven. Here&#x27;s why. Real computers have more bits, and a warning light called the overflow flag.</p>
+        </div>
+        <p class="ep-close">Next episode: circuits that choose — building an ALU.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../01/"><span>Previous · Episode 1</span><b>How 8 Switches Add Two Numbers</b></a><div class="ep-pg next soon"><span>Next</span><b>Episode 3 comes out <time datetime="2026-10-27T21:00:00+08:00" data-at="2026-10-27T21:00:00+08:00" data-fmt="when">10-27 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../assets/strings.js"></script>
+<script src="../../../assets/site.js"></script>
+<script src="../../../assets/videos.js"></script>
+</body>
+</html>

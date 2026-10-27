@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How 8 Switches Add Two Numbers — From One Switch to a CPU #1</title>
+<meta name="description" content="Eight switches, five lights, and no chip at all: by the end of this video you&#x27;ll know exactly how they add two numbers. We start with one switch and one light, build AND, OR and NOT gates, learn to count in binary, and put together a half adder, a full adder and a 4-bit adder.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/01/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/01/" data-lang="en" data-href="./">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/01/zh-cn/" data-lang="zh-CN" data-href="./zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/01/zh-tw/" data-lang="zh-TW" data-href="./zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/01/ja/" data-lang="ja" data-href="./ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/01/ko/" data-lang="ko" data-href="./ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/01/es/" data-lang="es" data-href="./es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/01/fr/" data-lang="fr" data-href="./fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/01/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="How 8 Switches Add Two Numbers — From One Switch to a CPU #1">
+<meta property="og:description" content="Eight switches, five lights, and no chip at all: by the end of this video you&#x27;ll know exactly how they add two numbers. We start with one switch and one light, build AND, OR and NOT gates, learn to count in binary, and put together a half adder, a full adder and a 4-bit adder.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/01/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "How 8 Switches Add Two Numbers", "description": "Eight switches, five lights, and no chip at all: by the end of this video you'll know exactly how they add two numbers. We start with one switch and one light, build AND, OR and NOT gates, learn to count in binary, and put together a half adder, a full adder and a 4-bit adder.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp"], "uploadDate": "2026-10-25T22:35:00+08:00", "duration": "PT9M24S", "embedUrl": "https://www.youtube.com/embed/9xtOaLQJl_4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../" data-page-lang="en">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../videos/">All episodes</a> · From One Switch to a CPU · Episode 1</p>
+      <h1 class="ep-title">How 8 Switches Add Two Numbers</h1>
+      <div class="vplayer" data-yt="9xtOaLQJl_4" data-title="How 8 Switches Add Two Numbers">
+        <button type="button" class="vplay" aria-label="Play: How 8 Switches Add Two Numbers">
+          <img src="../../../assets/img/videos/cpu-01.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Pressing play loads the video from YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/9xtOaLQJl_4" rel="noopener">Watch on YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">Subscribe on YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Eight switches, five lights, and no chip at all: by the end of this video you&#x27;ll know exactly how they add two numbers.<br>We start with one switch and one light, build AND, OR and NOT gates, learn to count in binary, and put together a half adder, a full adder and a 4-bit adder.</p>
+      <p class="ep-ai">Every animation in this video is drawn by code, and the narration is an AI voice.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapters</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Eight switches that add</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=23" data-t="23" rel="noopener"><span class="t">0:23</span>One switch is one bit</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>The AND gate</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=123" data-t="123" rel="noopener"><span class="t">2:03</span>The OR gate</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=150" data-t="150" rel="noopener"><span class="t">2:30</span>The NOT gate</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=173" data-t="173" rel="noopener"><span class="t">2:53</span>Switches flipped by electricity</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=235" data-t="235" rel="noopener"><span class="t">3:55</span>Counting with only 0 and 1</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=316" data-t="316" rel="noopener"><span class="t">5:16</span>Adding two bits</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=378" data-t="378" rel="noopener"><span class="t">6:18</span>XOR and the half adder</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=418" data-t="418" rel="noopener"><span class="t">6:58</span>The full adder</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=466" data-t="466" rel="noopener"><span class="t">7:46</span>A 4-bit adder</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=532" data-t="532" rel="noopener"><span class="t">8:52</span>Recap and what&#x27;s next</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcript</h2>
+        <div class="ep-text">
+        <p>These eight switches can add two numbers. Five, and three. Flip, flip, flip, flip... and the lights say eight. No chip. No code. Just switches, and a box we will open at the end. By the end of this video, you&#x27;ll know exactly what&#x27;s inside it.</p>
+        <p>Let&#x27;s start with the simplest circuit there is: a battery, a wire, a light, and a switch. Close the switch, and current flows all the way around. The light comes on. We&#x27;ll call that one. Open the switch, and the flow stops. The light goes off. That&#x27;s zero. One switch can only say two things: on or off, one or zero. That single yes-or-no is called a bit. It&#x27;s the smallest piece of information a computer can hold. Every photo, every word, every game on a computer is built from bits like this one.</p>
+        <p>Now let&#x27;s add a second switch, in a row with the first. We&#x27;ll call them A and B. Close only A... nothing. Only B... still nothing. Close both, and the light comes on. Current has to get through A and then through B. If either one is open, the path is broken. Let&#x27;s write all four cases in a table. Zero and zero gives zero. Zero and one, zero. One and zero, zero. One and one gives one. This is an AND gate. The output is one only when A and B are both one.</p>
+        <p>Now put the two switches side by side, so current has two roads to the light. Close A, and the light comes on. Close B instead, and it comes on too. Close both: still on. Only when both are open does the light go dark. This is an OR gate: the output is one when A is one, or B is one, or both.</p>
+        <p>One more. This button is wired the other way around: it&#x27;s closed until you press it. So the light is on... press the button, and the light goes off. This is a NOT gate. Whatever goes in, the opposite comes out. One becomes zero, zero becomes one.</p>
+        <p>So far, we&#x27;ve been flipping these switches ourselves. In a real computer, nobody touches them. The switches are flipped by electricity. A transistor is a tiny switch that closes when a signal arrives on a third wire. That changes everything. Because now, the output of one gate can flip the switches of the next gate. Gates can drive other gates. And that means we can chain them together into bigger and bigger circuits. To keep the drawings simple, engineers give each gate its own symbol. This is AND, this is OR, and this little triangle with a circle is NOT. A modern chip packs billions of these switches, and each one can flip billions of times every second. But before we build anything big, we need to know how to count with them.</p>
+        <p>We count in tens. The right column counts ones. When it passes nine, it rolls back to zero and adds one to the next column: the tens. So two hundred fifty-three means two hundreds, five tens, and three ones. Now imagine you only have two digits: zero and one. That&#x27;s all a switch can show. It works the same way. The right column counts ones. But it rolls over after one, not after nine. So each column is worth twice the one before it: one, two, four, eight. Let&#x27;s count with four lights. Zero. One. Now the first column is full, so it carries: two is one, zero. Three is one, one. Four is one, zero, zero. Keep going, and four lights can count all the way from zero to fifteen. Five is four plus one: zero, one, zero, one. Three is two plus one: zero, zero, one, one. That&#x27;s exactly what our switches were showing at the start. This is called binary.</p>
+        <p>Now, adding. Let&#x27;s start with the smallest possible sum: one bit plus one bit. There are only four cases. Zero plus zero is zero. Zero plus one is one. One plus zero is one. And one plus one is two, which in binary is one, zero. We write down zero, and carry the one. So every one-bit sum has two outputs: the sum bit, and the carry bit. Look at the carry column: zero, zero, zero, one. We&#x27;ve seen that pattern before. It&#x27;s an AND gate. And the sum column: zero, one, one, zero. It&#x27;s one only when the two inputs are different.</p>
+        <p>We don&#x27;t have a gate for that yet, but we can build one from the three we have. Take A OR B. That&#x27;s one when at least one input is on. Then block the case where both are on, using AND and NOT. The result is one only when the inputs are different. This is called exclusive OR, X-OR for short, and it gets its own symbol. Put an XOR and an AND side by side, feed them the same two bits, and you get the sum and the carry. That&#x27;s a half adder.</p>
+        <p>Why only half? Think about how you add bigger numbers on paper. You start on the right, add the column, and carry into the next one. So every column after the first has three numbers to add: A, B, and the carry coming in. A half adder only takes two. So we use two of them. The first half adder adds A and B. The second adds that result to the incoming carry. If either of them produced a carry, we pass a carry on. One OR gate takes care of that. Two half adders and an OR gate: that&#x27;s a full adder. Three bits in, a sum and a carry out.</p>
+        <p>Now line up four full adders, one for each column, and connect each carry out to the next carry in. Remember the box from the beginning? Let&#x27;s open it. This is what was inside all along: four full adders in a row. Five plus three again. The first column: one plus one. Sum zero, carry one. The carry moves left, like a baton in a relay race. Zero plus one, plus the carry: sum zero, carry one. And again in the next column. Until the last column: zero plus zero plus the carry gives one. The lights read zero, one, zero, zero, zero. That&#x27;s eight. Real computers do the same thing with sixty-four columns instead of four. The idea doesn&#x27;t change.</p>
+        <p>Let&#x27;s look back. A switch gave us one bit. Switches in a row and side by side gave us gates. Gates flipping gates gave us an adder. Not once did we leave the world of on and off. But there&#x27;s a problem. There&#x27;s no minus sign anywhere in this circuit. So how does a computer subtract, or even store a negative number? That&#x27;s the next episode. See you there.</p>
+        <p>What&#x27;s inside the box? Four little adders, passing a carry from right to left. Every computer adds this way. The full story starts with a single switch.</p>
+        <p>Four lights can count all the way to fifteen. Here&#x27;s how. That&#x27;s binary, and it&#x27;s how every computer counts.</p>
+        </div>
+        <p class="ep-close">Next episode: negative numbers, and how the same adder learns to subtract.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg next" href="../../02/"><span>Next · Episode 2</span><b>Why 6 + 3 = −7 in a Computer: Negative Numbers and Subtraction</b></a></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../assets/strings.js"></script>
+<script src="../../../assets/site.js"></script>
+<script src="../../../assets/videos.js"></script>
+</body>
+</html>

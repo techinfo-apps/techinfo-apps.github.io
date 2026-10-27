@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>コンピューターで 6 + 3 = −7 になる理由：負の数と引き算 — スイッチ1つからCPUまで #2</title>
+<meta name="description" content="回路にはマイナス記号がありません。では、コンピューターはどうやって −3 を記憶し、加算器はどうやって引き算をするのでしょうか。 まず、いちばん思いつきやすい方法（符号ビット）を試して、なぜうまくいかないのかを確かめます。次に、16個の数を円形に並べて逆向きに数え、2の補数と出会います。さらに、4つのXORと1本の配線で加算器を加減算器に変え、最後に、6 + 3 が −7 になることがある理由を突き止めます。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/02/ja/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/02/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/02/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/02/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/02/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/02/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/02/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/02/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/02/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="コンピューターで 6 + 3 = −7 になる理由：負の数と引き算 — スイッチ1つからCPUまで #2">
+<meta property="og:description" content="回路にはマイナス記号がありません。では、コンピューターはどうやって −3 を記憶し、加算器はどうやって引き算をするのでしょうか。 まず、いちばん思いつきやすい方法（符号ビット）を試して、なぜうまくいかないのかを確かめます。次に、16個の数を円形に並べて逆向きに数え、2の補数と出会います。さらに、4つのXORと1本の配線で加算器を加減算器に変え、最後に、6 + 3 が −7 になることがある理由を突き止めます。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-02.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/02/ja/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "コンピューターで 6 + 3 = −7 になる理由：負の数と引き算", "description": "回路にはマイナス記号がありません。では、コンピューターはどうやって −3 を記憶し、加算器はどうやって引き算をするのでしょうか。 まず、いちばん思いつきやすい方法（符号ビット）を試して、なぜうまくいかないのかを確かめます。次に、16個の数を円形に並べて逆向きに数え、2の補数と出会います。さらに、4つのXORと1本の配線で加算器を加減算器に変え、最後に、6 + 3 が −7 になることがある理由を突き止めます。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-02.webp"], "uploadDate": "2026-10-26T21:00:00+08:00", "duration": "PT8M30S", "embedUrl": "https://www.youtube.com/embed/YvoT53qUBrA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ja">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">すべての回</a> · スイッチ1つからCPUまで · 第2話</p>
+      <h1 class="ep-title">コンピューターで 6 + 3 = −7 になる理由：負の数と引き算</h1>
+      <div class="vplayer" data-yt="YvoT53qUBrA" data-title="コンピューターで 6 + 3 = −7 になる理由：負の数と引き算">
+        <button type="button" class="vplay" aria-label="再生: コンピューターで 6 + 3 = −7 になる理由：負の数と引き算">
+          <img src="../../../../assets/img/videos/cpu-02.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">再生を押すと、動画をYouTubeから読み込みます。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/YvoT53qUBrA" rel="noopener">YouTubeで見る</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">YouTubeでチャンネル登録</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">回路にはマイナス記号がありません。では、コンピューターはどうやって −3 を記憶し、加算器はどうやって引き算をするのでしょうか。<br>まず、いちばん思いつきやすい方法（符号ビット）を試して、なぜうまくいかないのかを確かめます。次に、16個の数を円形に並べて逆向きに数え、2の補数と出会います。さらに、4つのXORと1本の配線で加算器を加減算器に変え、最後に、6 + 3 が −7 になることがある理由を突き止めます。</p>
+      <p class="ep-ai">この動画のアニメーションは、すべてコードで描いています。ナレーションはAI音声です。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">チャプター</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>引き算ができる加算器</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=40" data-t="40" rel="noopener"><span class="t">0:40</span>回路にマイナス記号はない</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=65" data-t="65" rel="noopener"><span class="t">1:05</span>符号ビットとその問題点</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=127" data-t="127" rel="noopener"><span class="t">2:07</span>逆向きに数える</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=210" data-t="210" rel="noopener"><span class="t">3:30</span>2の補数</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=282" data-t="282" rel="noopener"><span class="t">4:42</span>引き算は足し算</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=398" data-t="398" rel="noopener"><span class="t">6:38</span>オーバーフロー</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=483" data-t="483" rel="noopener"><span class="t">8:03</span>まとめと次回予告</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">ナレーション全文</h2>
+        <div class="ep-text">
+        <p>これは前回と同じ加算器です。新しい部品は1つもありません。5と……マイナス3。パチ……すると、ランプは2を示します。この加算器は引き算ができます。秘密は、マイナス3の書き方にあります。それがどういうものか、確かめてみましょう。</p>
+        <p>前回はこれを作りました。4つの全加算器が並び、繰り上がりを右から左へ渡します。これで、0から15までの好きな2つの数を足せます。</p>
+        <p>でも、現実の数にはマイナスがあります。気温は0度より下がることがあります。エレベーターは1階より下に行くこともあります。回路には、マイナス記号を書く場所がありません。あるのは、点くか消えるかのランプだけです。だから、マイナス記号そのものもビットにしなければなりません。いちばん分かりやすい考えは、いちばん左のランプを符号に使うことです。</p>
+        <p>いちばん左のランプが消えていればプラス、点いていればマイナスです。残りの3つのランプが大きさを表します。プラス3は、0、0、1、1。マイナス3は、1、0、1、1です。よさそうに見えます。でも、問題が2つあります。1つ目は、0が2回出てくることです。プラスの0と、マイナスの0です。同じ数に2つのパターンがあるのはむだですし、数の比較もやっかいになります。2つ目は、この加算器で、3足すマイナス3を計算してみることです。答えは0のはずです。ところが、ランプは1、1、1、0を示します。符号のルールで読むと、これはマイナス6です。これを使うには、負の数のためだけの回路をまるごと新しく作る必要があります。もっといい方法があります。</p>
+        <p>古い機械式のカウンターを思い浮かべてください。0、0、0、0を示しています。1つ戻します。0では止まらず、9、9、9、9に回ります。2進数のカウンターも同じです。すべて0から1つ戻すと、すべて1になります。では、それをマイナス1と呼ぶことにしましょう。もう1つ戻すと1、1、1、0で、マイナス2。その次はマイナス3、と続きます。16通りのパターンを、すべて円に並べます。右側は0から7まで。左側はマイナス1からマイナス8までです。そして見てください。負の数は、どれも一番左のビットが1のままです。符号のランプが、ただで残りました。足し算は、円の上を時計回りに進むことです。マイナス3は0から13歩の場所にあるので、それを足すことは、13歩前に進むことです。16マスの円の上では、13歩前に進むと、ちょうど3歩戻った場所に着きます。3から始めると、それは0です。</p>
+        <p>この負の数の書き方を、2の補数と呼びます。みなさんが使ってきたコンピューターのほとんどが、この方法で動いています。円がなくても見つけられます。2ステップのレシピがあります。すべてのビットを反転して、1を足すのです。3は0、0、1、1です。すべてのビットを反転すると1、1、0、0。1を足すと1、1、0、1。これがマイナス3です。なぜうまくいくのでしょう。どんな数でも、それを反転したものと足すと、すべての桁が1になり、繰り上がりは1つもありません。すべて1は、マイナス1です。つまり、反転したものは、マイナス1からその数を引いたものです。もう1つ足すと、ちょうどその数のマイナスになります。では0は？反転するとすべて1。1を足すと、すべて0に戻ります。繰り上がりは端からこぼれ落ちます。0はただ1つだけ。問題解決です。</p>
+        <p>これで、引き算は簡単です。A引くBは、A足すマイナスBと同じです。そして、マイナスBは、Bを反転して1を足したものです。つまり、A引くBは、A足す反転したB足す1です。反転は簡単です。NOTゲートの仕事です。でも、足し算もできる回路にしたいのです。そこでコツです。XORを覚えていますか。片方の入力が0なら、もう片方はそのまま通ります。片方の入力が1なら、もう片方は反転して出てきます。そこで、Bの各配線にXORを1つずつつなぎ、すべてを1本の制御線につなぎます。これを「引き算」と呼びましょう。「引き算」が0のときは、Bはそのまま通り、回路は足し算をします。「引き算」が1のときは、Bのすべてのビットが反転します。では、足す1は？1つ目の加算器には、まだ使っていない繰り上がり入力があります。同じ制御線をそこにつなぎます。1本の線で、反転と1を足すことが、同時にできます。5引く3です。5は0、1、0、1。3を反転すると1、1、0、0。それに、制御線からの1を足します。加算器がリレーをして、結果は1、0、0、1、0。左端の余分な繰り上がりはそのままこぼれ落ち、残るのは0、0、1、0。2です。最初は、マイナス3を手で入力しました。今は回路が自分で反転します。4つのXORと1本の制御線で、加算器が加減算器になりました。</p>
+        <p>1つ問題があります。4ビットで表せるのは16通りだけ。マイナス8から7までです。では、6足す3は？0、1、1、0足す0、0、1、1は、1、0、0、1になります。2の補数として読むと、これはマイナス7です。9ではありません。円の上で、7を通り過ぎて、端を越え、負の側に落ちたのです。これをオーバーフローと呼びます。対策は、それに気づくことです。正の数2つを足して負の数になることはありません。負の数2つを足して正の数になることもありません。いくつかのゲートがまさにそれを見張り、警告ランプを点けます。オーバーフローフラグです。ほとんどのプロセッサーにあります。本物のコンピューターは32ビットや64ビットを使うので、範囲はとても広いです。32ビットなら20億を超えます。それでも起こります。2014年、このサイトのある動画の再生回数がとても多くなり、カウンターがあふれそうになって、64ビットにアップグレードされました。</p>
+        <p>これで、この小さな回路は、足し算と引き算ができ、負の数も扱え、答えが収まらないときには気づくこともできるようになりました。でも、コンピューターは足し算と引き算だけではありません。数を比べます。ビットの並び全体にANDやORもします。1つの回路は、その瞬間にどの仕事をすればいいか、どうやって知るのでしょう。次回は、選ぶ回路です。また会いましょう。</p>
+        <p>この回路は足し算しかできません。引き算をするところを見てください。コツは、コンピューターが負の数をどう書くかです。すべてのビットを反転して、1を足します。それを5に足し、余分な繰り上がりを捨てると、2になります。ほとんどのコンピューターが、この方法で引き算をします。</p>
+        <p>4ビットのコンピューターでは、6足す3がマイナス7になります。その理由はこうです。本物のコンピューターにはもっと多くのビットがあり、オーバーフローフラグという警告ランプがあります。</p>
+        </div>
+        <p class="ep-close">次回：選ぶ回路 ―― ALUを作ります。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../01/ja/"><span>前の回 · 第1話</span><b>8つのスイッチで足し算するしくみ（チップもコードもなし）</b></a><div class="ep-pg next soon"><span>次の回</span><b>第3話は <time datetime="2026-10-27T21:00:00+08:00" data-at="2026-10-27T21:00:00+08:00" data-fmt="when">10-27 21:00 (UTC+8)</time> に公開</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

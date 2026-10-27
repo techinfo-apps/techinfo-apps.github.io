@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>8 个开关怎么做加法（没有芯片，没有代码） — 从一个开关到 CPU #1</title>
+<meta name="description" content="八个开关，五盏灯，一颗芯片都没有：看完这个视频，你就会清清楚楚地知道，它们是怎么把两个数加起来的。 我们从一个开关和一盏灯开始，搭出与门（AND）、或门（OR）和非门（NOT），学会用二进制数数，再拼出半加器、全加器和 4 位加法器。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/01/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/01/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/01/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/01/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/01/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/01/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/01/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/01/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/01/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="8 个开关怎么做加法（没有芯片，没有代码） — 从一个开关到 CPU #1">
+<meta property="og:description" content="八个开关，五盏灯，一颗芯片都没有：看完这个视频，你就会清清楚楚地知道，它们是怎么把两个数加起来的。 我们从一个开关和一盏灯开始，搭出与门（AND）、或门（OR）和非门（NOT），学会用二进制数数，再拼出半加器、全加器和 4 位加法器。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/01/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "8 个开关怎么做加法（没有芯片，没有代码）", "description": "八个开关，五盏灯，一颗芯片都没有：看完这个视频，你就会清清楚楚地知道，它们是怎么把两个数加起来的。 我们从一个开关和一盏灯开始，搭出与门（AND）、或门（OR）和非门（NOT），学会用二进制数数，再拼出半加器、全加器和 4 位加法器。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp"], "uploadDate": "2026-10-25T22:35:00+08:00", "duration": "PT9M24S", "embedUrl": "https://www.youtube.com/embed/9xtOaLQJl_4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一个开关到 CPU · 第 1 集</p>
+      <h1 class="ep-title">8 个开关怎么做加法（没有芯片，没有代码）</h1>
+      <div class="vplayer" data-yt="9xtOaLQJl_4" data-title="8 个开关怎么做加法（没有芯片，没有代码）">
+        <button type="button" class="vplay" aria-label="播放: 8 个开关怎么做加法（没有芯片，没有代码）">
+          <img src="../../../../assets/img/videos/cpu-01.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/9xtOaLQJl_4" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">八个开关，五盏灯，一颗芯片都没有：看完这个视频，你就会清清楚楚地知道，它们是怎么把两个数加起来的。<br>我们从一个开关和一盏灯开始，搭出与门（AND）、或门（OR）和非门（NOT），学会用二进制数数，再拼出半加器、全加器和 4 位加法器。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>会做加法的八个开关</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=23" data-t="23" rel="noopener"><span class="t">0:23</span>一个开关就是一位</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>与门（AND）</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=123" data-t="123" rel="noopener"><span class="t">2:03</span>或门（OR）</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=150" data-t="150" rel="noopener"><span class="t">2:30</span>非门（NOT）</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=173" data-t="173" rel="noopener"><span class="t">2:53</span>由电来拨动的开关</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=235" data-t="235" rel="noopener"><span class="t">3:55</span>只用 0 和 1 数数</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=316" data-t="316" rel="noopener"><span class="t">5:16</span>两位相加</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=378" data-t="378" rel="noopener"><span class="t">6:18</span>异或门（XOR）和半加器</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=418" data-t="418" rel="noopener"><span class="t">6:58</span>全加器</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=466" data-t="466" rel="noopener"><span class="t">7:46</span>4 位加法器</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=532" data-t="532" rel="noopener"><span class="t">8:52</span>回顾与下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>这八个开关能把两个数加起来。五，和三。拨、拨、拨、拨……灯亮出来的是八。没有芯片，没有代码，只有开关，还有一个最后才打开的盒子。看完这集，你会清清楚楚地知道里面是什么。</p>
+        <p>从最简单的电路开始：一节电池、一根导线、一盏灯、一个开关。合上开关，电流绕着回路流一圈，灯亮了。我们把这叫作 1。断开开关，电流停了，灯灭了。这就是 0。一个开关只能说两件事：开或关，1 或 0。这一个“是或否”，叫作一位（bit），是电脑能存的最小的一份信息。电脑上的每张照片、每个字、每个游戏，都是用这样的一位一位搭起来的。</p>
+        <p>现在加第二个开关，跟第一个排成一串。我们叫它们 A 和 B。只合上 A……灯不亮。只合上 B……还是不亮。两个都合上，灯亮了。电流得先过 A、再过 B，哪一个断开，路就断了。把四种情况写进表里：0 和 0 得 0，0 和 1 得 0，1 和 0 得 0，1 和 1 得 1。这就是“与门”：只有 A 和 B 都是 1，输出才是 1。</p>
+        <p>现在把两个开关并排接，电流就有两条路通到灯。合上 A，灯亮；换成合上 B，也亮；两个都合上，还是亮。只有两个都断开，灯才会灭。这就是“或门”：A 是 1，或者 B 是 1，或者两个都是，输出就是 1。</p>
+        <p>再来一个：这个按钮是反着接的，不按的时候是通的。所以灯本来亮着……按下按钮，灯反而灭了。这就是“非门”：进去什么，出来就是反的。1 变 0，0 变 1。</p>
+        <p>到现在为止，开关都是我们自己拨的。真正的电脑里，没有人去碰它们。拨开关的是电。晶体管就是一个很小的开关，第三根线上来了信号，它就合上。这一下就不一样了：一个门的输出，可以去拨下一个门的开关。门能带动别的门，所以我们能把它们一个接一个连起来，搭成越来越大的电路。为了画起来简单，工程师给每种门一个符号：这是与门，这是或门，这个带小圆圈的三角是非门。一颗现代芯片里有几十亿个这样的开关，每个每秒能开关几十亿次。不过在搭大东西之前，得先学会用它们数数。</p>
+        <p>我们平时按十来数：最右边一位数个数，过了九就回到零，往左边一位进一，那一位是十。所以二百五十三，就是两个百、五个十、三个一。现在想象一下，只有两个数字，0 和 1。开关能表示的就只有这两个。规则一样：最右边一位数个数，只不过过了 1 就进位，而不是过了 9。所以每一位都是右边那位的两倍：1、2、4、8。用四盏灯数数：0、1，第一位满了，进位，2 就是 1 0；3 是 1 1；4 是 1 0 0。一直数下去，四盏灯能从 0 数到 15。5 是 4 加 1：0101。3 是 2 加 1：0011。这就是开场那些开关摆出来的样子。这种数法叫二进制。</p>
+        <p>现在来做加法。先从最小的加法开始：一位加一位。只有四种情况：0 加 0 得 0，0 加 1 得 1，1 加 0 得 1。1 加 1 等于 2，二进制写成 1 0：这一位写 0，把 1 进到下一位。所以一位加法有两个输出：和，还有进位。看进位那一列：0、0、0、1。这个样子我们见过，就是与门。再看和那一列：0、1、1、0。只有两个输入不一样时，它才是 1。</p>
+        <p>我们还没有这样的门，但能用手上这三种拼一个出来。先取 A 或 B：至少有一个是 1，它就是 1。再用与门和非门，把“两个都是 1”的情况挡掉。结果只在两个输入不一样时是 1。这叫“异或”（XOR），它也有自己的符号。把一个异或门和一个与门并排，喂它们同样的两位，就得到了和与进位。这叫半加器。</p>
+        <p>为什么只算“半”个？想想你在纸上是怎么加大一点的数的。从最右边开始，加完一列，把进位带到下一列。所以从第二列起，每一列要加三个数：A、B，还有进来的进位。半加器只能加两个，所以用两个半加器。第一个半加器加 A 和 B，第二个把结果再和进来的进位相加。两个里面只要有一个产生了进位，就往下一位送进位，一个或门就够了。两个半加器加一个或门，就是全加器：进去三位，出来和与进位。</p>
+        <p>现在把四个全加器排成一排，一列一个，每个的进位输出接到下一个的进位输入。还记得开场那个盒子吗？我们打开它。里面一直就是这个：一排四个全加器。再算一次 5 加 3。第一列：1 加 1，和是 0，进位 1。进位往左传，像接力赛里的接力棒。0 加 1，再加进位：和是 0，进位 1。下一列也一样。直到最后一列：0 加 0 再加进位，得 1。灯亮出来是 0 1 0 0 0，就是 8。真正的电脑用 64 列，而不是 4 列，道理完全一样。</p>
+        <p>回头看一下：一个开关给了我们一位；串起来、并起来的开关给了我们门；门去拨门，就有了加法器。我们一步都没离开过“开”和“关”。可是有个问题：这个电路里哪儿都没有负号。那电脑怎么做减法，又怎么存一个负数？这就是下一集的内容，下集见。</p>
+        <p>盒子里是什么？四个小加法器，把进位从右往左传。所有电脑都是这样做加法的。完整的故事，从一个开关讲起。</p>
+        <p>四盏灯能一直数到 15，看看怎么数。这就是二进制，所有电脑都这样数数。</p>
+        </div>
+        <p class="ep-close">下一集：负数，以及同一台加法器怎样学会做减法。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg next" href="../../02/zh-cn/"><span>下一集 · 第 2 集</span><b>为什么电脑里 6 + 3 = −7？负数和减法</b></a></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

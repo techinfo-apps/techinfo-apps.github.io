@@ -2,6 +2,10 @@
    en, zh-CN, zh-TW, ja; the Broomy page in seven. Keys are shared by every page; a missing one shows the English. */
 window.TI_STRINGS = {
   "en": {
+    "nav.videos": "Tutorials",
+    "home.vid.h": "Free tutorials.",
+    "home.vid.p": "Season one: how a computer really works, from a single switch to a whole CPU. Every picture is computed by code.",
+    "home.vid.btn": "Start watching",
     "nav.aiban": "AI Ban Simulator",
     "games.h": "Games",
     "games.slogan": "A little joy, for everyone.",
@@ -233,6 +237,10 @@ window.TI_STRINGS = {
     "nav.broomy": "Broomy"
   },
   "zh-CN": {
+    "nav.videos": "教程",
+    "home.vid.h": "免费教程。",
+    "home.vid.p": "第一季：电脑到底是怎么工作的，从一个开关讲到整颗 CPU。每个画面都是代码算出来的。",
+    "home.vid.btn": "开始看",
     "nav.aiban": "AI 封号模拟器",
     "games.h": "游戏",
     "games.slogan": "为人带来一点快乐。",
@@ -464,6 +472,10 @@ window.TI_STRINGS = {
     "nav.broomy": "小扫帚"
   },
   "zh-TW": {
+    "nav.videos": "教學",
+    "home.vid.h": "免費教學。",
+    "home.vid.p": "第一季：電腦到底是怎麼運作的，從一個開關講到整顆 CPU。每個畫面都是程式算出來的。",
+    "home.vid.btn": "開始看",
     "nav.aiban": "AI 封號模擬器",
     "games.h": "遊戲",
     "games.slogan": "為人帶來一點快樂。",
@@ -695,6 +707,10 @@ window.TI_STRINGS = {
     "nav.broomy": "小掃帚"
   },
   "ja": {
+    "nav.videos": "チュートリアル",
+    "home.vid.h": "無料チュートリアル。",
+    "home.vid.p": "シーズン1：スイッチ1つからCPUまるごと1つまで、コンピューターが本当はどう動いているのかを解説します。画面はすべてコードで計算して描いています。",
+    "home.vid.btn": "見てみる",
     "nav.aiban": "AI 垢BANシミュレーター",
     "games.h": "ゲーム",
     "games.slogan": "すこしの楽しさを、みんなに。",
@@ -926,6 +942,10 @@ window.TI_STRINGS = {
     "nav.broomy": "Broomy"
   },
   "ko": {
+    "nav.videos": "강좌",
+    "home.vid.h": "무료 강좌.",
+    "home.vid.p": "시즌 1: 스위치 하나에서 CPU 전체까지, 컴퓨터가 실제로 어떻게 동작하는지 설명합니다. 모든 화면은 코드로 계산해 그렸습니다.",
+    "home.vid.btn": "보러 가기",
     "nav.aiban": "AI Ban Simulator",
     "games.h": "게임",
     "games.slogan": "모두에게 작은 즐거움을.",
@@ -1089,6 +1109,10 @@ window.TI_STRINGS = {
     "sw.history": "버전마다 달라진 점: <a href=\"https://github.com/techinfo-apps/Broomy/blob/main/CHANGELOG.ko.md\" rel=\"noopener\">버전 기록</a>."
   },
   "es": {
+    "nav.videos": "Tutoriales",
+    "home.vid.h": "Tutoriales gratis.",
+    "home.vid.p": "Temporada 1: cómo funciona de verdad una computadora, de un solo interruptor a una CPU entera. Cada imagen la calcula el código.",
+    "home.vid.btn": "Empezar a ver",
     "nav.aiban": "AI Ban Simulator",
     "games.h": "Juegos",
     "games.slogan": "Un poco de alegría para todos.",
@@ -1252,6 +1276,10 @@ window.TI_STRINGS = {
     "sw.history": "Novedades de cada versión: <a href=\"https://github.com/techinfo-apps/Broomy/blob/main/CHANGELOG.es.md\" rel=\"noopener\">historial de versiones</a>."
   },
   "fr": {
+    "nav.videos": "Tutoriels",
+    "home.vid.h": "Tutoriels gratuits.",
+    "home.vid.p": "Saison 1 : comment un ordinateur fonctionne vraiment, d'un simple interrupteur à un processeur entier. Chaque image est calculée par le code.",
+    "home.vid.btn": "Commencer",
     "nav.aiban": "AI Ban Simulator",
     "games.h": "Jeux",
     "games.slogan": "Un peu de joie, pour tout le monde.",

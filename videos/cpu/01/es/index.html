@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cómo 8 interruptores suman dos números (sin chip ni código) — De un interruptor a una CPU #1</title>
+<meta name="description" content="Ocho interruptores, cinco luces y ningún chip: al terminar este video sabrás exactamente cómo suman dos números. Empezamos con un interruptor y una luz, construimos las puertas AND, OR y NOT, aprendemos a contar en binario y armamos un semisumador, un sumador completo y un sumador de 4 bits.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/01/es/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/01/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/01/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/01/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/01/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/01/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/01/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/01/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/01/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Cómo 8 interruptores suman dos números (sin chip ni código) — De un interruptor a una CPU #1">
+<meta property="og:description" content="Ocho interruptores, cinco luces y ningún chip: al terminar este video sabrás exactamente cómo suman dos números. Empezamos con un interruptor y una luz, construimos las puertas AND, OR y NOT, aprendemos a contar en binario y armamos un semisumador, un sumador completo y un sumador de 4 bits.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/01/es/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Cómo 8 interruptores suman dos números (sin chip ni código)", "description": "Ocho interruptores, cinco luces y ningún chip: al terminar este video sabrás exactamente cómo suman dos números. Empezamos con un interruptor y una luz, construimos las puertas AND, OR y NOT, aprendemos a contar en binario y armamos un semisumador, un sumador completo y un sumador de 4 bits.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp"], "uploadDate": "2026-10-25T22:35:00+08:00", "duration": "PT9M24S", "embedUrl": "https://www.youtube.com/embed/9xtOaLQJl_4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="es">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Todos los episodios</a> · De un interruptor a una CPU · Episodio 1</p>
+      <h1 class="ep-title">Cómo 8 interruptores suman dos números (sin chip ni código)</h1>
+      <div class="vplayer" data-yt="9xtOaLQJl_4" data-title="Cómo 8 interruptores suman dos números (sin chip ni código)">
+        <button type="button" class="vplay" aria-label="Reproducir: Cómo 8 interruptores suman dos números (sin chip ni código)">
+          <img src="../../../../assets/img/videos/cpu-01.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Al pulsar reproducir, el video se carga desde YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/9xtOaLQJl_4" rel="noopener">Ver en YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">Suscribirse en YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Ocho interruptores, cinco luces y ningún chip: al terminar este video sabrás exactamente cómo suman dos números.<br>Empezamos con un interruptor y una luz, construimos las puertas AND, OR y NOT, aprendemos a contar en binario y armamos un semisumador, un sumador completo y un sumador de 4 bits.</p>
+      <p class="ep-ai">Todas las animaciones de este video están dibujadas con código y la narración es una voz de IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Capítulos</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Ocho interruptores que suman</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=23" data-t="23" rel="noopener"><span class="t">0:23</span>Un interruptor es un bit</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>La puerta AND</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=123" data-t="123" rel="noopener"><span class="t">2:03</span>La puerta OR</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=150" data-t="150" rel="noopener"><span class="t">2:30</span>La puerta NOT</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=173" data-t="173" rel="noopener"><span class="t">2:53</span>Interruptores accionados por electricidad</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=235" data-t="235" rel="noopener"><span class="t">3:55</span>Contar solo con 0 y 1</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=316" data-t="316" rel="noopener"><span class="t">5:16</span>Sumar dos bits</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=378" data-t="378" rel="noopener"><span class="t">6:18</span>XOR y el semisumador</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=418" data-t="418" rel="noopener"><span class="t">6:58</span>El sumador completo</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=466" data-t="466" rel="noopener"><span class="t">7:46</span>Un sumador de 4 bits</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=532" data-t="532" rel="noopener"><span class="t">8:52</span>Resumen y qué sigue</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcripción</h2>
+        <div class="ep-text">
+        <p>Estos ocho interruptores pueden sumar dos números. Cinco y tres. Clic, clic, clic, clic... y las luces marcan ocho. Sin chip. Sin código. Solo interruptores y una caja que abriremos al final. Al terminar este video, sabrás exactamente qué hay dentro.</p>
+        <p>Empecemos con el circuito más sencillo que existe: una batería, un cable, una luz y un interruptor. Cierra el interruptor y la corriente fluye por todo el circuito. La luz se enciende. A eso lo llamaremos 1. Abre el interruptor y el flujo se detiene. La luz se apaga. Eso es 0. Un interruptor solo puede decir dos cosas: encendido o apagado, 1 o 0. Ese único sí o no se llama bit. Es la pieza de información más pequeña que puede guardar una computadora. Cada foto, cada palabra y cada juego de una computadora está hecho de bits como este.</p>
+        <p>Ahora añadamos un segundo interruptor, en serie con el primero. Los llamaremos A y B. Cierra solo A... nada. Solo B... sigue sin pasar nada. Cierra los dos y la luz se enciende. La corriente tiene que pasar por A y luego por B. Si uno de los dos está abierto, el camino se corta. Escribamos los cuatro casos en una tabla. 0 y 0 da 0. 0 y 1, 0. 1 y 0, 0. 1 y 1 da 1. Esto es una puerta AND. La salida es 1 solo cuando A y B son 1 a la vez.</p>
+        <p>Ahora pongamos los dos interruptores lado a lado, para que la corriente tenga dos caminos hasta la luz. Cierra A y la luz se enciende. Cierra B en su lugar y también se enciende. Cierra los dos: sigue encendida. Solo cuando los dos están abiertos, la luz se apaga. Esto es una puerta OR: la salida es 1 cuando A es 1, o B es 1, o ambos.</p>
+        <p>Uno más. Este botón está conectado al revés: está cerrado hasta que lo pulsas. Así que la luz está encendida... pulsa el botón y la luz se apaga. Esto es una puerta NOT. Lo que entra, sale al revés. El 1 se vuelve 0, y el 0 se vuelve 1.</p>
+        <p>Hasta ahora hemos accionado estos interruptores nosotros mismos. En una computadora real, nadie los toca. Los interruptores los acciona la electricidad. Un transistor es un interruptor diminuto que se cierra cuando llega una señal por un tercer cable. Eso lo cambia todo. Porque ahora la salida de una puerta puede accionar los interruptores de la siguiente puerta. Las puertas pueden controlar a otras puertas. Y eso significa que podemos encadenarlas en circuitos cada vez más grandes. Para que los dibujos sean sencillos, los ingenieros dan a cada puerta su propio símbolo. Esta es AND, esta es OR, y este pequeño triángulo con un círculo es NOT. Un chip moderno reúne miles de millones de estos interruptores, y cada uno puede cambiar miles de millones de veces por segundo. Pero antes de construir algo grande, necesitamos saber cómo contar con ellos.</p>
+        <p>Nosotros contamos de diez en diez. La columna de la derecha cuenta las unidades. Cuando pasa del nueve, vuelve a cero y suma uno a la siguiente columna: las decenas. Así, doscientos cincuenta y tres significa dos centenas, cinco decenas y tres unidades. Ahora imagina que solo tienes dos dígitos: cero y uno. Eso es todo lo que puede mostrar un interruptor. Funciona igual. La columna de la derecha cuenta las unidades. Pero pasa a la siguiente columna después del uno, no después del nueve. Así, cada columna vale el doble que la anterior: uno, dos, cuatro, ocho. Contemos con cuatro luces. Cero. Uno. Ahora la primera columna está llena, así que llevamos una: el dos es 1, 0. El tres es 1, 1. El cuatro es 1, 0, 0. Sigue así y cuatro luces pueden contar desde cero hasta quince. El cinco es cuatro más uno: 0, 1, 0, 1. El tres es dos más uno: 0, 0, 1, 1. Eso es exactamente lo que mostraban nuestros interruptores al principio. Esto se llama binario.</p>
+        <p>Ahora, sumemos. Empecemos por la suma más pequeña posible: un bit más un bit. Solo hay cuatro casos. Cero más cero es cero. Cero más uno es uno. Uno más cero es uno. Y uno más uno es dos, que en binario es 1, 0. Escribimos 0 y llevamos el 1. Así que toda suma de un bit tiene dos salidas: el bit de suma y el bit de acarreo. Mira la columna del acarreo: 0, 0, 0, 1. Ya hemos visto ese patrón. Es una puerta AND. Y la columna de la suma: 0, 1, 1, 0. Vale 1 solo cuando las dos entradas son distintas.</p>
+        <p>Todavía no tenemos una puerta para eso, pero podemos construir una con las tres que tenemos. Toma A OR B. Vale 1 cuando al menos una entrada está encendida. Luego bloquea el caso en que las dos están encendidas, usando AND y NOT. El resultado es 1 solo cuando las entradas son distintas. Esto se llama OR exclusivo, XOR para abreviar, y tiene su propio símbolo. Pon una XOR y una AND lado a lado, dales los mismos dos bits, y obtendrás la suma y el acarreo. Eso es un semisumador.</p>
+        <p>¿Por qué solo «semi»? Piensa en cómo sumas números más grandes en papel. Empiezas por la derecha, sumas la columna y llevas el acarreo a la siguiente. Así que cada columna después de la primera tiene tres números que sumar: A, B y el acarreo que llega. Un semisumador solo admite dos. Así que usamos dos. El primer semisumador suma A y B. El segundo suma ese resultado con el acarreo que llega. Si alguno de los dos produjo acarreo, pasamos un acarreo. Una puerta OR se encarga de eso. Dos semisumadores y una puerta OR: eso es un sumador completo. Tres bits de entrada, una suma y un acarreo de salida.</p>
+        <p>Ahora alinea cuatro sumadores completos, uno por cada columna, y conecta cada acarreo de salida con el acarreo de entrada del siguiente. ¿Recuerdas la caja del principio? Vamos a abrirla. Esto es lo que había dentro desde el principio: cuatro sumadores completos en fila. Cinco más tres otra vez. La primera columna: uno más uno. Suma 0, acarreo 1. El acarreo se mueve hacia la izquierda, como el testigo en una carrera de relevos. Cero más uno, más el acarreo: suma 0, acarreo 1. Y otra vez en la siguiente columna. Hasta la última columna: cero más cero más el acarreo da 1. Las luces marcan 0, 1, 0, 0, 0. Eso es ocho. Las computadoras reales hacen lo mismo con sesenta y cuatro columnas en lugar de cuatro. La idea no cambia.</p>
+        <p>Miremos atrás. Un interruptor nos dio un bit. Interruptores en fila y lado a lado nos dieron puertas. Puertas que accionan puertas nos dieron un sumador. Ni una sola vez salimos del mundo del encendido y el apagado. Pero hay un problema. En este circuito no hay ningún signo menos. Entonces, ¿cómo resta una computadora, o incluso guarda un número negativo? Eso es el próximo episodio. Nos vemos allí.</p>
+        <p>¿Qué hay dentro de la caja? Cuatro pequeños sumadores que pasan un acarreo de derecha a izquierda. Toda computadora suma así. La historia completa empieza con un solo interruptor.</p>
+        <p>Cuatro luces pueden contar hasta quince. Así se hace. Eso es el binario, y así cuenta toda computadora.</p>
+        </div>
+        <p class="ep-close">Próximo episodio: los números negativos y cómo el mismo sumador aprende a restar.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg next" href="../../02/es/"><span>Siguiente · Episodio 2</span><b>Por qué 6 + 3 = −7 en una computadora: números negativos y resta</b></a></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

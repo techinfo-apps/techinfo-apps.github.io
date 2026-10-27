@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>컴퓨터에서 6 + 3 = −7이 되는 이유: 음수와 뺄셈 — 스위치 하나에서 CPU까지 #2</title>
+<meta name="description" content="회로에는 마이너스 기호가 없어요. 그럼 컴퓨터는 −3을 어떻게 저장하고, 가산기는 어떻게 뺄셈을 할까요? 먼저 가장 쉽게 떠오르는 방법(부호 비트)을 해 보고 왜 안 되는지 확인해요. 그다음 열여섯 개의 수가 놓인 원을 따라 거꾸로 세어 보고, 2의 보수를 만나요. XOR 게이트 네 개와 선 하나로 가산기를 가감산기로 바꾸고, 6 + 3이 −7로 나올 수 있는 이유까지 알아봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/02/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/02/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/02/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/02/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/02/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/02/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/02/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/02/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/02/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="컴퓨터에서 6 + 3 = −7이 되는 이유: 음수와 뺄셈 — 스위치 하나에서 CPU까지 #2">
+<meta property="og:description" content="회로에는 마이너스 기호가 없어요. 그럼 컴퓨터는 −3을 어떻게 저장하고, 가산기는 어떻게 뺄셈을 할까요? 먼저 가장 쉽게 떠오르는 방법(부호 비트)을 해 보고 왜 안 되는지 확인해요. 그다음 열여섯 개의 수가 놓인 원을 따라 거꾸로 세어 보고, 2의 보수를 만나요. XOR 게이트 네 개와 선 하나로 가산기를 가감산기로 바꾸고, 6 + 3이 −7로 나올 수 있는 이유까지 알아봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-02.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/02/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "컴퓨터에서 6 + 3 = −7이 되는 이유: 음수와 뺄셈", "description": "회로에는 마이너스 기호가 없어요. 그럼 컴퓨터는 −3을 어떻게 저장하고, 가산기는 어떻게 뺄셈을 할까요? 먼저 가장 쉽게 떠오르는 방법(부호 비트)을 해 보고 왜 안 되는지 확인해요. 그다음 열여섯 개의 수가 놓인 원을 따라 거꾸로 세어 보고, 2의 보수를 만나요. XOR 게이트 네 개와 선 하나로 가산기를 가감산기로 바꾸고, 6 + 3이 −7로 나올 수 있는 이유까지 알아봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-02.webp"], "uploadDate": "2026-10-26T21:00:00+08:00", "duration": "PT8M30S", "embedUrl": "https://www.youtube.com/embed/YvoT53qUBrA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 2편</p>
+      <h1 class="ep-title">컴퓨터에서 6 + 3 = −7이 되는 이유: 음수와 뺄셈</h1>
+      <div class="vplayer" data-yt="YvoT53qUBrA" data-title="컴퓨터에서 6 + 3 = −7이 되는 이유: 음수와 뺄셈">
+        <button type="button" class="vplay" aria-label="재생: 컴퓨터에서 6 + 3 = −7이 되는 이유: 음수와 뺄셈">
+          <img src="../../../../assets/img/videos/cpu-02.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/YvoT53qUBrA" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">회로에는 마이너스 기호가 없어요. 그럼 컴퓨터는 −3을 어떻게 저장하고, 가산기는 어떻게 뺄셈을 할까요?<br>먼저 가장 쉽게 떠오르는 방법(부호 비트)을 해 보고 왜 안 되는지 확인해요. 그다음 열여섯 개의 수가 놓인 원을 따라 거꾸로 세어 보고, 2의 보수를 만나요. XOR 게이트 네 개와 선 하나로 가산기를 가감산기로 바꾸고, 6 + 3이 −7로 나올 수 있는 이유까지 알아봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>뺄셈하는 가산기</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=40" data-t="40" rel="noopener"><span class="t">0:40</span>회로에는 마이너스 기호가 없다</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=65" data-t="65" rel="noopener"><span class="t">1:05</span>부호 비트와 그 문제점</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=127" data-t="127" rel="noopener"><span class="t">2:07</span>거꾸로 세기</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=210" data-t="210" rel="noopener"><span class="t">3:30</span>2의 보수</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=282" data-t="282" rel="noopener"><span class="t">4:42</span>뺄셈은 덧셈이다</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=398" data-t="398" rel="noopener"><span class="t">6:38</span>오버플로</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=483" data-t="483" rel="noopener"><span class="t">8:03</span>정리와 다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>이건 지난번에 만든 그 가산기예요. 새 부품은 하나도 없어요. 5와… 마이너스 3. 딸깍… 그러면 불빛이 2를 보여 줘요. 이 가산기는 뺄셈을 할 수 있어요. 비밀은 마이너스 3을 쓰는 방법에 있어요. 그게 뭔지 알아봐요.</p>
+        <p>지난번에 우리는 이걸 만들었어요. 전가산기 네 개가 한 줄로 서서, 자리올림을 오른쪽에서 왼쪽으로 넘겨요. 0부터 15까지의 어떤 두 수든 더할 수 있어요.</p>
+        <p>하지만 실제 수에는 음수도 있어요. 기온은 영하로 내려갈 수 있어요. 엘리베이터는 1층 아래로 내려갈 수도 있어요. 회로에는 마이너스 기호를 쓸 자리가 없어요. 켜지거나 꺼지는 불빛만 있을 뿐이에요. 그래서 마이너스 기호 자체가 비트가 되어야 해요. 가장 쉬운 생각은 맨 왼쪽 불빛을 부호로 쓰는 거예요.</p>
+        <p>맨 왼쪽 불빛이 꺼져 있으면 플러스, 켜져 있으면 마이너스예요. 나머지 불빛 세 개가 크기를 나타내요. 그래서 플러스 3은 0, 0, 1, 1이고, 마이너스 3은 1, 0, 1, 1이에요. 그럴듯해 보여요. 하지만 문제가 두 가지 있어요. 첫째, 0이 두 번 나와요. 플러스 0과 마이너스 0이에요. 같은 수에 패턴이 두 개나 있는 건 낭비이고, 수를 비교하기도 불편해져요. 둘째, 우리 가산기로 3 더하기 마이너스 3을 계산해 봐요. 답은 0이어야 해요. 그런데 불빛은 1, 1, 1, 0을 보여 줘요. 부호 규칙으로 읽으면 마이너스 6이에요. 이걸 쓰려면 음수만을 위한 새 회로를 통째로 만들어야 해요. 더 좋은 방법이 있어요.</p>
+        <p>옛날 기계식 계수기를 떠올려 보세요. 0, 0, 0, 0을 보여 주고 있어요. 한 칸 뒤로 돌려요. 0에서 멈추지 않고, 9, 9, 9, 9로 돌아가요. 이진 계수기도 똑같아요. 모두 0인 상태에서 한 칸 뒤로 돌리면 모두 1이 돼요. 그럼 그걸 그냥 마이너스 1이라고 부르기로 해요. 한 칸 더 뒤로 가면 1, 1, 1, 0, 마이너스 2예요. 그다음은 마이너스 3, 이렇게 이어져요. 열여섯 가지 패턴을 모두 원 위에 놓아요. 오른쪽에는 0부터 7까지, 왼쪽에는 마이너스 1부터 마이너스 8까지예요. 그리고 보세요. 모든 음수에서 맨 왼쪽 비트는 여전히 1이에요. 부호 불빛을 공짜로 얻은 거예요. 더하기는 원 위에서 시계 방향으로 걸어가는 거예요. 마이너스 3은 0에서 열세 칸 떨어져 있으니까, 그걸 더한다는 건 열세 칸 앞으로 걷는다는 뜻이에요. 열여섯 칸짜리 원에서는 열세 칸 앞으로 가면 세 칸 뒤로 간 곳과 정확히 같은 자리에 도착해요. 3에서 출발하면 0이에요.</p>
+        <p>이렇게 음수를 쓰는 방법을 2의 보수라고 해요. 여러분이 써 본 거의 모든 컴퓨터가 이 방식으로 동작해요. 원이 없어도 찾을 수 있어요. 두 단계 방법이 있어요. 모든 비트를 뒤집고, 1을 더하는 거예요. 3은 0, 0, 1, 1이에요. 모든 비트를 뒤집으면 1, 1, 0, 0. 1을 더하면 1, 1, 0, 1. 이게 마이너스 3이에요. 왜 될까요? 어떤 수든 그 수를 뒤집은 것과 더하면 모든 자리가 1이 되고, 자리올림은 하나도 없어요. 전부 1이면 마이너스 1이에요. 그러니까 뒤집은 것은 마이너스 1에서 원래 수를 뺀 값이에요. 하나를 더 더하면 정확히 원래 수의 음수가 돼요. 그럼 0은요? 뒤집으면 모두 1이고, 1을 더하면 모두 0으로 돌아가요. 자리올림은 맨 끝에서 떨어져 나가요. 0은 딱 하나만 남아요. 문제 해결이에요.</p>
+        <p>이제 뺄셈은 쉬워요. A 빼기 B는 A 더하기 마이너스 B와 같아요. 그리고 마이너스 B는 B를 뒤집고 1을 더한 것이에요. 그러니까 A 빼기 B는 A 더하기 뒤집은 B 더하기 1이에요. 뒤집는 건 쉬워요. NOT 게이트가 하는 일이에요. 하지만 덧셈도 여전히 할 수 있는 회로를 원해요. 여기에 비결이 있어요. XOR 기억나요? 한 입력이 0이면 다른 입력이 그대로 지나가요. 한 입력이 1이면 다른 입력이 뒤집혀서 나와요. 그러니까 B의 각 선마다 XOR를 하나씩 달고, 전부 하나의 제어선에 연결해요. 이름은 &#x27;빼기&#x27;라고 할게요. &#x27;빼기&#x27;가 0이면 B가 바뀌지 않고 그대로 지나가서, 회로는 덧셈을 해요. &#x27;빼기&#x27;가 1이면 B의 모든 비트가 뒤집혀요. &#x27;더하기 1&#x27;은 어떻게 할까요? 첫 번째 가산기에는 우리가 쓰지 않던 자리올림 입력이 있어요. 같은 제어선을 거기에도 연결해요. 선 하나로 뒤집기와 1 더하기를 한꺼번에 해요. 5 빼기 3이에요. 5는 0, 1, 0, 1. 3을 뒤집으면 1, 1, 0, 0. 거기에 제어선에서 오는 1을 더해요. 가산기들이 이어달리기를 하면 결과는 1, 0, 0, 1, 0이에요. 왼쪽의 남는 자리올림은 그냥 떨어져 나가고, 0, 0, 1, 0이 남아요. 2예요. 처음에는 마이너스 3을 우리가 손으로 넣었어요. 이제 회로가 스스로 뒤집어요. XOR 게이트 네 개와 제어선 하나가 우리 가산기를 가감산기로 바꿔 놓았어요.</p>
+        <p>한 가지 걸리는 점이 있어요. 4비트는 열여섯 가지 패턴만 담을 수 있어요. 마이너스 8부터 7까지예요. 그럼 6 더하기 3은 뭘까요? 0, 1, 1, 0 더하기 0, 0, 1, 1은 1, 0, 0, 1이 돼요. 2의 보수로 읽으면 마이너스 7이에요. 9가 아니에요. 원 위에서 우리는 7을 지나쳐 가장자리를 넘어 음수 쪽으로 떨어졌어요. 이걸 오버플로라고 해요. 해결책은 그걸 알아채는 거예요. 양수 두 개를 더해서 음수가 나오면 안 돼요. 음수 두 개를 더해서 양수가 나와도 안 돼요. 게이트 몇 개가 바로 그걸 지켜보다가 경고등을 켜요. 오버플로 플래그예요. 대부분의 프로세서에 있어요. 진짜 컴퓨터는 32비트나 64비트를 쓰니까 범위가 아주 넓어요. 32비트는 20억을 넘어요. 그래도 일어나요. 2014년에 바로 이 사이트의 한 영상이 조회 수가 너무 많아져서 카운터가 곧 오버플로할 뻔했고, 64비트로 업그레이드해야 했어요.</p>
+        <p>이제 우리의 작은 회로는 더하고 뺄 수 있고, 음수도 다루고, 답이 들어가지 않을 때는 그것도 알아채요. 하지만 컴퓨터는 더하고 빼는 것보다 훨씬 많은 일을 해요. 수를 비교해요. 비트 한 줄 전체에 AND와 OR도 해요. 하나의 회로는 매 순간 어떤 일을 해야 하는지 어떻게 알까요? 다음 편은 고르는 회로예요. 거기서 만나요.</p>
+        <p>이 회로는 더하기만 할 수 있어요. 뺄셈을 하는 걸 보세요. 비결은 컴퓨터가 음수를 쓰는 방식이에요. 모든 비트를 뒤집고, 1을 더해요. 그걸 5에 더하고 남는 자리올림을 버리면 2가 돼요. 거의 모든 컴퓨터가 이렇게 뺄셈을 해요.</p>
+        <p>4비트 컴퓨터에서는 6 더하기 3이 마이너스 7이에요. 이유는 이래요. 진짜 컴퓨터는 비트가 더 많고, 오버플로 플래그라는 경고등이 있어요.</p>
+        </div>
+        <p class="ep-close">다음 편: 고르는 회로 — ALU 만들기.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../01/ko/"><span>이전 편 · 1편</span><b>스위치 8개로 두 수를 더하는 방법 (칩도 코드도 없이)</b></a><div class="ep-pg next soon"><span>다음 편</span><b>3편은 <time datetime="2026-10-27T21:00:00+08:00" data-at="2026-10-27T21:00:00+08:00" data-fmt="when">10-27 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

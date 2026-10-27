@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>为什么电脑里 6 + 3 = −7？负数和减法 — 从一个开关到 CPU #2</title>
+<meta name="description" content="电路里没有负号。那么，电脑要怎么存下 −3？加法器又怎么做减法？ 我们先试试最直接的想法（符号位），看看它为什么行不通；再沿着一圈十六个数倒着数；认识补码；用四个异或门和一根线，把加法器变成加减法器；最后弄明白，为什么 6 + 3 可能会算出 −7。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/02/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/02/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/02/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/02/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/02/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/02/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/02/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/02/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/02/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="为什么电脑里 6 + 3 = −7？负数和减法 — 从一个开关到 CPU #2">
+<meta property="og:description" content="电路里没有负号。那么，电脑要怎么存下 −3？加法器又怎么做减法？ 我们先试试最直接的想法（符号位），看看它为什么行不通；再沿着一圈十六个数倒着数；认识补码；用四个异或门和一根线，把加法器变成加减法器；最后弄明白，为什么 6 + 3 可能会算出 −7。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-02.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/02/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "为什么电脑里 6 + 3 = −7？负数和减法", "description": "电路里没有负号。那么，电脑要怎么存下 −3？加法器又怎么做减法？ 我们先试试最直接的想法（符号位），看看它为什么行不通；再沿着一圈十六个数倒着数；认识补码；用四个异或门和一根线，把加法器变成加减法器；最后弄明白，为什么 6 + 3 可能会算出 −7。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-02.webp"], "uploadDate": "2026-10-26T21:00:00+08:00", "duration": "PT8M30S", "embedUrl": "https://www.youtube.com/embed/YvoT53qUBrA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一个开关到 CPU · 第 2 集</p>
+      <h1 class="ep-title">为什么电脑里 6 + 3 = −7？负数和减法</h1>
+      <div class="vplayer" data-yt="YvoT53qUBrA" data-title="为什么电脑里 6 + 3 = −7？负数和减法">
+        <button type="button" class="vplay" aria-label="播放: 为什么电脑里 6 + 3 = −7？负数和减法">
+          <img src="../../../../assets/img/videos/cpu-02.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/YvoT53qUBrA" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">电路里没有负号。那么，电脑要怎么存下 −3？加法器又怎么做减法？<br>我们先试试最直接的想法（符号位），看看它为什么行不通；再沿着一圈十六个数倒着数；认识补码；用四个异或门和一根线，把加法器变成加减法器；最后弄明白，为什么 6 + 3 可能会算出 −7。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>会做减法的加法器</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=40" data-t="40" rel="noopener"><span class="t">0:40</span>电路里没有负号</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=65" data-t="65" rel="noopener"><span class="t">1:05</span>符号位和它的毛病</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=127" data-t="127" rel="noopener"><span class="t">2:07</span>倒着数</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=210" data-t="210" rel="noopener"><span class="t">3:30</span>补码</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=282" data-t="282" rel="noopener"><span class="t">4:42</span>减法就是加法</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=398" data-t="398" rel="noopener"><span class="t">6:38</span>溢出</a></li>
+        <li><a href="https://youtu.be/YvoT53qUBrA?t=483" data-t="483" rel="noopener"><span class="t">8:03</span>回顾与下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>这还是上一集那台加法器，一个零件都没加。五……再加负三。一拨……灯亮出来的是二。这台加法器会做减法。秘密在“负三”的写法里。我们来看看它是怎么写的。</p>
+        <p>上一集我们搭了这个：一排四个全加器，把进位从右往左传。它能把 0 到 15 之间的任意两个数加起来。</p>
+        <p>可是数是有负的：气温会降到零下，电梯会下到地面以下。电路里没有地方写负号，只有亮或灭的灯。所以负号本身也得变成一位。最直接的想法：拿最左边那盏灯当符号。</p>
+        <p>最左边的灯灭表示正，亮表示负，剩下三盏灯表示大小。所以正三是 0011，负三是 1011。看着挺合理，但有两个毛病。第一，零出现了两次：正零和负零。同一个数两种写法，浪费，比较大小也别扭。第二，拿加法器算三加负三，答案应该是零。结果灯亮出来是 1110，按符号位的读法，这是负六。要用这种写法，就得给负数另做一套电路。有更好的办法。</p>
+        <p>想象一个老式的机械计数器，显示 0000。往回拨一格，它不会停在零，而是转到 9999。二进制的计数器也一样：从全 0 往回拨一格，就变成全 1。那就干脆把它叫作负一。再往回一格是 1110，负二；再往回是负三，依次类推。把 16 种写法排成一圈：右半圈是 0 到 7，左半圈是 −1 到 −8。你看，所有负数的最左边一位还是 1。符号灯白白保留下来了。在转盘上，加法就是顺时针走。负三离零有 13 格，所以加负三就是往前走 13 格。一圈只有 16 格，往前走 13 格，正好落在往回走 3 格的地方。从三出发，就落在零。</p>
+        <p>这种写负数的办法叫“补码”。你用过的电脑几乎都是这样存负数的。不用转盘也能算出来，只要两步：每一位翻过来，再加一。三是 0011。每位翻过来：1100。再加一：1101。这就是负三。为什么对？任何一个数，加上它翻过来的样子，每一列都是 1，一个进位都没有。全 1 就是负一，所以翻过来的数等于“负一减去原来的数”；再加一，正好就是原来那个数的负数。那零呢？翻过来是全 1，加一，转回全 0，进位从最左边掉出去。只有一个零，毛病解决了。</p>
+        <p>现在减法就简单了：A 减 B，就是 A 加负 B。负 B 就是 B 翻过来再加一，所以 A 减 B 等于 A 加上翻过来的 B，再加一。翻过来不难，非门就干这个。可我们还想让这个电路照样能做加法。诀窍在这里。还记得异或门吗？一个输入是 0，另一个原样通过；一个输入是 1，另一个就被翻过来。那就在每根 B 线上加一个异或门，四个异或门都接到同一根控制线上，叫它“减法”。控制线是 0，B 原样通过，电路做加法；控制线是 1，B 的每一位都被翻过来。那个“加一”呢？最右边那个全加器有一个一直没用的进位输入，把同一根控制线也接上去。一根线，翻过来和加一，一起搞定。算五减三：五是 0101，三翻过来是 1100，再加上控制线送来的 1。全加器接力一遍，结果是 10010。最左边多出来的进位直接掉出去，剩下 0010，就是二。开场时，负三是我们手拨进去的；现在电路自己会翻：四个异或门加一根控制线，就把加法器变成了加减法器。</p>
+        <p>还有一个问题：四位只有 16 种写法，只能装下 −8 到 7。那六加三呢？0110 加 0011，得到 1001。按补码读，这是负七，不是九。在转盘上，我们走过了 7，一下翻到了负数那边。这叫溢出。办法是把它查出来：两个正数加起来不该是负数，两个负数加起来也不该是正数。加几个门专门盯着这件事，一出现就点亮一盏警示灯，这就是溢出标志。大多数处理器都有它。真电脑用 32 位、64 位，范围大得多，32 位就能超过 21 亿。可溢出照样会发生：2014 年，这个网站上有一个视频播放量太高，计数器眼看要溢出，只好改成 64 位。</p>
+        <p>现在这个小电路能加能减，能算负数，答案装不下时还会报警。可电脑要做的远不止加减：它要比较大小，要对一整排比特做与、做或。一个电路怎么知道这一刻该做哪一种？下一集：会做选择的电路。下集见。</p>
+        <p>这个电路只会做加法。看它做减法。诀窍在电脑怎么写负数：每一位翻过来，再加一。把它加到五上，丢掉多出来的进位，就得到二。几乎所有电脑都这样做减法。</p>
+        <p>在一台四位的电脑里，六加三等于负七。看看为什么。真电脑位数多得多，还有一盏叫“溢出标志”的警示灯。</p>
+        </div>
+        <p class="ep-close">下一集：会做选择的电路——搭一个 ALU。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../01/zh-cn/"><span>上一集 · 第 1 集</span><b>8 个开关怎么做加法（没有芯片，没有代码）</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 3 集 <time datetime="2026-10-27T21:00:00+08:00" data-at="2026-10-27T21:00:00+08:00" data-fmt="when">10-27 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

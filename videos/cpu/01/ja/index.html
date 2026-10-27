@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>8つのスイッチで足し算するしくみ（チップもコードもなし） — スイッチ1つからCPUまで #1</title>
+<meta name="description" content="8つのスイッチと5つのランプだけで、チップは一切なし。この動画を見終わるころには、これらがどうやって2つの数を足し算するのか、はっきり分かります。 1つのスイッチと1つのランプから始めて、ANDゲート、ORゲート、NOTゲートを作り、2進数での数え方を学び、半加算器、全加算器、4ビット加算器を組み立てます。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/01/ja/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/01/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/01/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/01/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/01/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/01/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/01/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/01/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/01/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="8つのスイッチで足し算するしくみ（チップもコードもなし） — スイッチ1つからCPUまで #1">
+<meta property="og:description" content="8つのスイッチと5つのランプだけで、チップは一切なし。この動画を見終わるころには、これらがどうやって2つの数を足し算するのか、はっきり分かります。 1つのスイッチと1つのランプから始めて、ANDゲート、ORゲート、NOTゲートを作り、2進数での数え方を学び、半加算器、全加算器、4ビット加算器を組み立てます。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/01/ja/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "8つのスイッチで足し算するしくみ（チップもコードもなし）", "description": "8つのスイッチと5つのランプだけで、チップは一切なし。この動画を見終わるころには、これらがどうやって2つの数を足し算するのか、はっきり分かります。 1つのスイッチと1つのランプから始めて、ANDゲート、ORゲート、NOTゲートを作り、2進数での数え方を学び、半加算器、全加算器、4ビット加算器を組み立てます。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp"], "uploadDate": "2026-10-25T22:35:00+08:00", "duration": "PT9M24S", "embedUrl": "https://www.youtube.com/embed/9xtOaLQJl_4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ja">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">すべての回</a> · スイッチ1つからCPUまで · 第1話</p>
+      <h1 class="ep-title">8つのスイッチで足し算するしくみ（チップもコードもなし）</h1>
+      <div class="vplayer" data-yt="9xtOaLQJl_4" data-title="8つのスイッチで足し算するしくみ（チップもコードもなし）">
+        <button type="button" class="vplay" aria-label="再生: 8つのスイッチで足し算するしくみ（チップもコードもなし）">
+          <img src="../../../../assets/img/videos/cpu-01.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">再生を押すと、動画をYouTubeから読み込みます。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/9xtOaLQJl_4" rel="noopener">YouTubeで見る</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">YouTubeでチャンネル登録</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">8つのスイッチと5つのランプだけで、チップは一切なし。この動画を見終わるころには、これらがどうやって2つの数を足し算するのか、はっきり分かります。<br>1つのスイッチと1つのランプから始めて、ANDゲート、ORゲート、NOTゲートを作り、2進数での数え方を学び、半加算器、全加算器、4ビット加算器を組み立てます。</p>
+      <p class="ep-ai">この動画のアニメーションは、すべてコードで描いています。ナレーションはAI音声です。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">チャプター</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>足し算をする8つのスイッチ</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=23" data-t="23" rel="noopener"><span class="t">0:23</span>スイッチ1つが1ビット</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>ANDゲート</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=123" data-t="123" rel="noopener"><span class="t">2:03</span>ORゲート</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=150" data-t="150" rel="noopener"><span class="t">2:30</span>NOTゲート</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=173" data-t="173" rel="noopener"><span class="t">2:53</span>電気で切り替わるスイッチ</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=235" data-t="235" rel="noopener"><span class="t">3:55</span>0と1だけで数える</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=316" data-t="316" rel="noopener"><span class="t">5:16</span>2つのビットの足し算</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=378" data-t="378" rel="noopener"><span class="t">6:18</span>XORと半加算器</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=418" data-t="418" rel="noopener"><span class="t">6:58</span>全加算器</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=466" data-t="466" rel="noopener"><span class="t">7:46</span>4ビット加算器</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=532" data-t="532" rel="noopener"><span class="t">8:52</span>まとめと次回予告</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">ナレーション全文</h2>
+        <div class="ep-text">
+        <p>この8つのスイッチで、2つの数を足し算できます。5と、3。パチ、パチ、パチ、パチ……すると、ランプは8を示します。チップもコードもありません。あるのはスイッチと、最後に開ける箱だけです。この動画の最後には、箱の中身がはっきり分かるようになります。</p>
+        <p>いちばんシンプルな回路から始めましょう。電池、導線、ランプ、そしてスイッチです。スイッチを閉じると、電流がぐるりと一周して流れ、ランプが点きます。これを「1」と呼びます。スイッチを開くと、流れが止まり、ランプが消えます。これが「0」です。1つのスイッチが言えることは2つだけ。オンかオフか、1か0かです。この「はい」か「いいえ」の1つ分を、ビットと呼びます。コンピューターが持てる、いちばん小さな情報の単位です。コンピューターの中の写真も、文字も、ゲームも、すべてこのようなビットでできています。</p>
+        <p>では、2つ目のスイッチを、1つ目と直列につなぎます。AとBと呼びましょう。Aだけ閉じると……何も起きません。Bだけ閉じても……やはり何も起きません。両方を閉じると、ランプが点きます。電流はAを通り、次にBを通らなければなりません。どちらかが開いていれば、道は途切れます。4つの場合を表に書いてみましょう。0と0は0。0と1は0。1と0は0。1と1は1になります。これがANDゲートです。AとBがどちらも1のときだけ、出力が1になります。</p>
+        <p>次は2つのスイッチを並列につなぎます。電流がランプへ向かう道が2本になります。Aを閉じると、ランプが点きます。代わりにBを閉じても、点きます。両方閉じても、点いたままです。両方が開いているときだけ、ランプは消えます。これがORゲートです。Aが1、またはBが1、またはその両方のとき、出力が1になります。</p>
+        <p>もう1つ。このボタンは逆につないであります。押すまでは閉じています。だから、ランプは点いています……ボタンを押すと、ランプが消えます。これがNOTゲートです。何を入れても、反対のものが出てきます。1は0に、0は1になります。</p>
+        <p>ここまでは、スイッチを自分の手で切り替えてきました。本物のコンピューターでは、誰も触りません。スイッチを切り替えるのは電気です。トランジスタは小さなスイッチで、3本目の線に信号が来ると閉じます。これですべてが変わります。1つのゲートの出力が、次のゲートのスイッチを切り替えられるからです。ゲートは、ほかのゲートを動かせます。つまり、ゲートをつなげて、どんどん大きな回路にできるということです。図を簡単にするために、エンジニアはゲートごとに専用の記号を使います。これがAND、これがOR、そして丸のついたこの小さな三角形がNOTです。現代のチップには、何十億個ものスイッチが詰まっていて、1つ1つが毎秒何十億回も切り替わります。でも、大きなものを作る前に、これで数を数える方法を知る必要があります。</p>
+        <p>私たちは10を単位に数えます。右の桁は1の位を数えます。9を超えると0に戻り、次の桁、つまり10の位に1を足します。つまり、253は、100が2つ、10が5つ、1が3つという意味です。では、数字が0と1の2つしかないとしましょう。スイッチが表せるのは、それだけです。仕組みは同じです。右の桁は1の位を数えます。ただし、9ではなく1を超えたところで繰り上がります。だから、それぞれの桁は、1つ右の桁の2倍の価値があります。1、2、4、8です。4つのランプで数えてみましょう。0。1。ここで1桁目がいっぱいになるので、繰り上がります。2は1、0。3は1、1。4は1、0、0です。このまま続けると、4つのランプで、0から15まで数えられます。5は4足す1で、0、1、0、1。3は2足す1で、0、0、1、1です。これは、最初にスイッチが示していたものと同じです。これを2進数と呼びます。</p>
+        <p>では、足し算です。いちばん小さな足し算から始めましょう。1ビット足す1ビットです。場合は4つしかありません。0足す0は0。0足す1は1。1足す0は1。そして、1足す1は2。2進数では1、0です。0を書いて、1を繰り上げます。つまり、1ビットの足し算には、出力が2つあります。和のビットと、繰り上がりのビットです。繰り上がりの列を見てください。0、0、0、1。このパターンは前に見ました。ANDゲートです。次に和の列です。0、1、1、0。2つの入力が違うときだけ1になります。</p>
+        <p>このためのゲートはまだありませんが、手持ちの3つのゲートから作れます。まず、A OR Bを取ります。少なくとも1つの入力がオンのとき1になります。次に、ANDとNOTを使って、両方がオンの場合を止めます。結果は、入力が違うときだけ1になります。これを排他的論理和、略してXORと呼び、専用の記号があります。XORとANDを並べ、同じ2つのビットを入力すると、和と繰り上がりが得られます。これが半加算器です。</p>
+        <p>なぜ「半分」だけなのでしょう。紙で大きな数を足すときのことを考えてみてください。右から始めて、その桁を足し、次の桁に繰り上げます。つまり、最初の桁より後は、どの桁も3つの数を足すことになります。A、B、そして下の桁から来る繰り上がりです。半加算器は2つしか受け取れません。だから、2つ使います。1つ目の半加算器がAとBを足します。2つ目が、その結果を、入ってくる繰り上がりに足します。どちらかが繰り上がりを出したら、繰り上がりを次へ渡します。ORゲート1つで済みます。半加算器2つとORゲート1つ。これが全加算器です。3ビットを入れると、和と繰り上がりが出てきます。</p>
+        <p>では、全加算器を4つ並べます。桁ごとに1つです。そして、それぞれの繰り上がり出力を、次の繰り上がり入力につなぎます。最初に出てきた箱を覚えていますか。開けてみましょう。中にはずっと、これが入っていました。4つの全加算器の列です。もう一度、5足す3です。1桁目は、1足す1。和は0、繰り上がりは1。繰り上がりは、リレーのバトンのように左へ進みます。0足す1、足す繰り上がりで、和は0、繰り上がりは1。次の桁でも同じです。最後の桁まで来ます。0足す0、足す繰り上がりで、1になります。ランプは0、1、0、0、0を示しています。これが8です。本物のコンピューターも同じことをします。4桁ではなく64桁で。考え方は変わりません。</p>
+        <p>振り返ってみましょう。1つのスイッチは、1ビットをくれました。直列と並列のスイッチは、ゲートをくれました。ゲートがゲートを切り替えることで、加算器ができました。私たちは一度も、オンとオフの世界から出ていません。でも、問題があります。この回路には、マイナス記号がどこにもありません。では、コンピューターはどうやって引き算をするのでしょう。負の数を保存することさえ、どうするのでしょう。それは次の回で。また会いましょう。</p>
+        <p>箱の中には何があるのでしょう。4つの小さな加算器が、繰り上がりを右から左へ渡しています。コンピューターはどれも、この方法で足し算をします。完全な話は、1つのスイッチから始まります。</p>
+        <p>4つのランプで、15まで数えられます。その方法はこうです。これが2進数で、すべてのコンピューターの数え方です。</p>
+        </div>
+        <p class="ep-close">次回：負の数と、同じ加算器が引き算を覚えるしくみ。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg next" href="../../02/ja/"><span>次の回 · 第2話</span><b>コンピューターで 6 + 3 = −7 になる理由：負の数と引き算</b></a></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

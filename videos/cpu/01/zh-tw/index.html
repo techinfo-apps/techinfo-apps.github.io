@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>8 個開關怎麼做加法（沒有晶片，沒有程式碼） — 從一個開關到 CPU #1</title>
+<meta name="description" content="八個開關、五盞燈，完全沒有晶片：看完這支影片，你就會清清楚楚知道，它們是怎麼把兩個數加起來的。 我們從一個開關和一盞燈開始，搭出及閘（AND）、或閘（OR）和反閘（NOT），學會用二進位數數，再組合出半加器、全加器和 4 位元加法器。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/01/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/01/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/01/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/01/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/01/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/01/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/01/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/01/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/01/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="8 個開關怎麼做加法（沒有晶片，沒有程式碼） — 從一個開關到 CPU #1">
+<meta property="og:description" content="八個開關、五盞燈，完全沒有晶片：看完這支影片，你就會清清楚楚知道，它們是怎麼把兩個數加起來的。 我們從一個開關和一盞燈開始，搭出及閘（AND）、或閘（OR）和反閘（NOT），學會用二進位數數，再組合出半加器、全加器和 4 位元加法器。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/01/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "8 個開關怎麼做加法（沒有晶片，沒有程式碼）", "description": "八個開關、五盞燈，完全沒有晶片：看完這支影片，你就會清清楚楚知道，它們是怎麼把兩個數加起來的。 我們從一個開關和一盞燈開始，搭出及閘（AND）、或閘（OR）和反閘（NOT），學會用二進位數數，再組合出半加器、全加器和 4 位元加法器。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-01.webp"], "uploadDate": "2026-10-25T22:35:00+08:00", "duration": "PT9M24S", "embedUrl": "https://www.youtube.com/embed/9xtOaLQJl_4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一個開關到 CPU · 第 1 集</p>
+      <h1 class="ep-title">8 個開關怎麼做加法（沒有晶片，沒有程式碼）</h1>
+      <div class="vplayer" data-yt="9xtOaLQJl_4" data-title="8 個開關怎麼做加法（沒有晶片，沒有程式碼）">
+        <button type="button" class="vplay" aria-label="播放: 8 個開關怎麼做加法（沒有晶片，沒有程式碼）">
+          <img src="../../../../assets/img/videos/cpu-01.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/9xtOaLQJl_4" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">八個開關、五盞燈，完全沒有晶片：看完這支影片，你就會清清楚楚知道，它們是怎麼把兩個數加起來的。<br>我們從一個開關和一盞燈開始，搭出及閘（AND）、或閘（OR）和反閘（NOT），學會用二進位數數，再組合出半加器、全加器和 4 位元加法器。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>會做加法的八個開關</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=23" data-t="23" rel="noopener"><span class="t">0:23</span>一個開關就是一個位元</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>及閘（AND）</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=123" data-t="123" rel="noopener"><span class="t">2:03</span>或閘（OR）</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=150" data-t="150" rel="noopener"><span class="t">2:30</span>反閘（NOT）</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=173" data-t="173" rel="noopener"><span class="t">2:53</span>由電來撥動的開關</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=235" data-t="235" rel="noopener"><span class="t">3:55</span>只用 0 和 1 數數</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=316" data-t="316" rel="noopener"><span class="t">5:16</span>兩個位元相加</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=378" data-t="378" rel="noopener"><span class="t">6:18</span>互斥或閘（XOR）與半加器</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=418" data-t="418" rel="noopener"><span class="t">6:58</span>全加器</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=466" data-t="466" rel="noopener"><span class="t">7:46</span>4 位元加法器</a></li>
+        <li><a href="https://youtu.be/9xtOaLQJl_4?t=532" data-t="532" rel="noopener"><span class="t">8:52</span>回顧與下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>這八個開關，能把兩個數加起來。五，和三。撥、撥、撥、撥……燈亮出來的是八。沒有晶片，沒有程式碼，只有開關，還有一個最後才會打開的盒子。看完這一集，你就會清清楚楚知道裡面是什麼。</p>
+        <p>我們從最簡單的電路開始：一顆電池、一條導線、一盞燈，還有一個開關。合上開關，電流就繞著電路流一圈，燈亮了。我們把這叫作 1。打開開關，電流就停了，燈熄了。這就是 0。一個開關只能表示兩件事：開或關，1 或 0。這一個「是或否」，叫作位元（bit），是電腦能儲存的最小資訊單位。電腦裡的每一張照片、每一個字、每一款遊戲，都是用這樣的位元一個一個組成的。</p>
+        <p>現在加上第二個開關，和第一個串在一起。我們叫它們 A 和 B。只合上 A……沒反應。只合上 B……還是沒反應。兩個都合上，燈就亮了。電流得先通過 A，再通過 B。只要有一個是斷開的，路就斷了。我們把四種情況寫成表格。0 和 0 得 0，0 和 1 得 0，1 和 0 得 0，1 和 1 得 1。這就是及閘（AND）。只有 A 和 B 都是 1 時，輸出才是 1。</p>
+        <p>現在把兩個開關並排接，電流就有兩條路可以通到燈。合上 A，燈亮了。換成合上 B，也亮。兩個都合上，還是亮。只有兩個都打開時，燈才會熄滅。這就是或閘（OR）：A 是 1，或 B 是 1，或兩個都是 1，輸出就是 1。</p>
+        <p>再來一個。這個按鈕是反著接的：不按的時候是通的。所以燈本來是亮的……按下按鈕，燈就熄了。這就是反閘（NOT）。輸入什麼，輸出的就是相反的。1 變成 0，0 變成 1。</p>
+        <p>到目前為止，開關都是我們自己撥的。真正的電腦裡，沒有人去碰它們。撥開關的是電。電晶體是一個很小的開關，當第三條線上有訊號傳來，它就會合上。這一下，一切都不一樣了。因為現在，一個閘的輸出，可以去撥動下一個閘的開關。閘可以驅動其他的閘。這表示我們能把它們一個接一個串起來，組成越來越大的電路。為了讓圖畫起來簡單，工程師為每種閘設計了專屬的符號。這是及閘，這是或閘，這個帶小圓圈的小三角形是反閘。現代的晶片裡塞了幾十億個這樣的開關，而每一個每秒鐘都能開關幾十億次。不過在建造任何大東西之前，我們得先學會怎麼用它們來數數。</p>
+        <p>我們平常是用十進位來數數。最右邊那一欄數個位。數過九，就回到零，並往下一欄進一：十位。所以兩百五十三，就是兩個百、五個十、三個一。現在想像一下，你只有兩個數字：0 和 1。開關能表示的，就只有這兩個。規則是一樣的。最右邊那一欄數個位。只不過數過 1 就進位，而不是數過 9。所以每一欄的價值，都是右邊那一欄的兩倍：1、2、4、8。我們用四盞燈來數數。0。1。這時第一欄滿了，所以要進位：2 是 1、0。3 是 1、1。4 是 1、0、0。一路數下去，四盞燈可以從 0 數到 15。5 是 4 加 1：0、1、0、1。3 是 2 加 1：0、0、1、1。這正是一開始那些開關擺出來的樣子。這種數法叫作二進位。</p>
+        <p>現在來做加法。我們從最小的加法開始：一個位元加一個位元。只有四種情況。0 加 0 是 0。0 加 1 是 1。1 加 0 是 1。而 1 加 1 等於 2，用二進位寫成 1、0。我們這一位寫下 0，然後把 1 進位。所以每個一位元的加法都有兩個輸出：和，還有進位。看進位那一欄：0、0、0、1。這個模式我們見過，它就是及閘。再看和那一欄：0、1、1、0。只有兩個輸入不一樣時，它才是 1。</p>
+        <p>我們還沒有這樣的閘，不過可以用手上這三種閘組合出一個來。先取 A 或 B。只要至少有一個輸入是 1，它就是 1。然後再用及閘和反閘，把「兩個都是 1」的情況擋掉。結果只有在兩個輸入不一樣時才是 1。這叫作互斥或（XOR），它也有自己的符號。把一個互斥或閘和一個及閘並排，餵給它們同樣的兩個位元，就能得到和與進位。這就是半加器。</p>
+        <p>為什麼只算「半個」？想想你在紙上怎麼加比較大的數。你從最右邊開始，加完一欄，再把進位帶到下一欄。所以從第二欄起，每一欄要加三個數：A、B，還有進來的進位。半加器只能加兩個數。所以我們用兩個半加器。第一個半加器加 A 和 B。第二個半加器，把這個結果再加上進來的進位。只要它們其中一個產生了進位，我們就要往下一位送出進位。一個或閘就能搞定。兩個半加器加一個或閘，就是全加器。輸入三個位元，輸出一個和與一個進位。</p>
+        <p>現在把四個全加器排成一列，一欄一個，再把每一個的進位輸出，接到下一個的進位輸入。還記得一開始那個盒子嗎？我們來打開它。它裡面一直都是這個：一排四個全加器。再算一次 5 加 3。第一欄：1 加 1。和是 0，進位 1。進位往左傳，就像接力賽裡的接力棒。0 加 1，再加進位：和是 0，進位 1。下一欄也是一樣。直到最後一欄：0 加 0，再加進位，得到 1。燈亮出來是 0、1、0、0、0。這就是 8。真正的電腦做的是同一件事，只是用 64 欄，而不是 4 欄。原理完全沒變。</p>
+        <p>我們回頭看看。一個開關給了我們一個位元。串起來、並起來的開關，給了我們閘。閘去撥動閘，給了我們加法器。我們一步都沒有離開「開」和「關」的世界。但有個問題。這個電路裡，哪裡都沒有負號。那麼，電腦要怎麼做減法，甚至怎麼儲存負數呢？那就是下一集的內容。我們下集見。</p>
+        <p>盒子裡有什麼？四個小加法器，把進位從右往左傳。所有電腦都是這樣做加法的。完整的故事，從一個開關說起。</p>
+        <p>四盞燈可以一路數到 15。看看是怎麼數的。這就是二進位，每一台電腦都是這樣數數的。</p>
+        </div>
+        <p class="ep-close">下一集：負數，以及同一台加法器怎麼學會做減法。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg next" href="../../02/zh-tw/"><span>下一集 · 第 2 集</span><b>為什麼電腦裡 6 + 3 = −7？負數與減法</b></a></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

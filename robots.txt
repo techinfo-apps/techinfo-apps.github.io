@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://techinfo-apps.github.io/videos/sitemap.xml
