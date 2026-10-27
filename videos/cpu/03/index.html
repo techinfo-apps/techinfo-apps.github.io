@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>One Circuit, Four Answers: Building an ALU From Logic Gates — From One Switch to a CPU #3</title>
+<meta name="description" content="Two numbers go in, five and one. Turn a small dial and the same circuit answers six, four, one or five. How? We run AND and OR across whole rows of bits, build a multiplexer that picks one signal out of several, meet its cousin the decoder, see how a computer compares two numbers with one subtraction and a few flag lights, and put it all together into an ALU, the arithmetic logic unit.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/03/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/03/" data-lang="en" data-href="./">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/03/zh-cn/" data-lang="zh-CN" data-href="./zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/03/zh-tw/" data-lang="zh-TW" data-href="./zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/03/ja/" data-lang="ja" data-href="./ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/03/ko/" data-lang="ko" data-href="./ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/03/es/" data-lang="es" data-href="./es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/03/fr/" data-lang="fr" data-href="./fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/03/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="One Circuit, Four Answers: Building an ALU From Logic Gates — From One Switch to a CPU #3">
+<meta property="og:description" content="Two numbers go in, five and one. Turn a small dial and the same circuit answers six, four, one or five. How? We run AND and OR across whole rows of bits, build a multiplexer that picks one signal out of several, meet its cousin the decoder, see how a computer compares two numbers with one subtraction and a few flag lights, and put it all together into an ALU, the arithmetic logic unit.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-03.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/03/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "One Circuit, Four Answers: Building an ALU From Logic Gates", "description": "Two numbers go in, five and one. Turn a small dial and the same circuit answers six, four, one or five. How? We run AND and OR across whole rows of bits, build a multiplexer that picks one signal out of several, meet its cousin the decoder, see how a computer compares two numbers with one subtraction and a few flag lights, and put it all together into an ALU, the arithmetic logic unit.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-03.webp"], "uploadDate": "2026-10-27T21:00:00+08:00", "duration": "PT6M29S", "embedUrl": "https://www.youtube.com/embed/skivFRxbf6U", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../" data-page-lang="en">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../videos/">All episodes</a> · From One Switch to a CPU · Episode 3</p>
+      <h1 class="ep-title">One Circuit, Four Answers: Building an ALU From Logic Gates</h1>
+      <div class="vplayer" data-yt="skivFRxbf6U" data-title="One Circuit, Four Answers: Building an ALU From Logic Gates">
+        <button type="button" class="vplay" aria-label="Play: One Circuit, Four Answers: Building an ALU From Logic Gates">
+          <img src="../../../assets/img/videos/cpu-03.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Pressing play loads the video from YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/skivFRxbf6U" rel="noopener">Watch on YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">Subscribe on YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Two numbers go in, five and one. Turn a small dial and the same circuit answers six, four, one or five. How?<br>We run AND and OR across whole rows of bits, build a multiplexer that picks one signal out of several, meet its cousin the decoder, see how a computer compares two numbers with one subtraction and a few flag lights, and put it all together into an ALU, the arithmetic logic unit.</p>
+      <p class="ep-ai">Every animation in this video is drawn by code, and the narration is an AI voice.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapters</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/skivFRxbf6U?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>One circuit, four answers</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>Where we are</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=43" data-t="43" rel="noopener"><span class="t">0:43</span>AND and OR on a row of bits</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=96" data-t="96" rel="noopener"><span class="t">1:36</span>The multiplexer</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=159" data-t="159" rel="noopener"><span class="t">2:39</span>Choosing from four</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=185" data-t="185" rel="noopener"><span class="t">3:05</span>The decoder</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=223" data-t="223" rel="noopener"><span class="t">3:43</span>Comparing numbers and flags</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=288" data-t="288" rel="noopener"><span class="t">4:48</span>Building the ALU</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=369" data-t="369" rel="noopener"><span class="t">6:09</span>What&#x27;s next</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcript</h2>
+        <div class="ep-text">
+        <p>Two numbers go in: five and one. Watch the answer. Add: six. Subtract: four. AND: one. OR: five. Same two numbers, four different answers. The only thing that changed is this little dial. Today, we build the circuit behind it.</p>
+        <p>So far we have an adder that can also subtract, with one control line deciding which. But a computer needs more jobs than that. It needs AND and OR on whole rows of bits, and it needs to compare numbers.</p>
+        <p>AND on a row of bits is easy: four AND gates side by side, one for each column. Five is zero, one, zero, one. One is zero, zero, zero, one. Column by column, AND gives zero, zero, zero, one. Swap in four OR gates, and the same inputs give zero, one, zero, one. So now we have three circuits, all looking at the same two numbers, each with its own answer. We need a way to pick one.</p>
+        <p>Picture a railway switch. Two tracks come in, one goes out, and a lever decides which track gets through. We can build the same thing for a signal. It&#x27;s called a multiplexer, or mux for short. Two inputs, A and B. One output. And a select line, S. When S is zero, the output copies A. When S is one, it copies B. Inside, it&#x27;s just the gates we know. One AND gate lets A through only when S is zero, thanks to a NOT gate on S. Another AND gate lets B through only when S is one. An OR gate joins the two paths. Since only one path is open at a time, whatever comes out is the input we picked. To choose from four inputs, stack the switches: two muxes pick within each pair, and a third picks between the pairs. Now it takes two select lines. Two bits make four combinations: zero zero, zero one, one zero, one one. One for each input.</p>
+        <p>There&#x27;s a close cousin of the mux, called a decoder. It goes the other way: two input bits, four output lines. Exactly one output lights up: the one whose number you typed in. Zero zero lights line zero. One one lights line three. Each output is one AND gate, with NOT gates on the inputs it wants to be zero. Keep the decoder in mind. In a few episodes, it will pick one cell out of millions in memory.</p>
+        <p>Now, comparing. Is five equal to one? Is it bigger? We don&#x27;t need a new circuit for that. We subtract. Five minus one is four. Not zero, so they&#x27;re not equal. And the answer isn&#x27;t negative, so five is the bigger one, as long as nothing overflowed. To check for zero, feed all four result bits into a single NOR gate: an OR gate with a NOT on its output. It gives one only when every bit is zero. That light is called the zero flag. The leftmost bit of the result tells us the sign: that&#x27;s the negative flag. Together with the carry and overflow flags from last time, these little lights describe the answer: zero or not, negative or not, too big or not. Subtract, then look at the flags. That&#x27;s how a computer compares.</p>
+        <p>Time to put it all together. A and B go into three units at once: the adder and subtractor, the row of ANDs, and the row of ORs. All three work at the same time, every time. Each produces its own answer. A four-way mux on each column picks which answer comes out. Its two select lines are the operation code. Zero zero means add. Zero one means subtract: the same bit also drives the subtract line. One zero means AND. One one means OR. And the flags sit on the side, describing whatever came out. Engineers draw this whole thing as one shape, with a notch on top: the ALU, the arithmetic logic unit. Real ALUs have more operations: shifting bits, X-OR, and more. But the idea is exactly this: every unit computes, and a mux picks the answer. Back to our dial. Five and one. Add: six. Subtract: four. AND: one. OR: five.</p>
+        <p>Our ALU answers instantly, but it has no memory. Change the inputs, and the old answer is gone. To build a computer, we also need circuits that remember. We&#x27;ll build those soon. But next time, our ALU learns to multiply and divide. See you there.</p>
+        <p>Same two numbers. Turn the dial. Inside, three circuits work at once, and a mux picks one answer. This is the ALU, the calculator at the heart of every processor.</p>
+        <p>How does a computer know five is bigger than one? It subtracts. Subtract, look at the flags. That&#x27;s a comparison.</p>
+        </div>
+        <p class="ep-close">Next episode: how the same parts multiply and divide.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../02/"><span>Previous · Episode 2</span><b>Why 6 + 3 = −7 in a Computer: Negative Numbers and Subtraction</b></a><div class="ep-pg next soon"><span>Next</span><b>Episode 4 comes out <time datetime="2026-10-28T21:00:00+08:00" data-at="2026-10-28T21:00:00+08:00" data-fmt="when">10-28 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../assets/strings.js"></script>
+<script src="../../../assets/site.js"></script>
+<script src="../../../assets/videos.js"></script>
+</body>
+</html>

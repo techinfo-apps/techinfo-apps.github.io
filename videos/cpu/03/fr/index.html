@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Un circuit, quatre réponses : construire une ALU — D&#x27;un interrupteur à un processeur #3</title>
+<meta name="description" content="Deux nombres entrent : cinq et un. On tourne un petit cadran et le même circuit répond six, quatre, un ou cinq. Comment est-ce possible ? Nous appliquons AND et OR à des rangées entières de bits, construisons un multiplexeur qui choisit un signal parmi plusieurs, rencontrons son proche cousin, le décodeur, voyons comment un ordinateur compare deux nombres avec une soustraction et quelques indicateurs, et assemblons le tout en une ALU, l&#x27;unité arithmétique et logique.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/03/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/03/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/03/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/03/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/03/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/03/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/03/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/03/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/03/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Un circuit, quatre réponses : construire une ALU — D&#x27;un interrupteur à un processeur #3">
+<meta property="og:description" content="Deux nombres entrent : cinq et un. On tourne un petit cadran et le même circuit répond six, quatre, un ou cinq. Comment est-ce possible ? Nous appliquons AND et OR à des rangées entières de bits, construisons un multiplexeur qui choisit un signal parmi plusieurs, rencontrons son proche cousin, le décodeur, voyons comment un ordinateur compare deux nombres avec une soustraction et quelques indicateurs, et assemblons le tout en une ALU, l&#x27;unité arithmétique et logique.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-03.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/03/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Un circuit, quatre réponses : construire une ALU", "description": "Deux nombres entrent : cinq et un. On tourne un petit cadran et le même circuit répond six, quatre, un ou cinq. Comment est-ce possible ? Nous appliquons AND et OR à des rangées entières de bits, construisons un multiplexeur qui choisit un signal parmi plusieurs, rencontrons son proche cousin, le décodeur, voyons comment un ordinateur compare deux nombres avec une soustraction et quelques indicateurs, et assemblons le tout en une ALU, l'unité arithmétique et logique.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-03.webp"], "uploadDate": "2026-10-27T21:00:00+08:00", "duration": "PT6M29S", "embedUrl": "https://www.youtube.com/embed/skivFRxbf6U", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;un interrupteur à un processeur · Épisode 3</p>
+      <h1 class="ep-title">Un circuit, quatre réponses : construire une ALU</h1>
+      <div class="vplayer" data-yt="skivFRxbf6U" data-title="Un circuit, quatre réponses : construire une ALU">
+        <button type="button" class="vplay" aria-label="Lire: Un circuit, quatre réponses : construire une ALU">
+          <img src="../../../../assets/img/videos/cpu-03.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/skivFRxbf6U" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Deux nombres entrent : cinq et un. On tourne un petit cadran et le même circuit répond six, quatre, un ou cinq. Comment est-ce possible ?<br>Nous appliquons AND et OR à des rangées entières de bits, construisons un multiplexeur qui choisit un signal parmi plusieurs, rencontrons son proche cousin, le décodeur, voyons comment un ordinateur compare deux nombres avec une soustraction et quelques indicateurs, et assemblons le tout en une ALU, l&#x27;unité arithmétique et logique.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/skivFRxbf6U?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Un circuit, quatre réponses</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>Où en sommes-nous</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=43" data-t="43" rel="noopener"><span class="t">0:43</span>AND et OR sur une rangée de bits</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=96" data-t="96" rel="noopener"><span class="t">1:36</span>Le multiplexeur</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=159" data-t="159" rel="noopener"><span class="t">2:39</span>Choisir parmi quatre</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=185" data-t="185" rel="noopener"><span class="t">3:05</span>Le décodeur</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=223" data-t="223" rel="noopener"><span class="t">3:43</span>Comparer des nombres et les indicateurs</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=288" data-t="288" rel="noopener"><span class="t">4:48</span>Construire l&#x27;ALU</a></li>
+        <li><a href="https://youtu.be/skivFRxbf6U?t=369" data-t="369" rel="noopener"><span class="t">6:09</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Deux nombres entrent : cinq et un. Regardez la réponse. Addition : six. Soustraction : quatre. AND : un. OR : cinq. Les deux mêmes nombres, quatre réponses différentes. La seule chose qui a changé, c&#x27;est ce petit cadran. Aujourd&#x27;hui, nous construisons le circuit qui se cache derrière.</p>
+        <p>Jusqu&#x27;ici, nous avons un additionneur qui sait aussi soustraire, avec une seule ligne de commande qui décide laquelle des deux opérations il fait. Mais un ordinateur a besoin de plus de tâches que cela. Il lui faut des AND et des OR sur des rangées entières de bits, et il lui faut comparer des nombres.</p>
+        <p>Faire un AND sur une rangée de bits est facile : quatre portes AND côte à côte, une par colonne. Cinq s&#x27;écrit 0, 1, 0, 1. Un s&#x27;écrit 0, 0, 0, 1. Colonne par colonne, le AND donne 0, 0, 0, 1. Remplaçons-les par quatre portes OR, et les mêmes entrées donnent 0, 1, 0, 1. Nous avons donc maintenant trois circuits qui regardent les deux mêmes nombres, chacun avec sa propre réponse. Il nous faut un moyen d&#x27;en choisir une.</p>
+        <p>Imaginez un aiguillage de chemin de fer. Deux voies arrivent, une seule repart, et un levier décide laquelle des deux passe. Nous pouvons construire la même chose pour un signal. Cela s&#x27;appelle un multiplexeur, ou mux en abrégé. Deux entrées, A et B. Une sortie. Et une ligne de sélection, S. Quand S vaut 0, la sortie copie A. Quand S vaut 1, elle copie B. À l&#x27;intérieur, il n&#x27;y a que des portes que nous connaissons. Une porte AND laisse passer A seulement quand S vaut 0, grâce à une porte NOT sur S. Une autre porte AND laisse passer B seulement quand S vaut 1. Une porte OR réunit les deux chemins. Comme un seul chemin est ouvert à la fois, ce qui sort est l&#x27;entrée que nous avons choisie. Pour choisir parmi quatre entrées, on empile des multiplexeurs : deux choisissent au sein de chaque paire, et un troisième choisit entre les paires. Il faut maintenant deux lignes de sélection. Deux bits donnent quatre combinaisons : 00, 01, 10, 11. Une pour chaque entrée.</p>
+        <p>Le multiplexeur a un proche cousin, appelé décodeur. Il fonctionne dans l&#x27;autre sens : deux bits en entrée, quatre lignes en sortie. Exactement une sortie s&#x27;allume : celle dont vous avez saisi le numéro. 00 allume la ligne zéro. 11 allume la ligne trois. Chaque sortie est une porte AND, avec des portes NOT sur les entrées qu&#x27;elle veut à zéro. Gardez le décodeur en tête. Dans quelques épisodes, il choisira une cellule parmi des millions dans la mémoire.</p>
+        <p>Passons à la comparaison. Cinq est-il égal à un ? Est-il plus grand ? Pas besoin d&#x27;un nouveau circuit pour cela. Nous soustrayons. Cinq moins un font quatre. Ce n&#x27;est pas zéro, donc ils ne sont pas égaux. Et le résultat n&#x27;est pas négatif, donc cinq est le plus grand, tant qu&#x27;il n&#x27;y a pas eu de dépassement. Pour vérifier si c&#x27;est zéro, on envoie les quatre bits du résultat dans une seule porte NOR : une porte OR avec un NOT sur sa sortie. Elle donne un seulement quand tous les bits valent zéro. Cette lampe s&#x27;appelle l&#x27;indicateur de zéro. Le bit le plus à gauche du résultat nous donne le signe : c&#x27;est l&#x27;indicateur de négatif. Avec les indicateurs de retenue et de dépassement de la dernière fois, ces petites lampes décrivent la réponse : zéro ou non, négatif ou non, trop grand ou non. On soustrait, puis on regarde les indicateurs. C&#x27;est ainsi qu&#x27;un ordinateur compare.</p>
+        <p>Il est temps de tout assembler. A et B entrent en même temps dans trois unités : l&#x27;additionneur-soustracteur, la rangée de AND et la rangée de OR. Toutes les trois travaillent en même temps, à chaque fois. Chacune produit sa propre réponse. Un multiplexeur à quatre voies sur chaque colonne choisit quelle réponse sort. Ses deux lignes de sélection forment le code d&#x27;opération. 00 veut dire additionner. 01 veut dire soustraire : le même bit commande aussi la ligne « soustraire ». 10 veut dire AND. 11 veut dire OR. Et les indicateurs se trouvent sur le côté, et décrivent ce qui est sorti. Les ingénieurs dessinent tout cela comme une seule forme, avec une encoche en haut : l&#x27;ALU, l&#x27;unité arithmétique et logique. Les vraies ALU ont plus d&#x27;opérations : décalage de bits, XOR, et d&#x27;autres. Mais l&#x27;idée est exactement celle-ci : chaque unité calcule, et un multiplexeur choisit la réponse. Revenons à notre cadran. Cinq et un. Addition : six. Soustraction : quatre. AND : un. OR : cinq.</p>
+        <p>Notre ALU répond instantanément, mais elle n&#x27;a pas de mémoire. Si on change les entrées, l&#x27;ancienne réponse disparaît. Pour construire un ordinateur, il nous faut aussi des circuits qui se souviennent. Nous les construirons bientôt. Mais la prochaine fois, notre ALU apprend à multiplier et à diviser. À bientôt.</p>
+        <p>Les deux mêmes nombres. Tournez le cadran. À l&#x27;intérieur, trois circuits travaillent en même temps, et un multiplexeur choisit une réponse. Voici l&#x27;ALU, la calculatrice au cœur de chaque processeur.</p>
+        <p>Comment un ordinateur sait-il que cinq est plus grand que un ? Il soustrait. On soustrait, on regarde les indicateurs. C&#x27;est cela, une comparaison.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : comment les mêmes pièces multiplient et divisent.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../02/fr/"><span>Précédent · Épisode 2</span><b>Pourquoi 6 + 3 = −7 ? Nombres négatifs et soustraction</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 4 sort le <time datetime="2026-10-28T21:00:00+08:00" data-at="2026-10-28T21:00:00+08:00" data-fmt="when">10-28 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
