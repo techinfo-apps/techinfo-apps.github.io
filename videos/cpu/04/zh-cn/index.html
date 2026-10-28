@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>用与门算 5 × 3：电脑怎么做乘法和除法 — 从一个开关到 CPU #4</title>
+<meta name="description" content="不用乘法表，什么都不用背：一个由与门排成的方阵，加上我们已经搭好的加法器，就能算出五乘三。 我们用二进制把竖式乘法再做一遍（移位，再相加），接出一台 4 位乘法器，再用二进制的方法算十三除以三（移位、比较、相减），最后来解决藏在每台加法器里的一个问题：进位要像涟漪一样一列一列地传下去；解决办法，就是真实的处理器用来在不到一纳秒的时间里完成 64 位加法的超前进位技巧。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/04/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/04/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/04/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/04/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/04/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/04/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/04/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/04/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/04/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="用与门算 5 × 3：电脑怎么做乘法和除法 — 从一个开关到 CPU #4">
+<meta property="og:description" content="不用乘法表，什么都不用背：一个由与门排成的方阵，加上我们已经搭好的加法器，就能算出五乘三。 我们用二进制把竖式乘法再做一遍（移位，再相加），接出一台 4 位乘法器，再用二进制的方法算十三除以三（移位、比较、相减），最后来解决藏在每台加法器里的一个问题：进位要像涟漪一样一列一列地传下去；解决办法，就是真实的处理器用来在不到一纳秒的时间里完成 64 位加法的超前进位技巧。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-04.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/04/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "用与门算 5 × 3：电脑怎么做乘法和除法", "description": "不用乘法表，什么都不用背：一个由与门排成的方阵，加上我们已经搭好的加法器，就能算出五乘三。 我们用二进制把竖式乘法再做一遍（移位，再相加），接出一台 4 位乘法器，再用二进制的方法算十三除以三（移位、比较、相减），最后来解决藏在每台加法器里的一个问题：进位要像涟漪一样一列一列地传下去；解决办法，就是真实的处理器用来在不到一纳秒的时间里完成 64 位加法的超前进位技巧。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-04.webp"], "uploadDate": "2026-10-28T21:00:00+08:00", "duration": "PT5M6S", "embedUrl": "https://www.youtube.com/embed/cKydfgEcVmo", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一个开关到 CPU · 第 4 集</p>
+      <h1 class="ep-title">用与门算 5 × 3：电脑怎么做乘法和除法</h1>
+      <div class="vplayer" data-yt="cKydfgEcVmo" data-title="用与门算 5 × 3：电脑怎么做乘法和除法">
+        <button type="button" class="vplay" aria-label="播放: 用与门算 5 × 3：电脑怎么做乘法和除法">
+          <img src="../../../../assets/img/videos/cpu-04.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/cKydfgEcVmo" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">不用乘法表，什么都不用背：一个由与门排成的方阵，加上我们已经搭好的加法器，就能算出五乘三。<br>我们用二进制把竖式乘法再做一遍（移位，再相加），接出一台 4 位乘法器，再用二进制的方法算十三除以三（移位、比较、相减），最后来解决藏在每台加法器里的一个问题：进位要像涟漪一样一列一列地传下去；解决办法，就是真实的处理器用来在不到一纳秒的时间里完成 64 位加法的超前进位技巧。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>用与门算五乘三</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=23" data-t="23" rel="noopener"><span class="t">0:23</span>竖式乘法</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=39" data-t="39" rel="noopener"><span class="t">0:39</span>二进制里的移位相加</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=78" data-t="78" rel="noopener"><span class="t">1:18</span>搭一台乘法器</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=134" data-t="134" rel="noopener"><span class="t">2:14</span>除法</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=195" data-t="195" rel="noopener"><span class="t">3:15</span>超前进位：让加法变快</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=280" data-t="280" rel="noopener"><span class="t">4:40</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>五乘三。没有乘法表，什么都不用背。只有一格一格的与门，加上我们已经搭好的加法器……出来的就是十五。今天讲电脑怎么做乘法、怎么做除法，还有为什么连加法都需要抄近路。</p>
+        <p>还记得竖式乘法吗？二十三乘十二：先乘个位的二，再乘十位的一、往左挪一格，最后把几行加起来。到了二进制就简单多了，因为每一位不是 0 就是 1。乘以 1，就是照抄一遍；乘以 0，就是全 0。整张乘法表就这两行。五乘三。三是 0011。三里面每有一个 1，就把五抄一遍，挪到那一位的位置上。五，加上挪了一格的五，也就是十。加起来：十五。挪一挪、加一加。二进制的乘法就这么回事。</p>
+        <p>要搭出来，先注意：乘一位，其实就是一个与门——五的一位，与上三的一位。四位乘四位，要十六个与门，排成方阵。每一行就是挪过位的一个“五”，或者全是 0。然后几排加法器把这几行一列一列加起来，进位照样往左传。四位乘四位，结果可能要八位：十五乘十五等于二百二十五。至于“挪一格”，根本不花力气：只是把每一位的线接到旁边一列。所以乘以二是电脑最便宜的一招：所有位往左挪一格。</p>
+        <p>除法就是二进制的竖式除法：挪一位、比一比、减一减。十三除以三。从左边开始，落下一个 1。三比它大吗？大。商写 0。再落下一位，现在是 11，就是三，够减了。商写 1，减掉。落下 0：不够，写 0。落下 1：还是不够，写 0。商是 0100，也就是四，余一。十三等于三乘四再加一。每一步就是一次减法，再看一眼正负：用的还是前两集的加减法器和标志。每一步都要等上一步的结果，所以除法是加减乘除里最慢的。</p>
+        <p>现在回到加法，因为有个问题我们一直没提。每一列都得等右边那一列把进位送过来。四列，就等四次。换成六十四列，最左边那一列要等进位穿过前面六十三列，像一长排多米诺骨牌。办法是提前看每一列：两位都是 1，这一列一定会产生进位，不管右边送来什么。只有一位是 1，这一列就会传递进位：右边送来什么，它就往左传什么。</p>
+        <p>再拿五加三来看：最右边一列是 1 和 1，产生进位；中间两列各有一个 1，传递进位；最左边一列两样都没有。</p>
+        <p>有了这两个信号，超前进位电路就能同时算出每一列的进位，用不着等。</p>
+        <p>比如第 3 列会收到进位，是因为第 0 列产生了进位，第 1、2 列又都会传递。几个与门、或门直接就能查出来，每一列同时查。</p>
+        <p>真正的处理器用这类办法，加两个六十四位的数，只要远不到一纳秒。</p>
+        <p>总结一下：乘法是挪一挪、加一加；除法是挪一挪、减一减；巧妙的接线让加法变快。下一集讲不是整数的数：为什么 0.1 加 0.2 不完全等于 0.3？下集见。</p>
+        <p>电脑做乘法，不用乘法表。看看怎么做。挪一挪、加一加，这就是二进制的乘法。</p>
+        <p>用最简单的办法加六十四位，就得等进位穿过六十三列。提前看一眼，所有进位一起到。</p>
+        </div>
+        <p class="ep-close">下一集：为什么 0.1 + 0.2 并不完全等于 0.3？浮点数。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../03/zh-cn/"><span>上一集 · 第 3 集</span><b>一个电路，四种答案：用逻辑门搭出 ALU</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 5 集 <time datetime="2026-10-29T21:00:00+08:00" data-at="2026-10-29T21:00:00+08:00" data-fmt="when">10-29 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

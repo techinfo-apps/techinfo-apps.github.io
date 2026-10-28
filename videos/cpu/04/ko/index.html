@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AND 게이트로 5 × 3: 컴퓨터는 곱셈과 나눗셈을 어떻게 할까 — 스위치 하나에서 CPU까지 #4</title>
+<meta name="description" content="구구단도, 외울 것도 없어요. AND 게이트로 이루어진 격자와 우리가 이미 만든 가산기만으로 5 곱하기 3을 계산해요. 세로셈 곱셈을 이진법으로 다시 해 보고(시프트하고 더하기), 4비트 곱셈기를 연결하고, 13을 3으로 나누는 계산도 이진법 방식(시프트, 비교, 빼기)으로 해 봐요. 그리고 모든 가산기에 숨어 있는 문제, 즉 자리올림이 자리에서 자리로 물결처럼 지나가는 문제를, 실제 프로세서가 64비트 덧셈을 1나노초도 안 되는 시간에 해내는 선행 자리올림 기법으로 해결해요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/04/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/04/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/04/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/04/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/04/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/04/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/04/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/04/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/04/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="AND 게이트로 5 × 3: 컴퓨터는 곱셈과 나눗셈을 어떻게 할까 — 스위치 하나에서 CPU까지 #4">
+<meta property="og:description" content="구구단도, 외울 것도 없어요. AND 게이트로 이루어진 격자와 우리가 이미 만든 가산기만으로 5 곱하기 3을 계산해요. 세로셈 곱셈을 이진법으로 다시 해 보고(시프트하고 더하기), 4비트 곱셈기를 연결하고, 13을 3으로 나누는 계산도 이진법 방식(시프트, 비교, 빼기)으로 해 봐요. 그리고 모든 가산기에 숨어 있는 문제, 즉 자리올림이 자리에서 자리로 물결처럼 지나가는 문제를, 실제 프로세서가 64비트 덧셈을 1나노초도 안 되는 시간에 해내는 선행 자리올림 기법으로 해결해요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-04.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/04/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "AND 게이트로 5 × 3: 컴퓨터는 곱셈과 나눗셈을 어떻게 할까", "description": "구구단도, 외울 것도 없어요. AND 게이트로 이루어진 격자와 우리가 이미 만든 가산기만으로 5 곱하기 3을 계산해요. 세로셈 곱셈을 이진법으로 다시 해 보고(시프트하고 더하기), 4비트 곱셈기를 연결하고, 13을 3으로 나누는 계산도 이진법 방식(시프트, 비교, 빼기)으로 해 봐요. 그리고 모든 가산기에 숨어 있는 문제, 즉 자리올림이 자리에서 자리로 물결처럼 지나가는 문제를, 실제 프로세서가 64비트 덧셈을 1나노초도 안 되는 시간에 해내는 선행 자리올림 기법으로 해결해요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-04.webp"], "uploadDate": "2026-10-28T21:00:00+08:00", "duration": "PT5M6S", "embedUrl": "https://www.youtube.com/embed/cKydfgEcVmo", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 4편</p>
+      <h1 class="ep-title">AND 게이트로 5 × 3: 컴퓨터는 곱셈과 나눗셈을 어떻게 할까</h1>
+      <div class="vplayer" data-yt="cKydfgEcVmo" data-title="AND 게이트로 5 × 3: 컴퓨터는 곱셈과 나눗셈을 어떻게 할까">
+        <button type="button" class="vplay" aria-label="재생: AND 게이트로 5 × 3: 컴퓨터는 곱셈과 나눗셈을 어떻게 할까">
+          <img src="../../../../assets/img/videos/cpu-04.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/cKydfgEcVmo" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">구구단도, 외울 것도 없어요. AND 게이트로 이루어진 격자와 우리가 이미 만든 가산기만으로 5 곱하기 3을 계산해요.<br>세로셈 곱셈을 이진법으로 다시 해 보고(시프트하고 더하기), 4비트 곱셈기를 연결하고, 13을 3으로 나누는 계산도 이진법 방식(시프트, 비교, 빼기)으로 해 봐요. 그리고 모든 가산기에 숨어 있는 문제, 즉 자리올림이 자리에서 자리로 물결처럼 지나가는 문제를, 실제 프로세서가 64비트 덧셈을 1나노초도 안 되는 시간에 해내는 선행 자리올림 기법으로 해결해요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>AND 게이트로 5 곱하기 3</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=23" data-t="23" rel="noopener"><span class="t">0:23</span>세로셈 곱셈</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=39" data-t="39" rel="noopener"><span class="t">0:39</span>이진법으로 시프트하고 더하기</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=78" data-t="78" rel="noopener"><span class="t">1:18</span>곱셈기 만들기</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=134" data-t="134" rel="noopener"><span class="t">2:14</span>나눗셈</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=195" data-t="195" rel="noopener"><span class="t">3:15</span>선행 자리올림: 덧셈을 빠르게</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=280" data-t="280" rel="noopener"><span class="t">4:40</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>5 곱하기 3. 구구단도, 외울 것도 없어요. AND 게이트로 이루어진 격자와, 우리가 이미 만든 가산기만 있으면 돼요… 그러면 15가 나와요. 오늘은 컴퓨터가 곱셈을 어떻게 하는지, 나눗셈을 어떻게 하는지, 그리고 덧셈에도 왜 지름길이 필요한지 알아봐요.</p>
+        <p>세로셈 곱셈 기억나세요? 23 곱하기 12예요. 먼저 2를 곱하고, 그다음 1을 곱하는데, 한 자리 왼쪽으로 시프트해요. 그리고 각 행을 더해요. 이진법에서는 훨씬 쉬워져요. 모든 자리가 0 아니면 1이기 때문이에요. 1을 곱하면 수가 그대로 복사돼요. 0을 곱하면 전부 0이 돼요. 구구단은 이게 전부예요. 5 곱하기 3이에요. 3은 0, 0, 1, 1이에요. 3 안에 있는 1마다, 5를 적고 그 자리로 시프트해요. 5, 더하기 한 번 시프트한 5, 그러니까 10이에요. 다 더하면 15예요. 시프트하고 더하기. 이진법의 곱셈은 이게 전부예요.</p>
+        <p>이걸 만들려면, 한 비트를 곱하는 건 AND 게이트 하나일 뿐이라는 걸 알아 두세요. 5의 한 비트와 3의 한 비트를 AND하는 거예요. 4비트 곱하기 4비트에는 AND 게이트가 열여섯 개 필요하고, 격자 모양으로 놓여요. 각 행은 5를 시프트한 복사본 하나이거나 전부 0이에요. 그다음 가산기 행들이 복사본들을 자리마다 더해요. 자리올림도 모두 처리해서요. 4비트 곱하기 4비트는 8비트가 필요할 수 있어요. 15 곱하기 15는 225예요. 그리고 시프트에는 비용이 전혀 들지 않아요. 그냥 배선이에요. 모든 비트가 한 자리 옆으로 옮겨 가요. 그래서 2를 곱하는 건 컴퓨터가 가진 가장 싼 요령이에요. 모든 비트를 한 자리 왼쪽으로 시프트하면 돼요.</p>
+        <p>나눗셈은 이진법으로 하는 세로셈 나눗셈이에요. 시프트, 비교, 뺄셈. 13 나누기 3이에요. 왼쪽부터 시작해요. 1을 내려요. 3이 더 큰가요? 네. 0을 적어요. 다음 비트를 내려요. 이제 1, 1이에요. 그건 3이에요. 들어가요. 1을 적고, 빼요. 0을 내려요. 너무 작아서 0을 적어요. 1을 내려요. 아직도 너무 작아서 0을 적어요. 답은 0, 1, 0, 0이에요. 4이고, 1이 남아요. 13은 3 곱하기 4에 1을 더한 거예요. 각 단계는 뺄셈 한 번과 부호 한 번 살펴보기예요. 지난 두 편에서 쓴 바로 그 가산기와 플래그예요. 그리고 각 단계가 앞 단계의 답을 필요로 하기 때문에, 나눗셈은 기본 네 가지 연산 중에서 가장 느려요.</p>
+        <p>이제 덧셈으로 돌아가요. 지금까지 모른 척해 온 문제가 있거든요. 각 자리는 오른쪽 자리에서 오는 자리올림을 기다려요. 네 자리면 네 번 기다려요. 64자리라면, 맨 왼쪽 자리는 자리올림이 나머지 63자리를 물결처럼 지나오기를 기다려요. 긴 도미노 줄처럼요. 해결책은 각 자리를 미리 살펴보는 거예요. 두 비트가 모두 1이면, 그 자리는 무엇이 들어오든 상관없이 자리올림을 생성해요. 정확히 한 비트만 1이면, 그 자리는 자리올림을 전파해요. 들어오는 것을 그대로 넘겨줘요.</p>
+        <p>5 더하기 3을 다시 볼게요. 맨 오른쪽 자리는 1과 1이에요. 생성해요. 그다음 두 자리는 각각 1이 하나뿐이에요. 전파해요. 마지막 자리는 둘 다 아니에요.</p>
+        <p>이 두 신호가 있으면, 선행 자리올림 회로는 기다리지 않고 모든 자리올림을 동시에 알아내요.</p>
+        <p>예를 들어, 3번 자리가 자리올림을 받는 건 0번 자리가 생성하고, 1번과 2번 자리가 모두 전파하기 때문이에요. AND 게이트와 OR 게이트 몇 개면 그걸 바로 확인할 수 있어요. 모든 자리에서 한꺼번에요.</p>
+        <p>실제 프로세서는 이런 요령으로 64비트를 1나노초의 아주 작은 일부 시간 안에 더해요.</p>
+        <p>정리해 볼게요. 곱셈은 시프트하고 더하기예요. 나눗셈은 시프트하고 빼기예요. 그리고 영리한 배선이 덧셈을 빠르게 만들어요. 다음 편은 정수가 아닌 수예요. 0.1 더하기 0.2는 왜 0.3과 딱 같지 않을까요? 거기서 만나요.</p>
+        <p>컴퓨터는 구구단 없이 곱셈을 해요. 방법은 이래요. 시프트하고 더하기. 이게 이진법 곱셈이에요.</p>
+        <p>64비트를 단순한 방법으로 더하면, 자리올림이 63자리를 물결처럼 지나갈 때까지 기다려야 해요. 미리 살펴보면, 모든 자리올림이 한꺼번에 도착해요.</p>
+        </div>
+        <p class="ep-close">다음 편: 0.1 + 0.2는 왜 0.3과 딱 같지 않을까요? 부동소수점 수 이야기예요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../03/ko/"><span>이전 편 · 3편</span><b>회로 하나, 답 네 가지: 논리 게이트로 ALU 만들기</b></a><div class="ep-pg next soon"><span>다음 편</span><b>5편은 <time datetime="2026-10-29T21:00:00+08:00" data-at="2026-10-29T21:00:00+08:00" data-fmt="when">10-29 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
