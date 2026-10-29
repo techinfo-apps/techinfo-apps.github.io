@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pourquoi 0.1 + 0.2 ≠ 0.3 : décimaux et virgule flottante — D&#x27;un interrupteur à un processeur #5</title>
+<meta name="description" content="Saisissez 0.1 + 0.2 dans presque n&#x27;importe quel langage de programmation et vous obtenez 0.30000000000000004. Ce n&#x27;est pas un bug. Nous écrivons des fractions en binaire (moitiés, quarts, huitièmes), voyons pourquoi un dixième ne finit jamais, construisons la virgule flottante à partir de la notation scientifique, ouvrons un vrai nombre de 64 bits (signe, exposant, mantisse) et suivons 0.1 + 0.2 pas à pas jusqu&#x27;à ce 4 parasite à la fin. Ensuite : ce que font les programmeurs face à ce problème.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/05/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/05/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/05/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/05/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/05/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/05/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/05/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/05/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/05/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Pourquoi 0.1 + 0.2 ≠ 0.3 : décimaux et virgule flottante — D&#x27;un interrupteur à un processeur #5">
+<meta property="og:description" content="Saisissez 0.1 + 0.2 dans presque n&#x27;importe quel langage de programmation et vous obtenez 0.30000000000000004. Ce n&#x27;est pas un bug. Nous écrivons des fractions en binaire (moitiés, quarts, huitièmes), voyons pourquoi un dixième ne finit jamais, construisons la virgule flottante à partir de la notation scientifique, ouvrons un vrai nombre de 64 bits (signe, exposant, mantisse) et suivons 0.1 + 0.2 pas à pas jusqu&#x27;à ce 4 parasite à la fin. Ensuite : ce que font les programmeurs face à ce problème.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/05/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Pourquoi 0.1 + 0.2 ≠ 0.3 : décimaux et virgule flottante", "description": "Saisissez 0.1 + 0.2 dans presque n'importe quel langage de programmation et vous obtenez 0.30000000000000004. Ce n'est pas un bug. Nous écrivons des fractions en binaire (moitiés, quarts, huitièmes), voyons pourquoi un dixième ne finit jamais, construisons la virgule flottante à partir de la notation scientifique, ouvrons un vrai nombre de 64 bits (signe, exposant, mantisse) et suivons 0.1 + 0.2 pas à pas jusqu'à ce 4 parasite à la fin. Ensuite : ce que font les programmeurs face à ce problème.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp"], "uploadDate": "2026-10-29T21:00:00+08:00", "duration": "PT6M45S", "embedUrl": "https://www.youtube.com/embed/K2jDuFdrMaw", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;un interrupteur à un processeur · Épisode 5</p>
+      <h1 class="ep-title">Pourquoi 0.1 + 0.2 ≠ 0.3 : décimaux et virgule flottante</h1>
+      <div class="vplayer" data-yt="K2jDuFdrMaw" data-title="Pourquoi 0.1 + 0.2 ≠ 0.3 : décimaux et virgule flottante">
+        <button type="button" class="vplay" aria-label="Lire: Pourquoi 0.1 + 0.2 ≠ 0.3 : décimaux et virgule flottante">
+          <img src="../../../../assets/img/videos/cpu-05.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/K2jDuFdrMaw" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Saisissez 0.1 + 0.2 dans presque n&#x27;importe quel langage de programmation et vous obtenez 0.30000000000000004. Ce n&#x27;est pas un bug.<br>Nous écrivons des fractions en binaire (moitiés, quarts, huitièmes), voyons pourquoi un dixième ne finit jamais, construisons la virgule flottante à partir de la notation scientifique, ouvrons un vrai nombre de 64 bits (signe, exposant, mantisse) et suivons 0.1 + 0.2 pas à pas jusqu&#x27;à ce 4 parasite à la fin. Ensuite : ce que font les programmeurs face à ce problème.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Pourquoi 0.1 + 0.2 n&#x27;est pas 0.3</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=30" data-t="30" rel="noopener"><span class="t">0:30</span>Les fractions en binaire</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=73" data-t="73" rel="noopener"><span class="t">1:13</span>Pourquoi un dixième ne finit jamais</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>La virgule flottante</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=197" data-t="197" rel="noopener"><span class="t">3:17</span>Dans un nombre de 64 bits</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=251" data-t="251" rel="noopener"><span class="t">4:11</span>Points et écarts</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=285" data-t="285" rel="noopener"><span class="t">4:45</span>Additionner 0.1 et 0.2</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=351" data-t="351" rel="noopener"><span class="t">5:51</span>Ce que font les programmeurs</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=385" data-t="385" rel="noopener"><span class="t">6:25</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Demandez à un ordinateur d&#x27;additionner 0.1 et 0.2. Vous vous attendez à 0.3. À la place, vous obtenez ceci. 0.3, quinze zéros, et un 4. Ce n&#x27;est pas un bug. C&#x27;est ainsi que presque tous les ordinateurs stockent les nombres qui ne sont pas entiers. Aujourd&#x27;hui, on découvre pourquoi.</p>
+        <p>Jusqu&#x27;ici, tous les nombres de cette série étaient des nombres entiers : cinq, trois, quinze, moins sept. En décimal, les chiffres après la virgule sont des dixièmes, des centièmes, des millièmes : chaque position est dix fois plus petite. Le binaire fonctionne de la même façon, sauf que chaque position est deux fois plus petite : un demi, un quart, un huitième, un seizième. Ainsi, en binaire, 0.1 vaut un demi. 0.11 vaut un demi plus un quart : 0.75.</p>
+        <p>Écrivons maintenant un dixième en binaire. Quelles moitiés, quarts et huitièmes s&#x27;additionnent pour donner exactement 0.1 ? Un demi, c&#x27;est trop grand. Un quart, trop grand. Un huitième, encore trop grand. Un seizième rentre. Cela fait 0.0625, et il nous en faut encore un peu plus. On continue, en ajoutant un morceau chaque fois qu&#x27;il rentre, et un motif apparaît : 0011, 0011, encore et encore. Cela ne finit jamais. C&#x27;est comme un tiers en décimal : 0.333, indéfiniment. Un ordinateur doit s&#x27;arrêter après un nombre fixe de bits. Le 0.1 qu&#x27;il stocke n&#x27;est donc pas exactement un dixième. Il en est simplement très, très proche.</p>
+        <p>Alors, combien de bits garde-t-on, et où place-t-on la virgule ? Les scientifiques ont résolu cela il y a longtemps, pour les nombres très grands et très petits. Un million, c&#x27;est 1 fois 10 puissance 6. Un millionième, c&#x27;est 1 fois 10 puissance moins 6. Quelques chiffres, plus une puissance qui indique où va la virgule. La virgule peut se déplacer, ou flotter. C&#x27;est pourquoi on parle de virgule flottante. Les ordinateurs font la même chose en binaire. 0.1 devient 1.1001 1001... fois 2 puissance moins 4.</p>
+        <p>La plupart des langages de programmation stockent cela sur 64 bits, répartis en trois parties. Un bit de signe : plus ou moins. 11 bits pour l&#x27;exposant : quelle puissance de 2. Ici, moins 4. Et 52 bits pour la mantisse, ou fraction : les chiffres après la virgule. Le 1 avant la virgule n&#x27;est pas stocké du tout. En binaire, presque tous les nombres écrits ainsi commencent par un 1, donc on l&#x27;obtient gratuitement. Regardez maintenant tout à la fin. Le dernier groupe devrait être 1001, mais le motif est coupé ici, donc on arrondit vers le haut à 1010. Le 0.1 stocké est donc un tout petit peu au-dessus d&#x27;un dixième.</p>
+        <p>L&#x27;arrondi a lieu parce que la virgule flottante ne peut tomber que sur certains points. Entre eux, il y a des écarts. Voici une version minuscule avec seulement 3 bits de fraction, pour qu&#x27;on puisse les voir. Près de zéro, les points sont très serrés. Plus loin, les écarts s&#x27;élargissent. Les vrais nombres de 64 bits ont bien plus de points. Près de 1, ils sont espacés d&#x27;environ 2 fois 10 puissance moins 16. Mais l&#x27;idée est la même : chaque résultat est arrondi à un point de la droite.</p>
+        <p>Maintenant, on peut additionner. Zoomons près de 0.3, assez pour voir les points eux-mêmes. Le vrai 0.3 tombe entre deux d&#x27;entre eux. Le plus proche, juste en dessous, est ce que l&#x27;ordinateur appelle 0.3. Nos 0.1 et 0.2 stockés étaient tous deux un tout petit peu trop grands. Leur somme exacte tombe donc ici, pile au milieu des deux points. En cas d&#x27;égalité, la règle est de choisir le point dont le dernier bit est 0. Ici, c&#x27;est celui du haut. À l&#x27;affichage, l&#x27;ordinateur montre juste assez de chiffres pour distinguer ce point de son voisin : 0.3, quinze zéros, et un 4. Donc 0.1 plus 0.2 n&#x27;est pas égal à 0.3. Ils sont distants de moins d&#x27;un millionième de millionième, mais ils diffèrent.</p>
+        <p>C&#x27;est pourquoi les programmeurs ne demandent presque jamais si deux nombres à virgule flottante sont exactement égaux. Ils demandent s&#x27;ils sont assez proches. Et l&#x27;argent se compte généralement en centimes entiers, avec des nombres entiers, pour que rien ne soit arrondi. En échange, la virgule flottante offre une plage énorme. Les mêmes 64 bits peuvent contenir la largeur d&#x27;un atome et la distance jusqu&#x27;aux galaxies les plus lointaines.</p>
+        <p>En résumé : un ordinateur stocke un nombre sous la forme d&#x27;un signe, d&#x27;un exposant et d&#x27;une mantisse, et la plupart des décimaux ne peuvent être stockés qu&#x27;approximativement. La prochaine fois : si tout, à l&#x27;intérieur, n&#x27;est que nombres, comment un ordinateur stocke-t-il les lettres, les couleurs et les sons ? À bientôt.</p>
+        <p>Saisissez 0.1 plus 0.2 dans presque n&#x27;importe quel langage de programmation, et vous n&#x27;obtiendrez pas 0.3. Virgule flottante : très proche, mais pas exacte.</p>
+        <p>Un dixième s&#x27;écrit facilement en décimal. En binaire, cela ne finit jamais. Alors chaque ordinateur doit l&#x27;arrondir.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : comment le texte, les couleurs et le son deviennent tous des nombres.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../04/fr/"><span>Précédent · Épisode 4</span><b>5 × 3 avec des portes AND : multiplier et diviser</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 6 sort le <time datetime="2026-10-30T21:00:00+08:00" data-at="2026-10-30T21:00:00+08:00" data-fmt="when">10-30 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

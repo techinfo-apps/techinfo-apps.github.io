@@ -12,8 +12,8 @@
 "vid.new": "New",
 "vid.cpu.name": "From One Switch to a CPU",
 "vid.cpu.season": "Season 1",
-"vid.cpu.progress": "4 of 18 episodes out",
-"vid.cpu.when": "A new episode every day at <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.cpu.progress": "5 of 18 episodes out",
+"vid.cpu.when": "A new episode every day at <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
 "vid.ep.1": "Episode 1",
 "vid.ep.2": "Episode 2",
 "vid.ep.3": "Episode 3",
@@ -40,7 +40,9 @@
 "vid.cpu.3.d": "6 min",
 "vid.cpu.4": "5 × 3 With AND Gates: How Computers Multiply and Divide",
 "vid.cpu.4.d": "5 min",
-"vid.cpu.next": "Episode 5 comes out <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"when\">10-29 21:00 (UTC+8)</time>"
+"vid.cpu.5": "Why 0.1 + 0.2 ≠ 0.3: How Computers Store Decimals (Floating Point)",
+"vid.cpu.5.d": "7 min",
+"vid.cpu.next": "Episode 6 comes out <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>"
 },
 "zh-CN": {
 "vid.title": "免费教程 — Technology Information",
@@ -52,8 +54,8 @@
 "vid.new": "新",
 "vid.cpu.name": "从一个开关到 CPU",
 "vid.cpu.season": "第一季",
-"vid.cpu.progress": "已更新 4 / 18 集",
-"vid.cpu.when": "每天 <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
+"vid.cpu.progress": "已更新 5 / 18 集",
+"vid.cpu.when": "每天 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
 "vid.ep.1": "第 1 集",
 "vid.ep.2": "第 2 集",
 "vid.ep.3": "第 3 集",
@@ -80,7 +82,9 @@
 "vid.cpu.3.d": "6 分钟",
 "vid.cpu.4": "用与门算 5 × 3：电脑怎么做乘法和除法",
 "vid.cpu.4.d": "5 分钟",
-"vid.cpu.next": "第 5 集 <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"when\">10-29 21:00 (UTC+8)</time> 上线"
+"vid.cpu.5": "为什么 0.1 + 0.2 ≠ 0.3：电脑怎么存小数（浮点数）",
+"vid.cpu.5.d": "7 分钟",
+"vid.cpu.next": "第 6 集 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time> 上线"
 },
 "zh-TW": {
 "vid.title": "免費教學 — Technology Information",
@@ -92,8 +96,8 @@
 "vid.new": "新",
 "vid.cpu.name": "從一個開關到 CPU",
 "vid.cpu.season": "第一季",
-"vid.cpu.progress": "已更新 4 / 18 集",
-"vid.cpu.when": "每天 <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
+"vid.cpu.progress": "已更新 5 / 18 集",
+"vid.cpu.when": "每天 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
 "vid.ep.1": "第 1 集",
 "vid.ep.2": "第 2 集",
 "vid.ep.3": "第 3 集",
@@ -120,7 +124,9 @@
 "vid.cpu.3.d": "6 分鐘",
 "vid.cpu.4": "用及閘（AND）算 5 × 3：電腦怎麼做乘法與除法",
 "vid.cpu.4.d": "5 分鐘",
-"vid.cpu.next": "第 5 集 <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"when\">10-29 21:00 (UTC+8)</time> 上線"
+"vid.cpu.5": "為什麼 0.1 + 0.2 ≠ 0.3：電腦怎麼存小數（浮點數）",
+"vid.cpu.5.d": "7 分鐘",
+"vid.cpu.next": "第 6 集 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time> 上線"
 },
 "ja": {
 "vid.title": "無料チュートリアル — Technology Information",
@@ -132,8 +138,8 @@
 "vid.new": "新着",
 "vid.cpu.name": "スイッチ1つからCPUまで",
 "vid.cpu.season": "シーズン1",
-"vid.cpu.progress": "全18話のうち4話を公開中",
-"vid.cpu.when": "毎日 <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> に新しい回を公開します。",
+"vid.cpu.progress": "全18話のうち5話を公開中",
+"vid.cpu.when": "毎日 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> に新しい回を公開します。",
 "vid.ep.1": "第1話",
 "vid.ep.2": "第2話",
 "vid.ep.3": "第3話",
@@ -160,7 +166,9 @@
 "vid.cpu.3.d": "6分",
 "vid.cpu.4": "ANDゲートで 5 × 3：コンピューターのかけ算とわり算のしくみ",
 "vid.cpu.4.d": "5分",
-"vid.cpu.next": "第5話は <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"when\">10-29 21:00 (UTC+8)</time> に公開"
+"vid.cpu.5": "なぜ 0.1 + 0.2 ≠ 0.3 になるのか：コンピューターの小数のしくみ（浮動小数点数）",
+"vid.cpu.5.d": "7分",
+"vid.cpu.next": "第6話は <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time> に公開"
 },
 "ko": {
 "vid.title": "무료 강좌 — Technology Information",
@@ -172,8 +180,8 @@
 "vid.new": "새 편",
 "vid.cpu.name": "스위치 하나에서 CPU까지",
 "vid.cpu.season": "시즌 1",
-"vid.cpu.progress": "전체 18편 중 4편 공개",
-"vid.cpu.when": "매일 <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>에 새 편이 올라옵니다.",
+"vid.cpu.progress": "전체 18편 중 5편 공개",
+"vid.cpu.when": "매일 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>에 새 편이 올라옵니다.",
 "vid.ep.1": "1편",
 "vid.ep.2": "2편",
 "vid.ep.3": "3편",
@@ -200,7 +208,9 @@
 "vid.cpu.3.d": "6분",
 "vid.cpu.4": "AND 게이트로 5 × 3: 컴퓨터는 곱셈과 나눗셈을 어떻게 할까",
 "vid.cpu.4.d": "5분",
-"vid.cpu.next": "5편은 <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"when\">10-29 21:00 (UTC+8)</time>에 공개"
+"vid.cpu.5": "0.1 + 0.2 ≠ 0.3인 이유: 컴퓨터는 소수를 어떻게 저장할까 (부동소수점)",
+"vid.cpu.5.d": "7분",
+"vid.cpu.next": "6편은 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>에 공개"
 },
 "es": {
 "vid.title": "Tutoriales gratis — Technology Information",
@@ -212,8 +222,8 @@
 "vid.new": "Nuevo",
 "vid.cpu.name": "De un interruptor a una CPU",
 "vid.cpu.season": "Temporada 1",
-"vid.cpu.progress": "4 de 18 episodios publicados",
-"vid.cpu.when": "Un episodio nuevo cada día a las <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.cpu.progress": "5 de 18 episodios publicados",
+"vid.cpu.when": "Un episodio nuevo cada día a las <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
 "vid.ep.1": "Episodio 1",
 "vid.ep.2": "Episodio 2",
 "vid.ep.3": "Episodio 3",
@@ -240,7 +250,9 @@
 "vid.cpu.3.d": "6 min",
 "vid.cpu.4": "5 × 3 con puertas AND: cómo multiplican y dividen las computadoras",
 "vid.cpu.4.d": "5 min",
-"vid.cpu.next": "El episodio 5 sale el <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"when\">10-29 21:00 (UTC+8)</time>"
+"vid.cpu.5": "Por qué 0.1 + 0.2 ≠ 0.3: cómo guarda los decimales una computadora",
+"vid.cpu.5.d": "7 min",
+"vid.cpu.next": "El episodio 6 sale el <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>"
 },
 "fr": {
 "vid.title": "Tutoriels gratuits — Technology Information",
@@ -252,8 +264,8 @@
 "vid.new": "Nouveau",
 "vid.cpu.name": "D'un interrupteur à un processeur",
 "vid.cpu.season": "Saison 1",
-"vid.cpu.progress": "4 épisodes sur 18 en ligne",
-"vid.cpu.when": "Un nouvel épisode chaque jour à <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.cpu.progress": "5 épisodes sur 18 en ligne",
+"vid.cpu.when": "Un nouvel épisode chaque jour à <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
 "vid.ep.1": "Épisode 1",
 "vid.ep.2": "Épisode 2",
 "vid.ep.3": "Épisode 3",
@@ -280,6 +292,8 @@
 "vid.cpu.3.d": "6 min",
 "vid.cpu.4": "5 × 3 avec des portes AND : multiplier et diviser",
 "vid.cpu.4.d": "5 min",
-"vid.cpu.next": "L'épisode 5 sort le <time datetime=\"2026-10-29T21:00:00+08:00\" data-at=\"2026-10-29T21:00:00+08:00\" data-fmt=\"when\">10-29 21:00 (UTC+8)</time>"
+"vid.cpu.5": "Pourquoi 0.1 + 0.2 ≠ 0.3 : décimaux et virgule flottante",
+"vid.cpu.5.d": "7 min",
+"vid.cpu.next": "L'épisode 6 sort le <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>"
 }
 });

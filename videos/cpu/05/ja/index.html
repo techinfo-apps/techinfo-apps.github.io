@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>なぜ 0.1 + 0.2 ≠ 0.3 になるのか：コンピューターの小数のしくみ（浮動小数点数） — スイッチ1つからCPUまで #5</title>
+<meta name="description" content="ほとんどのプログラミング言語で 0.1 + 0.2 と入力すると、答えは 0.30000000000000004 になります。バグではありません。 2進数で小数（2分の1、4分の1、8分の1）を書き表し、10分の1がなぜ終わらないのかを確かめます。次に、指数表記をもとに浮動小数点数を組み立て、本物の64ビットの数（符号、指数、仮数）を開いて、0.1 + 0.2 が最後に余計な4のついた値になるまでを一歩ずつ追いかけます。最後に、プログラマーがこの問題にどう対処しているかも紹介します。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/05/ja/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/05/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/05/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/05/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/05/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/05/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/05/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/05/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/05/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="なぜ 0.1 + 0.2 ≠ 0.3 になるのか：コンピューターの小数のしくみ（浮動小数点数） — スイッチ1つからCPUまで #5">
+<meta property="og:description" content="ほとんどのプログラミング言語で 0.1 + 0.2 と入力すると、答えは 0.30000000000000004 になります。バグではありません。 2進数で小数（2分の1、4分の1、8分の1）を書き表し、10分の1がなぜ終わらないのかを確かめます。次に、指数表記をもとに浮動小数点数を組み立て、本物の64ビットの数（符号、指数、仮数）を開いて、0.1 + 0.2 が最後に余計な4のついた値になるまでを一歩ずつ追いかけます。最後に、プログラマーがこの問題にどう対処しているかも紹介します。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/05/ja/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "なぜ 0.1 + 0.2 ≠ 0.3 になるのか：コンピューターの小数のしくみ（浮動小数点数）", "description": "ほとんどのプログラミング言語で 0.1 + 0.2 と入力すると、答えは 0.30000000000000004 になります。バグではありません。 2進数で小数（2分の1、4分の1、8分の1）を書き表し、10分の1がなぜ終わらないのかを確かめます。次に、指数表記をもとに浮動小数点数を組み立て、本物の64ビットの数（符号、指数、仮数）を開いて、0.1 + 0.2 が最後に余計な4のついた値になるまでを一歩ずつ追いかけます。最後に、プログラマーがこの問題にどう対処しているかも紹介します。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp"], "uploadDate": "2026-10-29T21:00:00+08:00", "duration": "PT6M45S", "embedUrl": "https://www.youtube.com/embed/K2jDuFdrMaw", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ja">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">すべての回</a> · スイッチ1つからCPUまで · 第5話</p>
+      <h1 class="ep-title">なぜ 0.1 + 0.2 ≠ 0.3 になるのか：コンピューターの小数のしくみ（浮動小数点数）</h1>
+      <div class="vplayer" data-yt="K2jDuFdrMaw" data-title="なぜ 0.1 + 0.2 ≠ 0.3 になるのか：コンピューターの小数のしくみ（浮動小数点数）">
+        <button type="button" class="vplay" aria-label="再生: なぜ 0.1 + 0.2 ≠ 0.3 になるのか：コンピューターの小数のしくみ（浮動小数点数）">
+          <img src="../../../../assets/img/videos/cpu-05.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">再生を押すと、動画をYouTubeから読み込みます。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/K2jDuFdrMaw" rel="noopener">YouTubeで見る</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTubeでチャンネル登録</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">ほとんどのプログラミング言語で 0.1 + 0.2 と入力すると、答えは 0.30000000000000004 になります。バグではありません。<br>2進数で小数（2分の1、4分の1、8分の1）を書き表し、10分の1がなぜ終わらないのかを確かめます。次に、指数表記をもとに浮動小数点数を組み立て、本物の64ビットの数（符号、指数、仮数）を開いて、0.1 + 0.2 が最後に余計な4のついた値になるまでを一歩ずつ追いかけます。最後に、プログラマーがこの問題にどう対処しているかも紹介します。</p>
+      <p class="ep-ai">この動画のアニメーションは、すべてコードで描いています。ナレーションはAI音声です。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">チャプター</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>なぜ 0.1 + 0.2 は 0.3 にならないのか</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=30" data-t="30" rel="noopener"><span class="t">0:30</span>2進数の小数</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=73" data-t="73" rel="noopener"><span class="t">1:13</span>10分の1が終わらない理由</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>浮動小数点数</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=197" data-t="197" rel="noopener"><span class="t">3:17</span>64ビットの数の中身</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=251" data-t="251" rel="noopener"><span class="t">4:11</span>点とすきま</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=285" data-t="285" rel="noopener"><span class="t">4:45</span>0.1 と 0.2 を足す</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=351" data-t="351" rel="noopener"><span class="t">5:51</span>プログラマーの対処法</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=385" data-t="385" rel="noopener"><span class="t">6:25</span>次回予告</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">ナレーション全文</h2>
+        <div class="ep-text">
+        <p>コンピューターに、0.1足す0.2を計算させてみましょう。0.3になると思いますよね。ところが、出てくるのはこれです。0.3、0が15個、そして4。バグではありません。整数ではない数を、ほとんどすべてのコンピューターがこのように記憶しているのです。今日は、その理由を探っていきます。</p>
+        <p>ここまで、このシリーズに出てきた数は、すべて整数でした。5、3、15、マイナス7。10進数では、小数点より右の桁は、10分の1、100分の1、1000分の1と続きます。1桁右へ行くごとに、10分の1の大きさになります。2進数も同じ仕組みですが、1桁右へ行くごとに、2分の1の大きさになります。2分の1、4分の1、8分の1、16分の1。つまり2進数では、0.1は2分の1です。0.11は、2分の1足す4分の1で、0.75になります。</p>
+        <p>では、10分の1を2進数で書いてみましょう。2分の1、4分の1、8分の1のうち、どれを足せばちょうど0.1になるでしょうか。2分の1は大きすぎます。4分の1も大きすぎます。8分の1でも、まだ大きすぎます。16分の1なら入ります。これは0.0625で、まだ少し足りません。入るたびにひとつずつ足していくと、パターンが見えてきます。0011、0011と、何度も繰り返されるのです。これは終わりません。10進数の3分の1と同じで、0.333と、永遠に続きます。コンピューターは、決まったビット数で止めなければなりません。だから保存される0.1は、ちょうど10分の1ではなく、とてもとても近い値なのです。</p>
+        <p>では、ビットをいくつ残し、小数点をどこに置けばよいのでしょうか。科学者たちは、とても大きな数やとても小さな数について、ずっと昔にこの問題を解決していました。100万は、1かける10の6乗。100万分の1は、1かける10のマイナス6乗です。いくつかの数字と、小数点の位置を示す指数。小数点は動く、つまり浮かぶことができます。だから、浮動小数点数と呼ばれるのです。コンピューターも、2進数で同じことをします。0.1は、1.1001 1001……に、2のマイナス4乗をかけた形になります。</p>
+        <p>ほとんどのプログラミング言語は、これを64ビットで保存し、3つの部分に分けます。符号ビットに1ビット。プラスかマイナスかです。指数に11ビット。2の何乗かを表します。ここでは、マイナス4です。そして、仮数に52ビット。小数点より右にある数字の部分です。小数点の前の1は、まったく保存されません。2進数でこの形に書くと、ほとんどの数が1で始まるので、ただで手に入るのです。では、いちばん最後を見てください。最後のグループは1001になるはずですが、パターンがここで打ち切られるため、切り上げられて1010になります。つまり、保存された0.1は、10分の1よりほんの少しだけ大きいのです。</p>
+        <p>丸めが起こるのは、浮動小数点数が決まった点にしか置けないからです。点と点の間には、すきまがあります。ここでは、仮数が3ビットしかない小さなモデルで見てみましょう。0の近くでは、点がぎっしり並んでいます。遠くへ行くほど、すきまは広がります。実際の64ビットの数には、点がはるかに多くあります。1の近くでは、約2かける10のマイナス16乗しか離れていません。でも考え方は同じです。どんな結果も、数直線上のどこかの点に丸められます。</p>
+        <p>では、足し算をしましょう。0.3の近くを、点そのものが見えるところまで拡大します。本当の0.3は、2つの点の間に落ちます。近いほう、つまり少し下の点を、コンピューターは0.3と呼んでいます。保存された0.1と0.2は、どちらもほんの少し大きめでした。だから、その正確な合計は、ここ、2つの点のちょうど真ん中に来ます。同点のときは、最後のビットが0のほうの点を選ぶというルールです。ここでは、上の点です。表示するとき、コンピューターは、その点を隣の点と見分けるのに必要な桁数だけを出します。0.3、0が15個、そして4です。つまり、0.1足す0.2は、0.3とは等しくありません。差は100万分の1の100万分の1にも満たないほどですが、違いはあるのです。</p>
+        <p>だからプログラマーは、2つの浮動小数点数がぴったり等しいかどうかを、ほとんど尋ねません。代わりに、十分に近いかどうかを尋ねます。お金は、たいてい整数のセント単位で数えます。そうすれば、何も丸められずにすみます。その代わり、浮動小数点数は、とても広い範囲を与えてくれます。同じ64ビットで、原子の幅も、いちばん遠い銀河までの距離も表せます。</p>
+        <p>まとめです。コンピューターは、数を符号、指数、仮数として保存し、ほとんどの小数は近似値でしか保存できません。次回は、中身がすべて数だとしたら、コンピューターは文字や色や音をどうやって保存するのでしょうか。また会いましょう。</p>
+        <p>ほとんどどんなプログラミング言語でも、0.1足す0.2と入力して、0.3という答えは出てきません。浮動小数点数は、とても近いけれど、正確ではありません。</p>
+        <p>10分の1は、10進数なら簡単に書けます。2進数では、終わりがありません。だから、どのコンピューターも丸めるしかないのです。</p>
+        </div>
+        <p class="ep-close">次回：文字も色も音も、どうやって数になるのか。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../04/ja/"><span>前の回 · 第4話</span><b>ANDゲートで 5 × 3：コンピューターのかけ算とわり算のしくみ</b></a><div class="ep-pg next soon"><span>次の回</span><b>第6話は <time datetime="2026-10-30T21:00:00+08:00" data-at="2026-10-30T21:00:00+08:00" data-fmt="when">10-30 21:00 (UTC+8)</time> に公開</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

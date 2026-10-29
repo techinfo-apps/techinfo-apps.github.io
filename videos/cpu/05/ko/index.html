@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>0.1 + 0.2 ≠ 0.3인 이유: 컴퓨터는 소수를 어떻게 저장할까 (부동소수점) — 스위치 하나에서 CPU까지 #5</title>
+<meta name="description" content="거의 모든 프로그래밍 언어에서 0.1 + 0.2를 입력하면 0.30000000000000004가 나와요. 버그가 아니에요. 이진법으로 소수(2분의 1, 4분의 1, 8분의 1)를 써 보고, 10분의 1이 왜 끝나지 않는지 확인해요. 과학에서 쓰는 지수 표기법으로 부동소수점을 만들고, 실제 64비트 수(부호, 지수, 가수)를 열어 보면서, 0.1 + 0.2가 끝에 엉뚱한 4가 붙은 값이 되기까지를 한 단계씩 따라가요. 그리고 프로그래머들이 이 문제를 어떻게 다루는지도 살펴봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/05/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/05/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/05/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/05/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/05/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/05/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/05/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/05/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/05/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="0.1 + 0.2 ≠ 0.3인 이유: 컴퓨터는 소수를 어떻게 저장할까 (부동소수점) — 스위치 하나에서 CPU까지 #5">
+<meta property="og:description" content="거의 모든 프로그래밍 언어에서 0.1 + 0.2를 입력하면 0.30000000000000004가 나와요. 버그가 아니에요. 이진법으로 소수(2분의 1, 4분의 1, 8분의 1)를 써 보고, 10분의 1이 왜 끝나지 않는지 확인해요. 과학에서 쓰는 지수 표기법으로 부동소수점을 만들고, 실제 64비트 수(부호, 지수, 가수)를 열어 보면서, 0.1 + 0.2가 끝에 엉뚱한 4가 붙은 값이 되기까지를 한 단계씩 따라가요. 그리고 프로그래머들이 이 문제를 어떻게 다루는지도 살펴봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/05/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "0.1 + 0.2 ≠ 0.3인 이유: 컴퓨터는 소수를 어떻게 저장할까 (부동소수점)", "description": "거의 모든 프로그래밍 언어에서 0.1 + 0.2를 입력하면 0.30000000000000004가 나와요. 버그가 아니에요. 이진법으로 소수(2분의 1, 4분의 1, 8분의 1)를 써 보고, 10분의 1이 왜 끝나지 않는지 확인해요. 과학에서 쓰는 지수 표기법으로 부동소수점을 만들고, 실제 64비트 수(부호, 지수, 가수)를 열어 보면서, 0.1 + 0.2가 끝에 엉뚱한 4가 붙은 값이 되기까지를 한 단계씩 따라가요. 그리고 프로그래머들이 이 문제를 어떻게 다루는지도 살펴봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp"], "uploadDate": "2026-10-29T21:00:00+08:00", "duration": "PT6M45S", "embedUrl": "https://www.youtube.com/embed/K2jDuFdrMaw", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 5편</p>
+      <h1 class="ep-title">0.1 + 0.2 ≠ 0.3인 이유: 컴퓨터는 소수를 어떻게 저장할까 (부동소수점)</h1>
+      <div class="vplayer" data-yt="K2jDuFdrMaw" data-title="0.1 + 0.2 ≠ 0.3인 이유: 컴퓨터는 소수를 어떻게 저장할까 (부동소수점)">
+        <button type="button" class="vplay" aria-label="재생: 0.1 + 0.2 ≠ 0.3인 이유: 컴퓨터는 소수를 어떻게 저장할까 (부동소수점)">
+          <img src="../../../../assets/img/videos/cpu-05.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/K2jDuFdrMaw" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">거의 모든 프로그래밍 언어에서 0.1 + 0.2를 입력하면 0.30000000000000004가 나와요. 버그가 아니에요.<br>이진법으로 소수(2분의 1, 4분의 1, 8분의 1)를 써 보고, 10분의 1이 왜 끝나지 않는지 확인해요. 과학에서 쓰는 지수 표기법으로 부동소수점을 만들고, 실제 64비트 수(부호, 지수, 가수)를 열어 보면서, 0.1 + 0.2가 끝에 엉뚱한 4가 붙은 값이 되기까지를 한 단계씩 따라가요. 그리고 프로그래머들이 이 문제를 어떻게 다루는지도 살펴봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>왜 0.1 + 0.2는 0.3이 아닐까</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=30" data-t="30" rel="noopener"><span class="t">0:30</span>이진법의 소수</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=73" data-t="73" rel="noopener"><span class="t">1:13</span>10분의 1이 끝나지 않는 이유</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>부동소수점</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=197" data-t="197" rel="noopener"><span class="t">3:17</span>64비트 수의 내부</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=251" data-t="251" rel="noopener"><span class="t">4:11</span>점과 틈</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=285" data-t="285" rel="noopener"><span class="t">4:45</span>0.1과 0.2 더하기</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=351" data-t="351" rel="noopener"><span class="t">5:51</span>프로그래머들은 어떻게 할까</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=385" data-t="385" rel="noopener"><span class="t">6:25</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>컴퓨터에게 0.1 더하기 0.2를 계산해 보라고 해 보세요. 0.3이 나올 거라고 생각하겠죠. 하지만 나오는 건 이거예요. 0.3, 0이 열다섯 개, 그리고 4. 버그가 아니에요. 거의 모든 컴퓨터가 정수가 아닌 수를 이렇게 저장해요. 오늘은 그 이유를 알아봐요.</p>
+        <p>지금까지 이 시리즈의 수는 모두 정수였어요. 5, 3, 15, 마이너스 7. 십진법에서 소수점 뒤의 자리는 10분의 1, 100분의 1, 1000분의 1이에요. 한 자리 갈 때마다 10배씩 작아져요. 이진법도 같아요. 다만 한 자리마다 2배씩 작아져요. 2분의 1, 4분의 1, 8분의 1, 16분의 1이에요. 그러니 이진법에서 0.1은 2분의 1이에요. 0.11은 2분의 1 더하기 4분의 1, 그러니까 0.75예요.</p>
+        <p>이제 10분의 1을 이진법으로 써 봐요. 2분의 1, 4분의 1, 8분의 1 중 무엇을 더해야 딱 0.1이 될까요? 2분의 1은 너무 커요. 4분의 1도 너무 커요. 8분의 1도 여전히 너무 커요. 16분의 1은 들어가요. 0.0625예요. 그래도 조금 더 필요해요. 들어갈 때마다 한 조각씩 더하며 계속 가면, 규칙이 나타나요. 0011, 0011, 계속 반복돼요. 끝나지 않아요. 십진법의 3분의 1과 같아요. 0.333, 영원히 계속돼요. 컴퓨터는 정해진 비트 수에서 멈춰야 해요. 그래서 저장된 0.1은 정확히 10분의 1이 아니에요. 아주 아주 가까울 뿐이에요.</p>
+        <p>그럼 비트를 몇 개 남기고, 소수점은 어디에 둘까요? 과학자들은 아주 큰 수와 아주 작은 수를 위해 오래전에 이 문제를 풀었어요. 100만은 1 곱하기 10의 6제곱이에요. 100만분의 1은 1 곱하기 10의 마이너스 6제곱이에요. 몇 개의 숫자와, 소수점이 어디 있는지 알려 주는 거듭제곱. 소수점이 움직일 수 있어요, 즉 떠다닐 수 있어요. 그래서 부동소수점이라고 불러요. 컴퓨터도 이진법에서 똑같이 해요. 0.1은 1.1001 1001…에 2의 마이너스 4제곱을 곱한 모양이 돼요.</p>
+        <p>대부분의 프로그래밍 언어는 이걸 64비트로 저장하고, 세 부분으로 나눠요. 1비트는 부호 비트예요. 플러스인지 마이너스인지를 나타내요. 11비트는 지수예요. 2의 몇 제곱인지를 나타내요. 여기서는 마이너스 4예요. 그리고 52비트는 가수예요. 소수점 뒤에 오는 숫자들이에요. 소수점 앞의 1은 아예 저장하지 않아요. 이진법에서 이렇게 쓴 수는 거의 모두 1로 시작하기 때문에, 공짜로 얻는 셈이에요. 이제 맨 끝을 보세요. 마지막 묶음은 1001이어야 하지만, 규칙이 여기서 잘리기 때문에 올림되어 1010이 돼요. 그래서 저장된 0.1은 10분의 1보다 아주 조금 커요.</p>
+        <p>반올림이 일어나는 건, 부동소수점 수가 정해진 점에만 놓일 수 있기 때문이에요. 점과 점 사이에는 틈이 있어요. 여기 가수가 3비트뿐인 작은 버전이 있어요. 그래서 점들을 눈으로 볼 수 있어요. 0 근처에서는 점들이 촘촘히 모여 있어요. 멀어질수록 틈이 넓어져요. 실제 64비트 수에는 점이 훨씬 많아요. 1 근처에서는 점들이 약 2 곱하기 10의 마이너스 16제곱만큼 떨어져 있어요. 하지만 원리는 같아요. 모든 결과는 수직선 위의 한 점으로 반올림돼요.</p>
+        <p>이제 더해 볼 수 있어요. 0.3 근처를, 점들이 하나하나 보일 만큼 확대해 봐요. 진짜 0.3은 두 점 사이에 떨어져요. 더 가까운, 바로 아래쪽 점을 컴퓨터는 0.3이라고 불러요. 저장된 0.1과 0.2는 둘 다 아주 조금 컸어요. 그래서 두 수의 정확한 합은 여기, 두 점의 한가운데에 놓여요. 동점일 때는 마지막 비트가 0인 점을 고르는 규칙이에요. 여기서는 위쪽 점이에요. 출력할 때 컴퓨터는 그 점을 이웃한 점과 구별할 만큼의 자릿수만 보여 줘요. 0.3, 0이 열다섯 개, 그리고 4예요. 그래서 0.1 더하기 0.2는 0.3과 같지 않아요. 둘은 100만분의 1의 100만분의 1도 안 되게 차이 나지만, 다르긴 달라요.</p>
+        <p>그래서 프로그래머들은 두 부동소수점 수가 정확히 같은지는 거의 묻지 않아요. 대신 충분히 가까운지를 물어요. 그리고 돈은 보통 정수로, 센트 단위로 세요. 그러면 아무것도 반올림되어 사라지지 않아요. 그 대신 부동소수점은 엄청나게 넓은 범위를 줘요. 같은 64비트로 원자의 너비도, 가장 먼 은하까지의 거리도 담을 수 있어요.</p>
+        <p>정리하면, 컴퓨터는 수를 부호, 지수, 가수로 저장하고, 대부분의 소수는 근삿값으로만 저장할 수 있어요. 다음 편은요, 안이 전부 수라면 컴퓨터는 글자, 색, 소리를 어떻게 저장할까요? 거기서 만나요.</p>
+        <p>거의 모든 프로그래밍 언어에 0.1 더하기 0.2를 입력해도, 0.3은 나오지 않아요. 부동소수점: 아주 가깝지만, 정확하지는 않아요.</p>
+        <p>10분의 1은 십진법으로는 쓰기 쉬워요. 이진법에서는 끝나지 않아요. 그래서 모든 컴퓨터는 반올림해야 해요.</p>
+        </div>
+        <p class="ep-close">다음 편: 글자, 색, 소리는 어떻게 전부 수가 될까요?</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../04/ko/"><span>이전 편 · 4편</span><b>AND 게이트로 5 × 3: 컴퓨터는 곱셈과 나눗셈을 어떻게 할까</b></a><div class="ep-pg next soon"><span>다음 편</span><b>6편은 <time datetime="2026-10-30T21:00:00+08:00" data-at="2026-10-30T21:00:00+08:00" data-fmt="when">10-30 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

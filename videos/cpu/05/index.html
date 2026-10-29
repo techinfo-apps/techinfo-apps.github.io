@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Why 0.1 + 0.2 ≠ 0.3: How Computers Store Decimals (Floating Point) — From One Switch to a CPU #5</title>
+<meta name="description" content="Type 0.1 + 0.2 into almost any programming language and you get 0.30000000000000004. That&#x27;s not a bug. We write fractions in binary (halves, quarters, eighths), see why one tenth never ends, build floating point out of scientific notation, open up a real 64-bit number (sign, exponent, fraction), and follow 0.1 + 0.2 step by step to that stray 4 at the end. Then: what programmers do about it.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/05/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/05/" data-lang="en" data-href="./">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/05/zh-cn/" data-lang="zh-CN" data-href="./zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/05/zh-tw/" data-lang="zh-TW" data-href="./zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/05/ja/" data-lang="ja" data-href="./ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/05/ko/" data-lang="ko" data-href="./ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/05/es/" data-lang="es" data-href="./es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/05/fr/" data-lang="fr" data-href="./fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/05/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Why 0.1 + 0.2 ≠ 0.3: How Computers Store Decimals (Floating Point) — From One Switch to a CPU #5">
+<meta property="og:description" content="Type 0.1 + 0.2 into almost any programming language and you get 0.30000000000000004. That&#x27;s not a bug. We write fractions in binary (halves, quarters, eighths), see why one tenth never ends, build floating point out of scientific notation, open up a real 64-bit number (sign, exponent, fraction), and follow 0.1 + 0.2 step by step to that stray 4 at the end. Then: what programmers do about it.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/05/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Why 0.1 + 0.2 ≠ 0.3: How Computers Store Decimals (Floating Point)", "description": "Type 0.1 + 0.2 into almost any programming language and you get 0.30000000000000004. That's not a bug. We write fractions in binary (halves, quarters, eighths), see why one tenth never ends, build floating point out of scientific notation, open up a real 64-bit number (sign, exponent, fraction), and follow 0.1 + 0.2 step by step to that stray 4 at the end. Then: what programmers do about it.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp"], "uploadDate": "2026-10-29T21:00:00+08:00", "duration": "PT6M45S", "embedUrl": "https://www.youtube.com/embed/K2jDuFdrMaw", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../" data-page-lang="en">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../videos/">All episodes</a> · From One Switch to a CPU · Episode 5</p>
+      <h1 class="ep-title">Why 0.1 + 0.2 ≠ 0.3: How Computers Store Decimals (Floating Point)</h1>
+      <div class="vplayer" data-yt="K2jDuFdrMaw" data-title="Why 0.1 + 0.2 ≠ 0.3: How Computers Store Decimals (Floating Point)">
+        <button type="button" class="vplay" aria-label="Play: Why 0.1 + 0.2 ≠ 0.3: How Computers Store Decimals (Floating Point)">
+          <img src="../../../assets/img/videos/cpu-05.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Pressing play loads the video from YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/K2jDuFdrMaw" rel="noopener">Watch on YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">Subscribe on YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Type 0.1 + 0.2 into almost any programming language and you get 0.30000000000000004. That&#x27;s not a bug.<br>We write fractions in binary (halves, quarters, eighths), see why one tenth never ends, build floating point out of scientific notation, open up a real 64-bit number (sign, exponent, fraction), and follow 0.1 + 0.2 step by step to that stray 4 at the end. Then: what programmers do about it.</p>
+      <p class="ep-ai">Every animation in this video is drawn by code, and the narration is an AI voice.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapters</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Why 0.1 + 0.2 isn&#x27;t 0.3</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=30" data-t="30" rel="noopener"><span class="t">0:30</span>Fractions in binary</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=73" data-t="73" rel="noopener"><span class="t">1:13</span>Why one tenth never ends</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>Floating point</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=197" data-t="197" rel="noopener"><span class="t">3:17</span>Inside a 64-bit number</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=251" data-t="251" rel="noopener"><span class="t">4:11</span>Points and gaps</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=285" data-t="285" rel="noopener"><span class="t">4:45</span>Adding 0.1 and 0.2</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=351" data-t="351" rel="noopener"><span class="t">5:51</span>What programmers do</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=385" data-t="385" rel="noopener"><span class="t">6:25</span>What&#x27;s next</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcript</h2>
+        <div class="ep-text">
+        <p>Ask a computer to add zero point one and zero point two. You&#x27;d expect zero point three. Instead, you get this. Zero point three, fifteen zeros, and a four. It&#x27;s not a bug. It&#x27;s how almost every computer stores numbers that aren&#x27;t whole. Today, we find out why.</p>
+        <p>So far, every number in this series has been a whole number: five, three, fifteen, minus seven. In decimal, the digits after the point are tenths, hundredths, thousandths: each place is ten times smaller. Binary works the same way, except each place is two times smaller: a half, a quarter, an eighth, a sixteenth. So in binary, point one is one half. Point one one is a half plus a quarter: zero point seven five.</p>
+        <p>Now let&#x27;s write one tenth in binary. Which halves, quarters and eighths add up to exactly zero point one? A half is too big. A quarter, too big. An eighth, still too big. A sixteenth fits. That&#x27;s zero point zero six two five, and we still need a little more. Keep going, adding a piece whenever it fits, and a pattern shows up: zero zero one one, zero zero one one, over and over. It never ends. It&#x27;s like one third in decimal: zero point three three three, forever. A computer has to stop after a fixed number of bits. So the zero point one it stores isn&#x27;t exactly one tenth. It&#x27;s just very, very close.</p>
+        <p>So how many bits do we keep, and where does the point go? Scientists solved this long ago, for very big and very small numbers. A million is one times ten to the six. A millionth is one times ten to the minus six. A few digits, plus a power that says where the point goes. The point can move, or float. That&#x27;s why this is called floating point. Computers do the same thing in binary. Zero point one becomes one point one zero zero one, one zero zero one, and so on, times two to the minus four.</p>
+        <p>Most programming languages store this in sixty-four bits, split into three parts. One bit for the sign: plus or minus. Eleven bits for the exponent: which power of two. Here, minus four. And fifty-two bits for the fraction: the digits after the point. The one before the point isn&#x27;t stored at all. In binary, almost every number written this way starts with a one, so it comes for free. Now look at the very end. The last group should be one zero zero one, but the pattern gets cut off here, so it&#x27;s rounded up to one zero one zero. So the stored zero point one is a hair above one tenth.</p>
+        <p>Rounding happens because floating point can only land on certain points. Between them are gaps. Here&#x27;s a tiny version with only three fraction bits, so we can see them. Near zero, the points are packed tight. Further out, the gaps get wider. Real sixty-four-bit numbers have far more points. Near one, they&#x27;re about two times ten to the minus sixteen apart. But the idea is the same: every result gets rounded to a point on the line.</p>
+        <p>Now we can add. Let&#x27;s zoom in near zero point three, so far that we can see the points themselves. True zero point three falls between two of them. The closer one, just below, is what the computer calls zero point three. Our stored zero point one and zero point two were both a hair too big. So their exact sum lands here, right in the middle between the two points. For a tie, the rule is to pick the point whose last bit is zero. Here, that&#x27;s the upper one. When it&#x27;s printed, the computer shows just enough digits to tell that point from its neighbor: zero point three, fifteen zeros, and a four. So zero point one plus zero point two isn&#x27;t equal to zero point three. They&#x27;re less than a millionth of a millionth apart, but they differ.</p>
+        <p>That&#x27;s why programmers almost never ask whether two floating-point numbers are exactly equal. They ask whether they&#x27;re close enough. And money is usually counted in whole cents, as integers, so nothing gets rounded away. In return, floating point gives us an enormous range. The same sixty-four bits can hold the width of an atom and the distance to the farthest galaxies.</p>
+        <p>So: a computer stores a number as a sign, an exponent and a fraction, and most decimals can only be stored approximately. Next time: if everything inside is numbers, how does a computer store letters, colors and sounds? See you there.</p>
+        <p>Type zero point one plus zero point two into almost any programming language, and you won&#x27;t get zero point three. Floating point: very close, but not exact.</p>
+        <p>One tenth is easy to write in decimal. In binary, it never ends. So every computer has to round it.</p>
+        </div>
+        <p class="ep-close">Next episode: how text, colors and sound all become numbers.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../04/"><span>Previous · Episode 4</span><b>5 × 3 With AND Gates: How Computers Multiply and Divide</b></a><div class="ep-pg next soon"><span>Next</span><b>Episode 6 comes out <time datetime="2026-10-30T21:00:00+08:00" data-at="2026-10-30T21:00:00+08:00" data-fmt="when">10-30 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../assets/strings.js"></script>
+<script src="../../../assets/site.js"></script>
+<script src="../../../assets/videos.js"></script>
+</body>
+</html>

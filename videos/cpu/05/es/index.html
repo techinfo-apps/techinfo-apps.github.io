@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Por qué 0.1 + 0.2 ≠ 0.3: cómo guarda los decimales una computadora — De un interruptor a una CPU #5</title>
+<meta name="description" content="Escribe 0.1 + 0.2 en casi cualquier lenguaje de programación y obtendrás 0.30000000000000004. No es un error. Escribimos fracciones en binario (mitades, cuartos, octavos), vemos por qué un décimo nunca termina, construimos el punto flotante a partir de la notación científica, abrimos un número real de 64 bits (signo, exponente, fracción) y seguimos 0.1 + 0.2 paso a paso hasta ese 4 suelto del final. Después: qué hacen los programadores al respecto.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/05/es/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/05/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/05/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/05/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/05/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/05/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/05/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/05/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/05/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Por qué 0.1 + 0.2 ≠ 0.3: cómo guarda los decimales una computadora — De un interruptor a una CPU #5">
+<meta property="og:description" content="Escribe 0.1 + 0.2 en casi cualquier lenguaje de programación y obtendrás 0.30000000000000004. No es un error. Escribimos fracciones en binario (mitades, cuartos, octavos), vemos por qué un décimo nunca termina, construimos el punto flotante a partir de la notación científica, abrimos un número real de 64 bits (signo, exponente, fracción) y seguimos 0.1 + 0.2 paso a paso hasta ese 4 suelto del final. Después: qué hacen los programadores al respecto.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/05/es/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Por qué 0.1 + 0.2 ≠ 0.3: cómo guarda los decimales una computadora", "description": "Escribe 0.1 + 0.2 en casi cualquier lenguaje de programación y obtendrás 0.30000000000000004. No es un error. Escribimos fracciones en binario (mitades, cuartos, octavos), vemos por qué un décimo nunca termina, construimos el punto flotante a partir de la notación científica, abrimos un número real de 64 bits (signo, exponente, fracción) y seguimos 0.1 + 0.2 paso a paso hasta ese 4 suelto del final. Después: qué hacen los programadores al respecto.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp"], "uploadDate": "2026-10-29T21:00:00+08:00", "duration": "PT6M45S", "embedUrl": "https://www.youtube.com/embed/K2jDuFdrMaw", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="es">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Todos los episodios</a> · De un interruptor a una CPU · Episodio 5</p>
+      <h1 class="ep-title">Por qué 0.1 + 0.2 ≠ 0.3: cómo guarda los decimales una computadora</h1>
+      <div class="vplayer" data-yt="K2jDuFdrMaw" data-title="Por qué 0.1 + 0.2 ≠ 0.3: cómo guarda los decimales una computadora">
+        <button type="button" class="vplay" aria-label="Reproducir: Por qué 0.1 + 0.2 ≠ 0.3: cómo guarda los decimales una computadora">
+          <img src="../../../../assets/img/videos/cpu-05.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Al pulsar reproducir, el video se carga desde YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/K2jDuFdrMaw" rel="noopener">Ver en YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">Suscribirse en YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Escribe 0.1 + 0.2 en casi cualquier lenguaje de programación y obtendrás 0.30000000000000004. No es un error.<br>Escribimos fracciones en binario (mitades, cuartos, octavos), vemos por qué un décimo nunca termina, construimos el punto flotante a partir de la notación científica, abrimos un número real de 64 bits (signo, exponente, fracción) y seguimos 0.1 + 0.2 paso a paso hasta ese 4 suelto del final. Después: qué hacen los programadores al respecto.</p>
+      <p class="ep-ai">Todas las animaciones de este video están dibujadas con código y la narración es una voz de IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Capítulos</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Por qué 0.1 + 0.2 no es 0.3</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=30" data-t="30" rel="noopener"><span class="t">0:30</span>Fracciones en binario</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=73" data-t="73" rel="noopener"><span class="t">1:13</span>Por qué un décimo nunca termina</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>Punto flotante</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=197" data-t="197" rel="noopener"><span class="t">3:17</span>Dentro de un número de 64 bits</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=251" data-t="251" rel="noopener"><span class="t">4:11</span>Puntos y huecos</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=285" data-t="285" rel="noopener"><span class="t">4:45</span>Sumar 0.1 y 0.2</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=351" data-t="351" rel="noopener"><span class="t">5:51</span>Qué hacen los programadores</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=385" data-t="385" rel="noopener"><span class="t">6:25</span>Qué sigue</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcripción</h2>
+        <div class="ep-text">
+        <p>Pídele a una computadora que sume 0.1 y 0.2. Esperarías obtener 0.3. En cambio, obtienes esto. 0.3, quince ceros y un 4. No es un error. Así es como casi todas las computadoras guardan los números que no son enteros. Hoy descubrimos por qué.</p>
+        <p>Hasta ahora, todos los números de esta serie han sido enteros: cinco, tres, quince, menos siete. En decimal, los dígitos después del punto son décimas, centésimas, milésimas: cada lugar es diez veces más pequeño. El binario funciona igual, solo que cada lugar es dos veces más pequeño: un medio, un cuarto, un octavo, un dieciseisavo. Así, en binario, 0.1 es un medio. 0.11 es un medio más un cuarto: 0.75.</p>
+        <p>Ahora escribamos un décimo en binario. ¿Qué mitades, cuartos y octavos suman exactamente 0.1? Un medio es demasiado grande. Un cuarto, también. Un octavo, todavía demasiado grande. Un dieciseisavo cabe. Eso es 0.0625, y todavía nos falta un poco más. Seguimos, añadiendo una pieza cada vez que cabe, y aparece un patrón: 0011, 0011, una y otra vez. Nunca termina. Es como un tercio en decimal: 0.333, para siempre. Una computadora tiene que detenerse tras un número fijo de bits. Así que el 0.1 que guarda no es exactamente un décimo. Solo está muy, muy cerca.</p>
+        <p>¿Cuántos bits conservamos, entonces, y dónde va el punto? Los científicos resolvieron esto hace mucho, para números muy grandes y muy pequeños. Un millón es 1 por 10 elevado a la 6. Una millonésima es 1 por 10 elevado a la menos 6. Unos pocos dígitos, más una potencia que indica dónde va el punto. El punto puede moverse, o flotar. Por eso se llama punto flotante. Las computadoras hacen lo mismo en binario. 0.1 se convierte en 1.1001 1001... por 2 elevado a la menos 4.</p>
+        <p>La mayoría de los lenguajes de programación guardan esto en 64 bits, divididos en tres partes. Un bit de signo: más o menos. 11 bits para el exponente: qué potencia de 2. Aquí, menos 4. Y 52 bits para la fracción, o mantisa: los dígitos después del punto. El 1 antes del punto no se guarda en absoluto. En binario, casi todos los números escritos así empiezan con un 1, así que sale gratis. Ahora mira el final. El último grupo debería ser 1001, pero el patrón se corta aquí, así que se redondea hacia arriba a 1010. Así que el 0.1 guardado queda apenas un poquito por encima de un décimo.</p>
+        <p>El redondeo ocurre porque el punto flotante solo puede caer en ciertos puntos. Entre ellos hay huecos. Aquí hay una versión diminuta con solo 3 bits de fracción, para poder verlos. Cerca del cero, los puntos están muy juntos. Más lejos, los huecos se hacen más anchos. Los números reales de 64 bits tienen muchísimos más puntos. Cerca del 1, están separados unos 2 por 10 a la menos 16. Pero la idea es la misma: cada resultado se redondea a un punto de la recta.</p>
+        <p>Ahora podemos sumar. Acerquémonos a 0.3, tanto que podamos ver los puntos mismos. El 0.3 verdadero cae entre dos de ellos. El más cercano, justo por debajo, es lo que la computadora llama 0.3. Nuestros 0.1 y 0.2 guardados eran ambos un poquito demasiado grandes. Así que su suma exacta cae aquí, justo en el medio entre los dos puntos. En caso de empate, la regla es elegir el punto cuyo último bit sea 0. Aquí, es el de arriba. Al imprimirse, la computadora muestra solo los dígitos justos para distinguir ese punto de su vecino: 0.3, quince ceros y un 4. Así que 0.1 más 0.2 no es igual a 0.3. Están a menos de una millonésima de millonésima de distancia, pero son distintos.</p>
+        <p>Por eso los programadores casi nunca preguntan si dos números de punto flotante son exactamente iguales. Preguntan si están lo bastante cerca. Y el dinero suele contarse en centavos enteros, como números enteros, para que nada se redondee. A cambio, el punto flotante nos da un rango enorme. Los mismos 64 bits pueden guardar el ancho de un átomo y la distancia a las galaxias más lejanas.</p>
+        <p>En resumen: una computadora guarda un número como un signo, un exponente y una fracción, y la mayoría de los decimales solo se pueden guardar de forma aproximada. La próxima vez: si todo lo de dentro son números, ¿cómo guarda una computadora las letras, los colores y los sonidos? Nos vemos allí.</p>
+        <p>Escribe 0.1 más 0.2 en casi cualquier lenguaje de programación, y no obtendrás 0.3. Punto flotante: muy cerca, pero no exacto.</p>
+        <p>Un décimo es fácil de escribir en decimal. En binario, nunca termina. Así que toda computadora tiene que redondearlo.</p>
+        </div>
+        <p class="ep-close">Próximo episodio: cómo el texto, los colores y el sonido se convierten en números.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../04/es/"><span>Anterior · Episodio 4</span><b>5 × 3 con puertas AND: cómo multiplican y dividen las computadoras</b></a><div class="ep-pg next soon"><span>Siguiente</span><b>El episodio 6 sale el <time datetime="2026-10-30T21:00:00+08:00" data-at="2026-10-30T21:00:00+08:00" data-fmt="when">10-30 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

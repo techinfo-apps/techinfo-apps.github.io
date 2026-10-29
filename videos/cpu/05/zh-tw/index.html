@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>為什麼 0.1 + 0.2 ≠ 0.3：電腦怎麼存小數（浮點數） — 從一個開關到 CPU #5</title>
+<meta name="description" content="在幾乎任何程式語言裡輸入 0.1 + 0.2，得到的都是 0.30000000000000004。這不是程式出錯。 我們先用二進位寫小數（二分之一、四分之一、八分之一），看看十分之一為什麼永遠寫不完；再借著科學記號搭出浮點數，拆開一個真實的 64 位元數（符號、指數、尾數），一步一步跟著 0.1 + 0.2 走到最後那個多出來的 4。最後談談程式設計師是怎麼應對的。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/05/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/05/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/05/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/05/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/05/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/05/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/05/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/05/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/05/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="為什麼 0.1 + 0.2 ≠ 0.3：電腦怎麼存小數（浮點數） — 從一個開關到 CPU #5">
+<meta property="og:description" content="在幾乎任何程式語言裡輸入 0.1 + 0.2，得到的都是 0.30000000000000004。這不是程式出錯。 我們先用二進位寫小數（二分之一、四分之一、八分之一），看看十分之一為什麼永遠寫不完；再借著科學記號搭出浮點數，拆開一個真實的 64 位元數（符號、指數、尾數），一步一步跟著 0.1 + 0.2 走到最後那個多出來的 4。最後談談程式設計師是怎麼應對的。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/05/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "為什麼 0.1 + 0.2 ≠ 0.3：電腦怎麼存小數（浮點數）", "description": "在幾乎任何程式語言裡輸入 0.1 + 0.2，得到的都是 0.30000000000000004。這不是程式出錯。 我們先用二進位寫小數（二分之一、四分之一、八分之一），看看十分之一為什麼永遠寫不完；再借著科學記號搭出浮點數，拆開一個真實的 64 位元數（符號、指數、尾數），一步一步跟著 0.1 + 0.2 走到最後那個多出來的 4。最後談談程式設計師是怎麼應對的。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-05.webp"], "uploadDate": "2026-10-29T21:00:00+08:00", "duration": "PT6M45S", "embedUrl": "https://www.youtube.com/embed/K2jDuFdrMaw", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一個開關到 CPU · 第 5 集</p>
+      <h1 class="ep-title">為什麼 0.1 + 0.2 ≠ 0.3：電腦怎麼存小數（浮點數）</h1>
+      <div class="vplayer" data-yt="K2jDuFdrMaw" data-title="為什麼 0.1 + 0.2 ≠ 0.3：電腦怎麼存小數（浮點數）">
+        <button type="button" class="vplay" aria-label="播放: 為什麼 0.1 + 0.2 ≠ 0.3：電腦怎麼存小數（浮點數）">
+          <img src="../../../../assets/img/videos/cpu-05.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/K2jDuFdrMaw" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">在幾乎任何程式語言裡輸入 0.1 + 0.2，得到的都是 0.30000000000000004。這不是程式出錯。<br>我們先用二進位寫小數（二分之一、四分之一、八分之一），看看十分之一為什麼永遠寫不完；再借著科學記號搭出浮點數，拆開一個真實的 64 位元數（符號、指數、尾數），一步一步跟著 0.1 + 0.2 走到最後那個多出來的 4。最後談談程式設計師是怎麼應對的。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>為什麼 0.1 + 0.2 不等於 0.3</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=30" data-t="30" rel="noopener"><span class="t">0:30</span>二進位裡的小數</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=73" data-t="73" rel="noopener"><span class="t">1:13</span>為什麼十分之一寫不完</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>浮點數</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=197" data-t="197" rel="noopener"><span class="t">3:17</span>64 位元數的內部</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=251" data-t="251" rel="noopener"><span class="t">4:11</span>點與點之間的空隙</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=285" data-t="285" rel="noopener"><span class="t">4:45</span>把 0.1 和 0.2 加起來</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=351" data-t="351" rel="noopener"><span class="t">5:51</span>程式設計師怎麼辦</a></li>
+        <li><a href="https://youtu.be/K2jDuFdrMaw?t=385" data-t="385" rel="noopener"><span class="t">6:25</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>請電腦算一下 0.1 加 0.2。你會以為得到 0.3。結果卻是這個。0.3，後面十五個 0，再加一個 4。這不是程式出錯。幾乎每台電腦存放「不是整數的數」，都是這樣。今天，我們就來找出原因。</p>
+        <p>到目前為止，這個系列裡的數都是整數：五、三、十五、負七。在十進位裡，小數點後面依序是十分位、百分位、千分位：每往右一位，就小十倍。二進位也是一樣，只是每往右一位，大小就減半：二分之一、四分之一、八分之一、十六分之一。所以在二進位裡，0.1 代表二分之一。0.11 是二分之一加四分之一，也就是 0.75。</p>
+        <p>現在，我們來用二進位寫出十分之一。哪些二分之一、四分之一、八分之一加起來，剛好是 0.1？二分之一太大。四分之一，太大。八分之一，還是太大。十六分之一放得進去。那是 0.0625，我們還需要再多一點。繼續下去，只要放得進去就加一塊，就會出現一個規律：0011、0011，一遍又一遍。它永遠不會結束。就像十進位裡的三分之一：0.333，一直寫下去。電腦寫到固定的位元數就得停下來。所以它存下的 0.1，並不是剛好等於十分之一，只是非常非常接近。</p>
+        <p>那麼，要留幾個位元？小數點又放在哪裡？科學家很久以前就為很大和很小的數解決了這個問題。一百萬是 1 乘以 10 的 6 次方。百萬分之一是 1 乘以 10 的負 6 次方。幾個數字，再加上一個指出小數點位置的次方。小數點可以移動，也就是「浮動」。這就是浮點數名稱的由來。電腦在二進位裡也做同樣的事。0.1 會寫成 1.1001 1001……再乘以 2 的負 4 次方。</p>
+        <p>大多數程式語言用 64 個位元來存這種數，分成三個部分。1 個位元存符號位元：正還是負。11 個位元存指數：也就是 2 的幾次方。這裡是負 4。還有 52 個位元存尾數：也就是小數點後面的那些數字。小數點前面的那個 1 根本不用存。在二進位裡，這樣寫的數幾乎都以 1 開頭，所以是免費附贈的。現在看最後面。最後一組本來應該是 1001，但規律在這裡被截斷了，所以往上捨入成 1010。所以存下來的 0.1，比十分之一稍微大了一丁點。</p>
+        <p>會發生捨入，是因為浮點數只能落在某些特定的點上。點與點之間是空隙。這是一個只有 3 位元尾數的迷你版本，好讓我們看清楚。靠近 0 的地方，點排得很密。越往外，空隙越寬。真正的 64 位元浮點數，點多得多。在 1 附近，相鄰兩點大約只差 2 乘以 10 的負 16 次方。但道理是一樣的：每個結果都會被捨入到數線上的某一個點。</p>
+        <p>現在可以來做加法了。我們放大到 0.3 附近，放大到能看見一個個點本身。真正的 0.3 落在其中兩個點之間。比較近的那個，就在下方，就是電腦所稱的 0.3。我們存下的 0.1 和 0.2，都比真值稍微大了一點。所以它們精確的和就落在這裡，正好在兩個點的正中間。遇到平手，規則是選最後一個位元為 0 的那個點。這裡就是上面那一個。列印時，電腦只顯示剛好足以把這個點和鄰近的點區分開的位數：0.3，後面十五個 0，再加一個 4。所以 0.1 加 0.2 並不等於 0.3。它們相差不到百萬分之一的百萬分之一，但確實不同。</p>
+        <p>這就是為什麼程式設計師幾乎從不問兩個浮點數是否完全相等。他們問的是，兩者是否夠接近。至於金錢，通常用整數的「分」來計算，這樣就不會有任何東西被捨入掉。作為交換，浮點數給了我們極其廣大的範圍。同樣的 64 位元，既能存下一個原子的寬度，也能存下到最遠星系的距離。</p>
+        <p>總結：電腦把一個數存成符號、指數和尾數，而大多數小數只能近似地存放。下一集：如果裡面全都是數字，電腦要怎麼存放文字、顏色和聲音？我們下集見。</p>
+        <p>在幾乎任何程式語言裡輸入 0.1 加 0.2，你得到的都不會是 0.3。浮點數：非常接近，但並不精確。</p>
+        <p>十分之一用十進位很好寫。在二進位裡，卻永遠寫不完。所以每台電腦都得把它捨入。</p>
+        </div>
+        <p class="ep-close">下一集：文字、顏色和聲音，是怎麼都變成數字的。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../04/zh-tw/"><span>上一集 · 第 4 集</span><b>用及閘（AND）算 5 × 3：電腦怎麼做乘法與除法</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 6 集 <time datetime="2026-10-30T21:00:00+08:00" data-at="2026-10-30T21:00:00+08:00" data-fmt="when">10-30 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
