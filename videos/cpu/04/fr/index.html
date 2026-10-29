@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>5 × 3 avec des portes AND : multiplier et diviser — D&#x27;un interrupteur à un processeur #4</title>
+<meta name="description" content="Pas de table de multiplication, rien à mémoriser : une grille de portes AND et les additionneurs que nous avons déjà construits calculent cinq fois trois. Nous refaisons la multiplication posée en binaire (décaler et additionner), câblons un multiplieur 4 bits, divisons treize par trois à la manière binaire (décaler, comparer, soustraire), et réglons un problème caché dans tous les additionneurs : la retenue qui traverse les colonnes en cascade, et l&#x27;astuce de la retenue anticipée qu&#x27;utilisent les vrais processeurs pour additionner 64 bits en une fraction de nanoseconde.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/04/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/04/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/04/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/04/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/04/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/04/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/04/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/04/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/04/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="5 × 3 avec des portes AND : multiplier et diviser — D&#x27;un interrupteur à un processeur #4">
+<meta property="og:description" content="Pas de table de multiplication, rien à mémoriser : une grille de portes AND et les additionneurs que nous avons déjà construits calculent cinq fois trois. Nous refaisons la multiplication posée en binaire (décaler et additionner), câblons un multiplieur 4 bits, divisons treize par trois à la manière binaire (décaler, comparer, soustraire), et réglons un problème caché dans tous les additionneurs : la retenue qui traverse les colonnes en cascade, et l&#x27;astuce de la retenue anticipée qu&#x27;utilisent les vrais processeurs pour additionner 64 bits en une fraction de nanoseconde.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-04.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/04/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "5 × 3 avec des portes AND : multiplier et diviser", "description": "Pas de table de multiplication, rien à mémoriser : une grille de portes AND et les additionneurs que nous avons déjà construits calculent cinq fois trois. Nous refaisons la multiplication posée en binaire (décaler et additionner), câblons un multiplieur 4 bits, divisons treize par trois à la manière binaire (décaler, comparer, soustraire), et réglons un problème caché dans tous les additionneurs : la retenue qui traverse les colonnes en cascade, et l'astuce de la retenue anticipée qu'utilisent les vrais processeurs pour additionner 64 bits en une fraction de nanoseconde.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-04.webp"], "uploadDate": "2026-10-28T21:00:00+08:00", "duration": "PT5M6S", "embedUrl": "https://www.youtube.com/embed/cKydfgEcVmo", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;un interrupteur à un processeur · Épisode 4</p>
+      <h1 class="ep-title">5 × 3 avec des portes AND : multiplier et diviser</h1>
+      <div class="vplayer" data-yt="cKydfgEcVmo" data-title="5 × 3 avec des portes AND : multiplier et diviser">
+        <button type="button" class="vplay" aria-label="Lire: 5 × 3 avec des portes AND : multiplier et diviser">
+          <img src="../../../../assets/img/videos/cpu-04.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/cKydfgEcVmo" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@technologyinformation2008?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Pas de table de multiplication, rien à mémoriser : une grille de portes AND et les additionneurs que nous avons déjà construits calculent cinq fois trois.<br>Nous refaisons la multiplication posée en binaire (décaler et additionner), câblons un multiplieur 4 bits, divisons treize par trois à la manière binaire (décaler, comparer, soustraire), et réglons un problème caché dans tous les additionneurs : la retenue qui traverse les colonnes en cascade, et l&#x27;astuce de la retenue anticipée qu&#x27;utilisent les vrais processeurs pour additionner 64 bits en une fraction de nanoseconde.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Cinq fois trois avec des portes AND</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=23" data-t="23" rel="noopener"><span class="t">0:23</span>La multiplication posée</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=39" data-t="39" rel="noopener"><span class="t">0:39</span>Décaler et additionner en binaire</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=78" data-t="78" rel="noopener"><span class="t">1:18</span>Construire un multiplieur</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=134" data-t="134" rel="noopener"><span class="t">2:14</span>La division</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=195" data-t="195" rel="noopener"><span class="t">3:15</span>Retenue anticipée : une addition plus rapide</a></li>
+        <li><a href="https://youtu.be/cKydfgEcVmo?t=280" data-t="280" rel="noopener"><span class="t">4:40</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Cinq fois trois. Pas de table de multiplication, rien à mémoriser. Juste une grille de portes AND et les additionneurs que nous avons déjà construits... et il en sort quinze. Aujourd&#x27;hui : comment un ordinateur multiplie, comment il divise, et pourquoi même l&#x27;addition a besoin d&#x27;un raccourci.</p>
+        <p>Vous vous souvenez de la multiplication posée ? Vingt-trois fois douze. On multiplie par le deux, puis par le un, décalé d&#x27;une position vers la gauche. Ensuite, on additionne les rangées. En binaire, c&#x27;est beaucoup plus facile, parce que chaque chiffre vaut 0 ou 1. Multiplier par un copie le nombre. Multiplier par zéro ne donne que des zéros. Voilà toute la table de multiplication. Cinq fois trois. Trois s&#x27;écrit 0, 0, 1, 1. Pour chaque 1 dans trois, on écrit cinq, décalé jusqu&#x27;à cette colonne. Cinq, plus cinq décalé une fois, ce qui fait dix. On additionne : quinze. Décaler et additionner. En binaire, la multiplication, ce n&#x27;est que ça.</p>
+        <p>Pour la construire, remarquons que multiplier par un bit, c&#x27;est simplement une porte AND : un bit de cinq, AND un bit de trois. Quatre bits fois quatre bits demandent seize portes AND, disposées en grille. Chaque rangée est une copie décalée de cinq, ou bien que des zéros. Ensuite, des rangées d&#x27;additionneurs additionnent les copies, colonne par colonne, retenues comprises. Quatre bits fois quatre bits peuvent demander huit bits. Quinze fois quinze font deux cent vingt-cinq. Et décaler ne coûte rien. Ce n&#x27;est que du câblage : chaque bit passe à la colonne voisine. C&#x27;est pourquoi multiplier par deux est l&#x27;astuce la moins chère d&#x27;un ordinateur : décaler chaque bit d&#x27;une position vers la gauche.</p>
+        <p>La division, c&#x27;est la division posée, faite en binaire : décaler, comparer, soustraire. Treize divisé par trois. On commence par la gauche. On abaisse un 1. Le trois est-il plus grand ? Oui. On écrit 0. On abaisse le bit suivant. Maintenant, nous avons 1, 1 : c&#x27;est trois. Ça rentre. On écrit 1, et on soustrait. On abaisse un 0 : trop petit, on écrit 0. On abaisse un 1 : toujours trop petit, on écrit 0. La réponse est 0, 1, 0, 0 : quatre, avec un reste de un. Treize, c&#x27;est trois fois quatre, plus un. Chaque étape est une soustraction et un coup d&#x27;œil au signe : le même additionneur et les mêmes indicateurs que dans les deux derniers épisodes. Et comme chaque étape a besoin de la réponse de l&#x27;étape précédente, la division est la plus lente des quatre opérations de base.</p>
+        <p>Revenons maintenant à l&#x27;addition, car il y a un problème que nous avons ignoré jusqu&#x27;ici. Chaque colonne attend la retenue de la colonne située à sa droite. Quatre colonnes, quatre attentes. Avec soixante-quatre colonnes, la dernière colonne attend que la retenue traverse en cascade les soixante-trois autres, comme une longue file de dominos. La solution : regarder chaque colonne à l&#x27;avance. Si les deux bits valent 1, cette colonne va générer une retenue, quelle que soit celle qu&#x27;elle reçoit. Si exactement un bit vaut 1, elle va propager la retenue : elle transmet tout ce qui arrive.</p>
+        <p>Reprenons cinq plus trois. La colonne de droite contient 1 et 1 : elle génère. Les deux colonnes suivantes n&#x27;ont chacune qu&#x27;un seul 1 : elles propagent. La dernière colonne ne fait ni l&#x27;un ni l&#x27;autre.</p>
+        <p>Avec ces deux signaux, un circuit à retenue anticipée calcule toutes les retenues en même temps, sans attendre.</p>
+        <p>Par exemple, la colonne trois reçoit une retenue parce que la colonne zéro génère, et que les colonnes un et deux propagent toutes les deux. Quelques portes AND et OR le vérifient directement, pour toutes les colonnes à la fois.</p>
+        <p>Les vrais processeurs utilisent des astuces de ce genre pour additionner soixante-quatre bits en une infime fraction de nanoseconde.</p>
+        <p>Donc : multiplier, c&#x27;est décaler et additionner. Diviser, c&#x27;est décaler et soustraire. Et un câblage astucieux rend l&#x27;addition rapide. La prochaine fois : les nombres qui ne sont pas entiers. Pourquoi zéro virgule un plus zéro virgule deux ne font-ils pas tout à fait zéro virgule trois ? À bientôt.</p>
+        <p>Les ordinateurs multiplient sans table de multiplication. Voici comment. Décaler et additionner. C&#x27;est cela, la multiplication binaire.</p>
+        <p>Additionner soixante-quatre bits de la façon simple, c&#x27;est attendre qu&#x27;une retenue traverse en cascade soixante-trois colonnes. Regardez à l&#x27;avance, et toutes les retenues arrivent d&#x27;un coup.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : pourquoi 0.1 + 0.2 n&#x27;est pas tout à fait égal à 0.3. Les nombres à virgule flottante.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../03/fr/"><span>Précédent · Épisode 3</span><b>Un circuit, quatre réponses : construire une ALU</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 5 sort le <time datetime="2026-10-29T21:00:00+08:00" data-at="2026-10-29T21:00:00+08:00" data-fmt="when">10-29 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@technologyinformation2008" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:sublueai@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="sublueai@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
