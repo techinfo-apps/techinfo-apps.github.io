@@ -21,7 +21,7 @@ ROOT = pathlib.Path(__file__).resolve().parent.parent
 DATA = ROOT / "videos/_data"
 STATUS = DATA / "status.json"
 BASE = "https://techinfo-apps.github.io/"
-CHANNEL = "https://www.youtube.com/@technologyinformation2008"
+CHANNEL = "https://www.youtube.com/@TechInForFree"
 BEIJING = dt.timezone(dt.timedelta(hours=8))
 
 LANGS = ["en", "zh-CN", "zh-TW", "ja", "ko", "es", "fr"]
