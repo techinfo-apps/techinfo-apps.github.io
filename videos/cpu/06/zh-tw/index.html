@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>電腦怎麼把文字、顏色和聲音存成數字 — 從一個開關到 CPU #6</title>
+<meta name="description" content="字母、照片、歌曲：在電腦裡，一切都是數字。 我們先看 ASCII，看看為什麼 65 代表 A；再看 Unicode 和 UTF-8 怎麼把全世界的文字系統塞進位元組裡；一個像素怎麼混合紅、綠、藍；聲音又怎麼做到每秒取樣 44,100 次。最後，看同樣的位元組被讀成三種不同的東西。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/06/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/06/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/06/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/06/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/06/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/06/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/06/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/06/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/06/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="電腦怎麼把文字、顏色和聲音存成數字 — 從一個開關到 CPU #6">
+<meta property="og:description" content="字母、照片、歌曲：在電腦裡，一切都是數字。 我們先看 ASCII，看看為什麼 65 代表 A；再看 Unicode 和 UTF-8 怎麼把全世界的文字系統塞進位元組裡；一個像素怎麼混合紅、綠、藍；聲音又怎麼做到每秒取樣 44,100 次。最後，看同樣的位元組被讀成三種不同的東西。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-06.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/06/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "電腦怎麼把文字、顏色和聲音存成數字", "description": "字母、照片、歌曲：在電腦裡，一切都是數字。 我們先看 ASCII，看看為什麼 65 代表 A；再看 Unicode 和 UTF-8 怎麼把全世界的文字系統塞進位元組裡；一個像素怎麼混合紅、綠、藍；聲音又怎麼做到每秒取樣 44,100 次。最後，看同樣的位元組被讀成三種不同的東西。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-06.webp"], "uploadDate": "2026-10-30T21:00:00+08:00", "duration": "PT4M36S", "embedUrl": "https://www.youtube.com/embed/xC9w-Cncj_Y", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一個開關到 CPU · 第 6 集</p>
+      <h1 class="ep-title">電腦怎麼把文字、顏色和聲音存成數字</h1>
+      <div class="vplayer" data-yt="xC9w-Cncj_Y" data-title="電腦怎麼把文字、顏色和聲音存成數字">
+        <button type="button" class="vplay" aria-label="播放: 電腦怎麼把文字、顏色和聲音存成數字">
+          <img src="../../../../assets/img/videos/cpu-06.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/xC9w-Cncj_Y" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">字母、照片、歌曲：在電腦裡，一切都是數字。<br>我們先看 ASCII，看看為什麼 65 代表 A；再看 Unicode 和 UTF-8 怎麼把全世界的文字系統塞進位元組裡；一個像素怎麼混合紅、綠、藍；聲音又怎麼做到每秒取樣 44,100 次。最後，看同樣的位元組被讀成三種不同的東西。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>一切都是數字</a></li>
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=25" data-t="25" rel="noopener"><span class="t">0:25</span>文字：ASCII、Unicode、UTF-8</a></li>
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=111" data-t="111" rel="noopener"><span class="t">1:51</span>圖片：像素與顏色</a></li>
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=172" data-t="172" rel="noopener"><span class="t">2:52</span>聲音：取樣</a></li>
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=227" data-t="227" rel="noopener"><span class="t">3:47</span>同樣的位元組，三種意思</a></li>
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=258" data-t="258" rel="noopener"><span class="t">4:18</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>這是字母 A。這是一種橙色。這是一聲短短的「嗶」。在電腦裡，這三樣都只是數字。今天要講的是：數字怎麼變成文字、圖片和聲音，還有為什麼光看數字，分不出它是哪一種。</p>
+        <p>先從文字說起。做法很簡單：給每個字元一個編號，大家都用同一張表。早期有一張表叫 ASCII，是 1960 年代訂出來的。大寫 A 是 65，B 是 66，依此類推。小寫 a 是 97。空格是 32。連數字 7 也有自己的編號：55。所以「Hi」這個詞存起來是 72、105。兩個位元組，16 位元。ASCII 用 7 個位元，可以放 128 個字元。英文夠用了，但放不下世界上其他的文字。現在有一張涵蓋幾乎所有文字系統的表，叫做 Unicode。它收錄了大約 15 萬個字元，還留有超過 100 萬個空位。帶重音的字母、西里爾字母、日文、中文、韓文：每個字元都有自己的編號。為了節省空間，一種叫 UTF-8 的格式把常見的字元存成 1 個位元組，其他的存成 2 個、3 個或 4 個。A 佔 1 個位元組。這個中文字佔 3 個。</p>
+        <p>接著看圖片。把任何螢幕放大，你會看到一格一格的小方塊，叫做像素。每個像素混合三種光：紅、綠、藍。每種光佔 1 個位元組，是 0 到 255 之間的一個數，代表它有多亮。三個都是 0，就是黑色。三個都開到最大，就是白色。紅開到最大、綠開到三分之二、藍關掉，就是橙色。3 個位元組，就足以表示超過 1600 萬種顏色。一張圖片就是這些數字，一列接著一列。全高清螢幕大約有 200 萬個像素，所以一張圖大約是 600 萬個數字。所以照片和影片通常都會經過壓縮：用更聰明的方式儲存，需要的數字少得多。</p>
+        <p>那聲音呢？聲音就是空氣的壓力，非常快速地忽高忽低。麥克風把這個壓力轉成電壓，電壓也以同樣的方式忽高忽低。為了存下來，電腦每隔固定的時間量一次電壓。每量一次，就是一次取樣。音樂通常每秒取樣 44,100 次，每次取樣是一個 16 位元的數字。為什麼要這麼頻繁？要捕捉一個波，每個波至少要取樣兩次。人耳能聽到的聲音，每秒大約可達 20,000 個波，所以 44,000 次取樣剛好夠用。播放時，這些數字會以電壓的形式送到喇叭，喇叭推動空氣。又變回聲音了。</p>
+        <p>奇怪的地方來了。同樣的三個位元組：72、105、33，可以是任何東西。當成文字讀，它們是「Hi!」。當成一個像素讀，它們是這種橄欖綠。當成聲音讀，它們是一個波上的三個小階。位元組並不知道自己是什麼。由讀取它們的程式來決定，通常是看檔名結尾這類的提示。</p>
+        <p>總結：文字是來自一張共同約定的表的數字，圖片是代表光的數字，聲音是隨時間量測下來的數字。但我們到目前為止做的每個電路，輸入一變就忘了。下一集，我們來打造會記住東西的電路。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：會記住東西的電路。鎖存器、正反器和暫存器。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../05/zh-tw/"><span>上一集 · 第 5 集</span><b>為什麼 0.1 + 0.2 ≠ 0.3：電腦怎麼存小數（浮點數）</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 7 集 <time datetime="2026-10-31T21:00:00+08:00" data-at="2026-10-31T21:00:00+08:00" data-fmt="when">10-31 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

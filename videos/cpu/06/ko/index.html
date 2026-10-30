@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>컴퓨터는 글자, 색, 소리를 수로 어떻게 저장할까 — 스위치 하나에서 CPU까지 #6</title>
+<meta name="description" content="글자, 사진, 노래. 컴퓨터 안에서는 모든 것이 수예요. ASCII를 살펴보고 65가 왜 A를 뜻하는지 알아봐요. 그리고 Unicode와 UTF-8이 세계의 문자 체계를 바이트에 담는 방법, 픽셀 하나가 빨강, 초록, 파랑을 섞는 방법, 소리를 1초에 44,100번 샘플링하는 방법을 차례로 봐요. 마지막으로, 똑같은 바이트를 세 가지 방식으로 읽어 봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/06/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/06/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/06/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/06/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/06/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/06/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/06/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/06/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/06/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="컴퓨터는 글자, 색, 소리를 수로 어떻게 저장할까 — 스위치 하나에서 CPU까지 #6">
+<meta property="og:description" content="글자, 사진, 노래. 컴퓨터 안에서는 모든 것이 수예요. ASCII를 살펴보고 65가 왜 A를 뜻하는지 알아봐요. 그리고 Unicode와 UTF-8이 세계의 문자 체계를 바이트에 담는 방법, 픽셀 하나가 빨강, 초록, 파랑을 섞는 방법, 소리를 1초에 44,100번 샘플링하는 방법을 차례로 봐요. 마지막으로, 똑같은 바이트를 세 가지 방식으로 읽어 봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-06.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/06/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "컴퓨터는 글자, 색, 소리를 수로 어떻게 저장할까", "description": "글자, 사진, 노래. 컴퓨터 안에서는 모든 것이 수예요. ASCII를 살펴보고 65가 왜 A를 뜻하는지 알아봐요. 그리고 Unicode와 UTF-8이 세계의 문자 체계를 바이트에 담는 방법, 픽셀 하나가 빨강, 초록, 파랑을 섞는 방법, 소리를 1초에 44,100번 샘플링하는 방법을 차례로 봐요. 마지막으로, 똑같은 바이트를 세 가지 방식으로 읽어 봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-06.webp"], "uploadDate": "2026-10-30T21:00:00+08:00", "duration": "PT4M36S", "embedUrl": "https://www.youtube.com/embed/xC9w-Cncj_Y", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 6편</p>
+      <h1 class="ep-title">컴퓨터는 글자, 색, 소리를 수로 어떻게 저장할까</h1>
+      <div class="vplayer" data-yt="xC9w-Cncj_Y" data-title="컴퓨터는 글자, 색, 소리를 수로 어떻게 저장할까">
+        <button type="button" class="vplay" aria-label="재생: 컴퓨터는 글자, 색, 소리를 수로 어떻게 저장할까">
+          <img src="../../../../assets/img/videos/cpu-06.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/xC9w-Cncj_Y" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">글자, 사진, 노래. 컴퓨터 안에서는 모든 것이 수예요.<br>ASCII를 살펴보고 65가 왜 A를 뜻하는지 알아봐요. 그리고 Unicode와 UTF-8이 세계의 문자 체계를 바이트에 담는 방법, 픽셀 하나가 빨강, 초록, 파랑을 섞는 방법, 소리를 1초에 44,100번 샘플링하는 방법을 차례로 봐요. 마지막으로, 똑같은 바이트를 세 가지 방식으로 읽어 봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>모든 것은 수</a></li>
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=25" data-t="25" rel="noopener"><span class="t">0:25</span>글자: ASCII, Unicode, UTF-8</a></li>
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=111" data-t="111" rel="noopener"><span class="t">1:51</span>그림: 픽셀과 색</a></li>
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=172" data-t="172" rel="noopener"><span class="t">2:52</span>소리: 샘플링</a></li>
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=227" data-t="227" rel="noopener"><span class="t">3:47</span>같은 바이트, 세 가지 의미</a></li>
+        <li><a href="https://youtu.be/xC9w-Cncj_Y?t=258" data-t="258" rel="noopener"><span class="t">4:18</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>이건 글자 A예요. 이건 주황색이고요. 그리고 이건 짧은 삐 소리예요. 컴퓨터 안에서는 이 세 가지 모두 그냥 수예요. 오늘은 수가 어떻게 글자, 그림, 소리가 되는지, 그리고 수만 봐서는 그게 어느 것인지 알 수 없는 이유를 알아봐요.</p>
+        <p>글자부터 시작해요. 아이디어는 간단해요. 모든 문자에 번호를 하나씩 주고, 모두가 같은 목록을 쓰기로 약속하는 거예요. 초기의 목록 중 하나인 ASCII는 1960년대에 나왔어요. 대문자 A는 65, B는 66, 이런 식으로 이어져요. 소문자 a는 97이에요. 공백은 32예요. 숫자 7도 자기 번호가 있어요. 55예요. 그래서 &#x27;Hi&#x27;라는 단어는 72, 105로 저장돼요. 2바이트, 16비트예요. ASCII는 7비트를 쓰는데, 128개의 문자를 담을 수 있어요. 영어에는 충분하지만, 세계의 나머지 문자에는 부족해요. 오늘날에는 거의 모든 문자 체계를 담은 목록이 하나 있어요. Unicode라고 해요. 약 15만 개의 문자가 들어 있고, 100만 개가 넘게 담을 여유가 있어요. 악센트가 붙은 글자, 키릴 문자, 일본어, 중국어, 한국어. 문자마다 자기만의 번호가 있어요. 공간을 아끼기 위해, UTF-8이라는 형식은 흔한 문자는 1바이트로, 나머지는 2, 3, 4바이트로 저장해요. A는 1바이트를 차지해요. 이 중국어 글자는 3바이트를 차지해요.</p>
+        <p>이번에는 그림이에요. 화면을 아무 데나 확대해 보면, 픽셀이라고 부르는 작은 네모들이 격자로 늘어서 있어요. 픽셀 하나는 빨강, 초록, 파랑 세 가지 빛을 섞어요. 빛마다 1바이트가 주어져요. 0부터 255까지의 수로, 얼마나 밝은지를 나타내요. 셋 다 0이면 검은색이에요. 셋 다 최대면 흰색이에요. 빨강은 최대, 초록은 3분의 2, 파랑은 끄면 주황색이 돼요. 3바이트면 1600만 가지가 넘는 색을 나타낼 수 있어요. 그림은 이 수들이 한 행씩 이어진 것일 뿐이에요. 풀HD 화면에는 픽셀이 약 200만 개 있으니, 그림 한 장은 약 600만 개의 수예요. 그래서 사진과 영상은 보통 압축해서 저장해요. 더 똑똑한 방법으로 저장해서, 필요한 수가 훨씬 적어요.</p>
+        <p>그럼 소리는요? 소리는 공기의 압력이 아주 빠르게 올라갔다 내려갔다 하는 거예요. 마이크는 그 압력을, 똑같이 오르내리는 전압으로 바꿔요. 저장하려면 컴퓨터는 일정한 간격으로 전압을 재요. 한 번 잰 것이 샘플이에요. 음악은 보통 1초에 44,100번 샘플링하고, 샘플 하나는 16비트 수예요. 왜 그렇게 자주일까요? 파동 하나를 잡으려면, 파동 하나당 샘플이 적어도 2개는 필요해요. 사람의 귀는 1초에 약 20,000개의 파동까지 들을 수 있으니, 샘플 44,000개면 딱 충분해요. 다시 재생하려면, 수가 전압이 되어 스피커로 나가고, 스피커가 공기를 밀어요. 다시 소리가 돼요.</p>
+        <p>신기한 건 지금부터예요. 똑같은 세 바이트, 72, 105, 33은 무엇이든 될 수 있어요. 글자로 읽으면 &#x27;Hi!&#x27;예요. 픽셀로 읽으면 이런 올리브색이에요. 소리로 읽으면 파동의 작은 계단 세 개예요. 바이트는 자기가 무엇인지 몰라요. 읽는 프로그램이 정하는데, 보통 파일 이름 끝부분 같은 힌트를 봐요.</p>
+        <p>정리하면, 글자는 약속한 목록에서 가져온 수, 그림은 빛을 나타내는 수, 소리는 시간에 따라 잰 수예요. 그런데 지금까지 만든 회로는 모두, 입력이 바뀌면 곧바로 잊어버려요. 다음 편에서는 기억하는 회로를 만들어요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 기억하는 회로. 래치, 플립플롭, 레지스터.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../05/ko/"><span>이전 편 · 5편</span><b>0.1 + 0.2 ≠ 0.3인 이유: 컴퓨터는 소수를 어떻게 저장할까 (부동소수점)</b></a><div class="ep-pg next soon"><span>다음 편</span><b>7편은 <time datetime="2026-10-31T21:00:00+08:00" data-at="2026-10-31T21:00:00+08:00" data-fmt="when">10-31 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
