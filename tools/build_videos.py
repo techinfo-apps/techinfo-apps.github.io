@@ -317,6 +317,7 @@ def episode(series, e, l, up):
     eps = series["episodes"]
     t, u = e["lang"][l], UI[l]
     root = "../../../" + ("../" if SLUG[l] else "")
+    sdir = "../../" if SLUG[l] else "../"  # from this page up to the season's folder (the other languages sit one folder deeper)
     url = f"{BASE}videos/{sid}/{nn}/{SLUG[l]}"
     cover = f"{BASE}assets/img/videos/{sid}-{nn}.webp"
     name = series["name"][l]
@@ -348,7 +349,7 @@ def episode(series, e, l, up):
             return ""
         on = f"{other['n']:02d}"
         if other["id"] in up:
-            return (f'<a class="ep-pg {cls}" href="../../{on}/{SLUG[l]}"><span>{E(label)} · {E(fmt(l, "ep", n=other["n"]))}</span>'
+            return (f'<a class="ep-pg {cls}" href="{sdir}{on}/{SLUG[l]}"><span>{E(label)} · {E(fmt(l, "ep", n=other["n"]))}</span>'
                     f'<b>{E(other["lang"][l]["title"])}</b></a>')
         due = dt.datetime.fromisoformat(other["at"]) > dt.datetime.now(dt.timezone.utc)
         when = fmt(l, "next", n=other["n"], time=time_tag(other["at"], "when")) if due else fmt(l, "soon", n=other["n"])
