@@ -217,9 +217,9 @@ def head(lang, root, title, desc, url, extra=""):
 
 # ---------- the overview page ----------
 
-def overview(series, up, strings):
+def series_block(series, up, strings, root):
+    """One season's block on the overview page (and its texts in `strings`)."""
     sid, total = series["id"], series["total"]
-    root = "../"
     eps = series["episodes"]
     shown = [e for e in eps if e["id"] in up]
     nxt = next((e for e in eps if e["id"] not in up), None)
@@ -227,9 +227,6 @@ def overview(series, up, strings):
     daily_at = (dt.datetime.now(BEIJING).strftime("%Y-%m-%d") + f"T{series['daily']}:00+08:00")
     for l in LANGS:
         s = strings[l]
-        s["vid.title"], s["vid.h"], s["vid.lead"] = UI[l]["title"], UI[l]["h"], UI[l]["lead"]
-        s["vid.watch"], s["vid.sub"], s["vid.season_yt"] = UI[l]["watch"], UI[l]["sub"], UI[l]["season_yt"]
-        s["vid.new"] = UI[l]["new"]
         s[f"vid.{sid}.name"] = series["name"][l]
         s[f"vid.{sid}.season"] = fmt(l, "season", n=series["season"])
         s[f"vid.{sid}.progress"] = fmt(l, "progress", n=len(shown), total=total)
@@ -261,20 +258,7 @@ def overview(series, up, strings):
       </div>""")
     cards = "\n".join(cards)
 
-    page = head("en", root, en["vid.title"], UI["en"]["desc"], BASE + "videos/") + f"""
-<body data-root="{root}" data-title-key="vid.title">
-
-{nav(root)}
-
-<main>
-  <section class="vid-hero dark">
-    <div class="wrap center reveal">
-      <h1 class="h-1"><span class="grad" data-i18n="vid.h">{E(en["vid.h"])}</span></h1>
-      <p class="lead" data-i18n="vid.lead">{E(en["vid.lead"])}</p>
-    </div>
-  </section>
-
-  <section class="vid-series dark">
+    return f"""  <section class="vid-series dark">
     <div class="wrap">
       <div class="series-head">
         <div>
@@ -291,12 +275,39 @@ def overview(series, up, strings):
 {cards}
       </div>
     </div>
+  </section>"""
+
+
+def overview(all_series, up, strings):
+    """/videos/: the intro, then one block per season, in the order of all_series. Returns the page's address."""
+    root = "../"
+    for l in LANGS:
+        s = strings[l]
+        s["vid.title"], s["vid.h"], s["vid.lead"] = UI[l]["title"], UI[l]["h"], UI[l]["lead"]
+        s["vid.watch"], s["vid.sub"], s["vid.season_yt"] = UI[l]["watch"], UI[l]["sub"], UI[l]["season_yt"]
+        s["vid.new"] = UI[l]["new"]
+    blocks = "\n\n".join(series_block(series, up, strings, root) for series in all_series)
+    en = strings["en"]
+
+    page = head("en", root, en["vid.title"], UI["en"]["desc"], BASE + "videos/") + f"""
+<body data-root="{root}" data-title-key="vid.title">
+
+{nav(root)}
+
+<main>
+  <section class="vid-hero dark">
+    <div class="wrap center reveal">
+      <h1 class="h-1"><span class="grad" data-i18n="vid.h">{E(en["vid.h"])}</span></h1>
+      <p class="lead" data-i18n="vid.lead">{E(en["vid.lead"])}</p>
+    </div>
   </section>
+
+{blocks}
 </main>
 
 """ + foot(root, ["strings.js", "videos-strings.js", "site.js", "videos.js"])
     (ROOT / "videos/index.html").write_text(page, encoding="utf-8")
-    return [BASE + "videos/"]
+    return BASE + "videos/"
 
 
 # ---------- an episode page, in one language ----------
@@ -418,7 +429,9 @@ def main():
     ap.add_argument("--offline", action="store_true", help="don't ask YouTube; use status.json as it is")
     offline = ap.parse_args().offline
     status = json.loads(STATUS.read_text(encoding="utf-8")) if STATUS.exists() else {}
-    all_series = [json.loads(p.read_text(encoding="utf-8")) for p in sorted(DATA.glob("*.json")) if p != STATUS]
+    # The overview lists the seasons in order, whatever the file names are.
+    all_series = sorted((json.loads(p.read_text(encoding="utf-8")) for p in DATA.glob("*.json") if p != STATUS),
+                        key=lambda s: (s["season"], s["id"]))
 
     if not offline:
         today = dt.datetime.now(BEIJING).strftime("%Y-%m-%d")
@@ -432,8 +445,9 @@ def main():
 
     strings = {l: {} for l in LANGS}
     groups = []
+    if all_series:
+        groups.append({"en": overview(all_series, up, strings)})
     for s in all_series:
-        groups.append({"en": overview(s, up, strings)[0]})
         for e in s["episodes"]:
             if e["id"] in up:
                 groups.append({l: episode(s, e, l, up) for l in LANGS})

@@ -42,7 +42,19 @@
 "vid.cpu.4.d": "5 min",
 "vid.cpu.5": "Why 0.1 + 0.2 ≠ 0.3: How Computers Store Decimals (Floating Point)",
 "vid.cpu.5.d": "7 min",
-"vid.cpu.next": "Episode 6 comes out <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>"
+"vid.cpu.next": "Episode 6 comes out <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>",
+"vid.dsa.name": "From a List to Your Map App",
+"vid.dsa.season": "Season 2",
+"vid.dsa.progress": "0 of 25 episodes out",
+"vid.dsa.when": "A new episode every day at <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.ep.19": "Episode 19",
+"vid.ep.20": "Episode 20",
+"vid.ep.21": "Episode 21",
+"vid.ep.22": "Episode 22",
+"vid.ep.23": "Episode 23",
+"vid.ep.24": "Episode 24",
+"vid.ep.25": "Episode 25",
+"vid.dsa.next": "Episode 1 comes out <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>"
 },
 "zh-CN": {
 "vid.title": "免费教程 — Technology Information",
@@ -84,7 +96,19 @@
 "vid.cpu.4.d": "5 分钟",
 "vid.cpu.5": "为什么 0.1 + 0.2 ≠ 0.3：电脑怎么存小数（浮点数）",
 "vid.cpu.5.d": "7 分钟",
-"vid.cpu.next": "第 6 集 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time> 上线"
+"vid.cpu.next": "第 6 集 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time> 上线",
+"vid.dsa.name": "从一串数到地图导航",
+"vid.dsa.season": "第二季",
+"vid.dsa.progress": "已更新 0 / 25 集",
+"vid.dsa.when": "每天 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
+"vid.ep.19": "第 19 集",
+"vid.ep.20": "第 20 集",
+"vid.ep.21": "第 21 集",
+"vid.ep.22": "第 22 集",
+"vid.ep.23": "第 23 集",
+"vid.ep.24": "第 24 集",
+"vid.ep.25": "第 25 集",
+"vid.dsa.next": "第 1 集 <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time> 上线"
 },
 "zh-TW": {
 "vid.title": "免費教學 — Technology Information",
@@ -126,7 +150,19 @@
 "vid.cpu.4.d": "5 分鐘",
 "vid.cpu.5": "為什麼 0.1 + 0.2 ≠ 0.3：電腦怎麼存小數（浮點數）",
 "vid.cpu.5.d": "7 分鐘",
-"vid.cpu.next": "第 6 集 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time> 上線"
+"vid.cpu.next": "第 6 集 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time> 上線",
+"vid.dsa.name": "從一串數到地圖導航",
+"vid.dsa.season": "第二季",
+"vid.dsa.progress": "已更新 0 / 25 集",
+"vid.dsa.when": "每天 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
+"vid.ep.19": "第 19 集",
+"vid.ep.20": "第 20 集",
+"vid.ep.21": "第 21 集",
+"vid.ep.22": "第 22 集",
+"vid.ep.23": "第 23 集",
+"vid.ep.24": "第 24 集",
+"vid.ep.25": "第 25 集",
+"vid.dsa.next": "第 1 集 <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time> 上線"
 },
 "ja": {
 "vid.title": "無料チュートリアル — Technology Information",
@@ -168,7 +204,19 @@
 "vid.cpu.4.d": "5分",
 "vid.cpu.5": "なぜ 0.1 + 0.2 ≠ 0.3 になるのか：コンピューターの小数のしくみ（浮動小数点数）",
 "vid.cpu.5.d": "7分",
-"vid.cpu.next": "第6話は <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time> に公開"
+"vid.cpu.next": "第6話は <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time> に公開",
+"vid.dsa.name": "数の並びから地図アプリまで",
+"vid.dsa.season": "シーズン2",
+"vid.dsa.progress": "全25話のうち0話を公開中",
+"vid.dsa.when": "毎日 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> に新しい回を公開します。",
+"vid.ep.19": "第19話",
+"vid.ep.20": "第20話",
+"vid.ep.21": "第21話",
+"vid.ep.22": "第22話",
+"vid.ep.23": "第23話",
+"vid.ep.24": "第24話",
+"vid.ep.25": "第25話",
+"vid.dsa.next": "第1話は <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time> に公開"
 },
 "ko": {
 "vid.title": "무료 강좌 — Technology Information",
@@ -210,7 +258,19 @@
 "vid.cpu.4.d": "5분",
 "vid.cpu.5": "0.1 + 0.2 ≠ 0.3인 이유: 컴퓨터는 소수를 어떻게 저장할까 (부동소수점)",
 "vid.cpu.5.d": "7분",
-"vid.cpu.next": "6편은 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>에 공개"
+"vid.cpu.next": "6편은 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>에 공개",
+"vid.dsa.name": "숫자 목록에서 지도 앱까지",
+"vid.dsa.season": "시즌 2",
+"vid.dsa.progress": "전체 25편 중 0편 공개",
+"vid.dsa.when": "매일 <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>에 새 편이 올라옵니다.",
+"vid.ep.19": "19편",
+"vid.ep.20": "20편",
+"vid.ep.21": "21편",
+"vid.ep.22": "22편",
+"vid.ep.23": "23편",
+"vid.ep.24": "24편",
+"vid.ep.25": "25편",
+"vid.dsa.next": "1편은 <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>에 공개"
 },
 "es": {
 "vid.title": "Tutoriales gratis — Technology Information",
@@ -252,7 +312,19 @@
 "vid.cpu.4.d": "5 min",
 "vid.cpu.5": "Por qué 0.1 + 0.2 ≠ 0.3: cómo guarda los decimales una computadora",
 "vid.cpu.5.d": "7 min",
-"vid.cpu.next": "El episodio 6 sale el <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>"
+"vid.cpu.next": "El episodio 6 sale el <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>",
+"vid.dsa.name": "De una lista a tu app de mapas",
+"vid.dsa.season": "Temporada 2",
+"vid.dsa.progress": "0 de 25 episodios publicados",
+"vid.dsa.when": "Un episodio nuevo cada día a las <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.ep.19": "Episodio 19",
+"vid.ep.20": "Episodio 20",
+"vid.ep.21": "Episodio 21",
+"vid.ep.22": "Episodio 22",
+"vid.ep.23": "Episodio 23",
+"vid.ep.24": "Episodio 24",
+"vid.ep.25": "Episodio 25",
+"vid.dsa.next": "El episodio 1 sale el <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>"
 },
 "fr": {
 "vid.title": "Tutoriels gratuits — Technology Information",
@@ -294,6 +366,18 @@
 "vid.cpu.4.d": "5 min",
 "vid.cpu.5": "Pourquoi 0.1 + 0.2 ≠ 0.3 : décimaux et virgule flottante",
 "vid.cpu.5.d": "7 min",
-"vid.cpu.next": "L'épisode 6 sort le <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>"
+"vid.cpu.next": "L'épisode 6 sort le <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"when\">10-30 21:00 (UTC+8)</time>",
+"vid.dsa.name": "D'une liste à l'appli de cartes",
+"vid.dsa.season": "Saison 2",
+"vid.dsa.progress": "0 épisodes sur 25 en ligne",
+"vid.dsa.when": "Un nouvel épisode chaque jour à <time datetime=\"2026-10-30T21:00:00+08:00\" data-at=\"2026-10-30T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.ep.19": "Épisode 19",
+"vid.ep.20": "Épisode 20",
+"vid.ep.21": "Épisode 21",
+"vid.ep.22": "Épisode 22",
+"vid.ep.23": "Épisode 23",
+"vid.ep.24": "Épisode 24",
+"vid.ep.25": "Épisode 25",
+"vid.dsa.next": "L'épisode 1 sort le <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>"
 }
 });
