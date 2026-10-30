@@ -235,6 +235,10 @@ window.TI_STRINGS = {
     "swa5": "macOS 14 Sonoma or later, on Apple silicon or Intel. Adjusting external monitors works on Apple silicon Macs.",
     "swd.h": "Get Broomy.",
     "swd.p": "Free, for macOS 14 or later. It isn't notarized yet: the first time, right-click → Open (on macOS 15 and later: System Settings → Privacy & Security → Open Anyway).",
+    "swl.h": "Broomy for Linux",
+    "swl.p": "A single command, <code>broomy</code>, for the terminal. It lists caches, old build folders and other leftovers, and cleans only what you choose: your files go to the Trash, system items use the system's own commands. Free, 64-bit, nothing else to install.",
+    "swl.req": "For Ubuntu, Debian and relatives (on an ARM computer, take broomy_0.1.0_arm64.deb). Any other 64-bit Linux: download the single file from the release page and run it.",
+    "btn.linux": "Download for Linux",
     "sw.history": "What's new in each version: <a href=\"https://github.com/techinfo-apps/Broomy/blob/main/CHANGELOG.md\" rel=\"noopener\">version history</a>.",
     "nav.broomy": "Broomy"
   },
@@ -472,6 +476,10 @@ window.TI_STRINGS = {
     "swa5": "macOS 14 Sonoma 及以上，Apple 芯片和 Intel 都行。调外接显示器要 Apple 芯片的 Mac。",
     "swd.h": "下载小扫帚。",
     "swd.p": "免费，macOS 14 及以上。还没经过苹果公证：第一次打开时右键 → 打开（macOS 15 及以后：系统设置 → 隐私与安全性 → 仍要打开）。",
+    "swl.h": "小扫帚 Linux 版",
+    "swl.p": "终端里的一个命令 <code>broomy</code>：把缓存、旧项目的构建文件夹等垃圾列出来，只清你选的：你的文件放进废纸篓，系统的几项用系统自己的命令。免费，64 位，不用另外装任何东西。",
+    "swl.req": "适用于 Ubuntu、Debian 和它们的兄弟们（ARM 电脑换成 broomy_0.1.0_arm64.deb）。别的 64 位 Linux：从下载页拿单个程序文件直接运行。",
+    "btn.linux": "下载 Linux 版",
     "sw.history": "每个版本加了什么：<a href=\"https://github.com/techinfo-apps/Broomy/blob/main/CHANGELOG.zh-CN.md\" rel=\"noopener\">版本记录</a>。",
     "nav.broomy": "小扫帚"
   },
@@ -709,6 +717,10 @@ window.TI_STRINGS = {
     "swa5": "macOS 14 Sonoma 以上，Apple 晶片和 Intel 都可以。調整外接顯示器需要 Apple 晶片的 Mac。",
     "swd.h": "下載小掃帚。",
     "swd.p": "免費，macOS 14 以上。還沒經過 Apple 公證：第一次打開時按右鍵 → 打開（macOS 15 及以後：系統設定 → 隱私權與安全性 → 強制打開）。",
+    "swl.h": "小掃帚 Linux 版",
+    "swl.p": "終端機裡的一個指令 <code>broomy</code>：把快取、舊專案的建置檔案夾等垃圾列出來，只清你選的：你的檔案放進垃圾桶，系統的幾項用系統自己的指令。免費，64 位元，不用另外安裝任何東西。",
+    "swl.req": "適用於 Ubuntu、Debian 和它們的兄弟們（ARM 電腦請改用 broomy_0.1.0_arm64.deb）。其他 64 位元 Linux：從下載頁取得單一程式檔直接執行。",
+    "btn.linux": "下載 Linux 版",
     "sw.history": "每個版本加了什麼：<a href=\"https://github.com/techinfo-apps/Broomy/blob/main/CHANGELOG.zh-TW.md\" rel=\"noopener\">版本紀錄</a>。",
     "nav.broomy": "小掃帚"
   },
@@ -946,6 +958,10 @@ window.TI_STRINGS = {
     "swa5": "macOS 14 Sonoma 以降、Apple シリコンまたは Intel。外部モニタの調整は Apple シリコンの Mac で使えます。",
     "swd.h": "Broomy を入手。",
     "swd.p": "無料、macOS 14 以降。まだ公証を受けていないため、初回は右クリック → 開く（macOS 15 以降：システム設定 → プライバシーとセキュリティ → このまま開く）。",
+    "swl.h": "Linux 版 Broomy",
+    "swl.p": "ターミナルで使うコマンド <code>broomy</code> がひとつ。キャッシュや古いビルドフォルダなどを一覧にして、選んだものだけを片付けます。ファイルはゴミ箱へ、システムの項目はシステム自身のコマンドで。無料、64 ビット、ほかに何もインストール不要。",
+    "swl.req": "Ubuntu、Debian とその仲間向け（ARM のコンピュータは broomy_0.1.0_arm64.deb を）。ほかの 64 ビット Linux：ダウンロードページの単一ファイルをそのまま実行します。",
+    "btn.linux": "Linux 版をダウンロード",
     "sw.history": "各バージョンの変更点：<a href=\"https://github.com/techinfo-apps/Broomy/blob/main/CHANGELOG.ja.md\" rel=\"noopener\">バージョン履歴</a>。",
     "nav.broomy": "Broomy"
   },
@@ -1116,6 +1132,10 @@ window.TI_STRINGS = {
     "swa5": "macOS 14 Sonoma 이상, Apple 실리콘 또는 Intel. 외장 모니터 조절은 Apple 실리콘 Mac에서 됩니다.",
     "swd.h": "Broomy 받기.",
     "swd.p": "무료, macOS 14 이상. 아직 공증을 받지 않아 처음에는 오른쪽 클릭 → 열기(macOS 15 이상: 시스템 설정 → 개인정보 보호 및 보안 → 확인 없이 열기).",
+    "swl.h": "Linux용 Broomy",
+    "swl.p": "터미널에서 쓰는 명령 하나, <code>broomy</code>. 캐시와 오래된 빌드 폴더 같은 것을 목록으로 보여 주고, 고른 것만 정리합니다. 파일은 휴지통으로, 시스템 항목은 시스템 자체 명령으로. 무료, 64비트, 따로 설치할 것 없음.",
+    "swl.req": "Ubuntu, Debian 및 계열용(ARM 컴퓨터는 broomy_0.1.0_arm64.deb). 그 밖의 64비트 Linux: 다운로드 페이지의 단일 파일을 그대로 실행하세요.",
+    "btn.linux": "Linux용 다운로드",
     "sw.history": "버전마다 달라진 점: <a href=\"https://github.com/techinfo-apps/Broomy/blob/main/CHANGELOG.ko.md\" rel=\"noopener\">버전 기록</a>."
   },
   "es": {
@@ -1285,6 +1305,10 @@ window.TI_STRINGS = {
     "swa5": "macOS 14 Sonoma o posterior, en Apple silicon o Intel. Ajustar monitores externos funciona en Macs con Apple silicon.",
     "swd.h": "Consigue Broomy.",
     "swd.p": "Gratis, para macOS 14 o posterior. Aún no está notarizado: la primera vez, clic secundario → Abrir (en macOS 15 y posteriores: Ajustes del Sistema → Privacidad y seguridad → Abrir igualmente).",
+    "swl.h": "Broomy para Linux",
+    "swl.p": "Un solo comando, <code>broomy</code>, para la terminal. Lista cachés, carpetas de compilación viejas y otros restos, y limpia solo lo que eliges: tus archivos van a la papelera y los elementos del sistema usan los comandos del propio sistema. Gratis, 64 bits, nada más que instalar.",
+    "swl.req": "Para Ubuntu, Debian y derivadas (en un ordenador ARM, usa broomy_0.1.0_arm64.deb). Otro Linux de 64 bits: descarga el archivo único de la página de descargas y ejecútalo.",
+    "btn.linux": "Descargar para Linux",
     "sw.history": "Novedades de cada versión: <a href=\"https://github.com/techinfo-apps/Broomy/blob/main/CHANGELOG.es.md\" rel=\"noopener\">historial de versiones</a>."
   },
   "fr": {
@@ -1454,6 +1478,10 @@ window.TI_STRINGS = {
     "swa5": "macOS 14 Sonoma ou ultérieur, sur Apple silicon ou Intel. Le réglage des moniteurs externes fonctionne sur les Mac Apple silicon.",
     "swd.h": "Obtenir Broomy.",
     "swd.p": "Gratuit, pour macOS 14 ou ultérieur. Pas encore notarié : la première fois, clic droit → Ouvrir (sur macOS 15 et ultérieur : Réglages Système → Confidentialité et sécurité → Ouvrir quand même).",
+    "swl.h": "Broomy pour Linux",
+    "swl.p": "Une seule commande, <code>broomy</code>, pour le terminal. Elle liste caches, anciens dossiers de compilation et autres restes, et ne nettoie que ce que vous choisissez : vos fichiers vont à la corbeille, les éléments système passent par les commandes du système lui-même. Gratuit, 64 bits, rien d’autre à installer.",
+    "swl.req": "Pour Ubuntu, Debian et dérivées (sur un ordinateur ARM, prenez broomy_0.1.0_arm64.deb). Autre Linux 64 bits : téléchargez le fichier unique depuis la page des téléchargements et lancez-le.",
+    "btn.linux": "Télécharger pour Linux",
     "sw.history": "Les nouveautés de chaque version : <a href=\"https://github.com/techinfo-apps/Broomy/blob/main/CHANGELOG.fr.md\" rel=\"noopener\">historique des versions</a>."
   }
 };

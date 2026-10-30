@@ -362,6 +362,14 @@ details p { margin: 12px 0 0; color: var(--fg-2); }
 .mac-card .ico { width: 54px; height: 54px; border-radius: 14px; display: grid; place-items: center; background: var(--grad); color: #fff; font-size: 26px; }
 .mac-card h3 { margin: 0; }
 @media (max-width: 860px) { .cards { grid-template-columns: 1fr; } .mac-card { grid-template-columns: 1fr; } }
+.linux-card { margin-top: 18px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 22px; }
+.linux-card h3 { margin: 0 0 8px; }
+.linux-card .req { margin-top: 10px; text-align: left; }
+.cmd { margin: 14px 0 0; padding: 14px 16px; border-radius: 12px; background: #1d1f24; color: #d7dae0; font: 13px/1.6 ui-monospace, Menlo, Consolas, monospace; overflow-x: auto; white-space: pre; }
+.linux-shot { margin: 22px auto 0; max-width: 820px; }
+.linux-shot img { display: block; width: 100%; height: auto; border-radius: 14px; }
+@media (max-width: 860px) { .linux-card { grid-template-columns: 1fr; } }
+
 
 /* ---------- Broomy: its screenshots in a Mac window (they have no title bar of their own) ---------- */
 .mac-window { position: relative; z-index: 1; border-radius: 12px; overflow: hidden; background: #ececec;
