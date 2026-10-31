@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>電路怎麼記住東西：鎖存器、正反器和暫存器 — 從一個開關到 CPU #7</title>
+<meta name="description" content="到目前為止，我們搭過的每一個電路，一放開開關，答案就忘了。這一集，我們來搭一個會記住的。 兩個閘繞成一圈，留住自己的輸出；設定重置鎖存器和 D 鎖存器；電腦為什麼需要時脈；只在時脈跳一下時才改變的正反器；最後是暫存器，和一個跟著時脈一起數數的計數器。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/07/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/07/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/07/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/07/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/07/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/07/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/07/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/07/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/07/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="電路怎麼記住東西：鎖存器、正反器和暫存器 — 從一個開關到 CPU #7">
+<meta property="og:description" content="到目前為止，我們搭過的每一個電路，一放開開關，答案就忘了。這一集，我們來搭一個會記住的。 兩個閘繞成一圈，留住自己的輸出；設定重置鎖存器和 D 鎖存器；電腦為什麼需要時脈；只在時脈跳一下時才改變的正反器；最後是暫存器，和一個跟著時脈一起數數的計數器。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-07.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/07/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "電路怎麼記住東西：鎖存器、正反器和暫存器", "description": "到目前為止，我們搭過的每一個電路，一放開開關，答案就忘了。這一集，我們來搭一個會記住的。 兩個閘繞成一圈，留住自己的輸出；設定重置鎖存器和 D 鎖存器；電腦為什麼需要時脈；只在時脈跳一下時才改變的正反器；最後是暫存器，和一個跟著時脈一起數數的計數器。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-07.webp"], "uploadDate": "2026-10-31T21:00:00+08:00", "duration": "PT4M23S", "embedUrl": "https://www.youtube.com/embed/Fa679kMISQc", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一個開關到 CPU · 第 7 集</p>
+      <h1 class="ep-title">電路怎麼記住東西：鎖存器、正反器和暫存器</h1>
+      <div class="vplayer" data-yt="Fa679kMISQc" data-title="電路怎麼記住東西：鎖存器、正反器和暫存器">
+        <button type="button" class="vplay" aria-label="播放: 電路怎麼記住東西：鎖存器、正反器和暫存器">
+          <img src="../../../../assets/img/videos/cpu-07.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/Fa679kMISQc" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">到目前為止，我們搭過的每一個電路，一放開開關，答案就忘了。這一集，我們來搭一個會記住的。<br>兩個閘繞成一圈，留住自己的輸出；設定重置鎖存器和 D 鎖存器；電腦為什麼需要時脈；只在時脈跳一下時才改變的正反器；最後是暫存器，和一個跟著時脈一起數數的計數器。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/Fa679kMISQc?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>一盞會記住的燈</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>一個忘不掉的迴路</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=53" data-t="53" rel="noopener"><span class="t">0:53</span>設定重置鎖存器</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=111" data-t="111" rel="noopener"><span class="t">1:51</span>D 鎖存器</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=144" data-t="144" rel="noopener"><span class="t">2:24</span>時脈與正反器</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=195" data-t="195" rel="noopener"><span class="t">3:15</span>暫存器與計數器</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=242" data-t="242" rel="noopener"><span class="t">4:02</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>按下這個按鈕，燈就亮了。放開，它還是亮著。我們到目前為止搭過的每一個電路，這時候早就忘光了。這個卻記住了。今天，我們要用同樣的閘，搭出記憶。</p>
+        <p>訣竅是一個迴路。拿一個或閘（OR），把它自己的輸出接回它的其中一個輸入。按下按鈕：輸出變成 1。這個 1 又流回輸入，所以就算你放開按鈕，或閘還是一直輸出 1。它記住了。可是現在它再也忘不掉了：沒有任何辦法能把它關掉。</p>
+        <p>所以我們改用兩個反或閘（NOR）。反或閘就是在輸出端加了反閘（NOT）的或閘：只有兩個輸入都是 0 時，它才輸出 1。把它們交叉連接：每個閘的輸出，都接到另一個閘的輸入。兩邊各留一個輸入空著：一個叫「設定」（Set），一個叫「重置」（Reset）。按下設定。下面那個閘的輸出掉到 0，上面那個閘現在看到兩個 0，於是 Q 亮了。放開設定。Q 還是亮著，因為是它自己壓住了下面那個閘。按下重置，Q 就熄了。放開，它還是熄著。這就是 1 位元的記憶，叫作設定重置鎖存器（SR latch）。唯一的規則：不要同時按兩個。</p>
+        <p>為了更好用，我們在前面加上兩個及閘（AND）和一個反閘（NOT）。現在有一條資料線 D，和一條寫入線 W。只要 W 是 1，Q 就會直接複製 D。當 W 掉到 0，前面的閘就關上了，Q 會留住 D 的最後一個值，不管 D 接下來怎麼變。這就是 D 鎖存器：該寫的時候才寫入，其餘時間就保持住。</p>
+        <p>現在想像成千上萬個這樣的鎖存器一起工作。它們得先約好什麼時候改變。所以電腦有一個時脈：一個在 0 和 1 之間不斷來回跳動的訊號。現代處理器的時脈，每秒大約會跳 30 億次。</p>
+        <p>把兩個鎖存器排成一列，讓時脈一前一後地打開它們。結果就是一個正反器（flip-flop）。正反器只在時脈從 0 變成 1 的那一瞬間才複製 D。其餘時間，它完全不理 D。你看：D 一直在亂動，但 Q 只在時脈跳的那一下才會改變。</p>
+        <p>把四個正反器並排，接在同一個時脈上，就得到一個暫存器：它能存一個 4 位元的數字。每跳一下，暫存器就收進一個新的數字。兩次之間，它把舊的數字穩穩留住，讓其他電路使用。</p>
+        <p>現在把暫存器接到一個加 1 的加法器，再把算出的和送回暫存器。嘀：一。嘀：二。嘀：三。這就是計數器。處理器裡有一個一模一樣的，用來記住程式跑到哪裡了。過幾集再詳細講。</p>
+        <p>總結一下：一圈閘能存 1 個位元，時脈告訴每個位元什麼時候該變，一排正反器能存一個數字。可是暫存器只能存幾個位元，電腦卻需要幾十億個。下一集：記憶體晶片裡面是什麼。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：記憶體條裡面是什麼。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../06/zh-tw/"><span>上一集 · 第 6 集</span><b>電腦怎麼把文字、顏色和聲音存成數字</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 8 集 <time datetime="2026-11-01T21:00:00+08:00" data-at="2026-11-01T21:00:00+08:00" data-fmt="when">11-01 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

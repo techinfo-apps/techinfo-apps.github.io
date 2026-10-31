@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>电路是怎么记住东西的：锁存器、触发器和寄存器 — 从一个开关到 CPU #7</title>
+<meta name="description" content="到现在为止，我们搭的每一个电路，一松开开关，答案就忘了。这一集，我们来搭一个会记住的。 两个门绕成一圈，留住自己的输出；置位复位锁存器和 D 锁存器；电脑为什么需要时钟；只在时钟跳一下时才变的触发器；最后是寄存器，和一个跟着时钟一起数数的计数器。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/07/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/07/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/07/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/07/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/07/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/07/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/07/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/07/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/07/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="电路是怎么记住东西的：锁存器、触发器和寄存器 — 从一个开关到 CPU #7">
+<meta property="og:description" content="到现在为止，我们搭的每一个电路，一松开开关，答案就忘了。这一集，我们来搭一个会记住的。 两个门绕成一圈，留住自己的输出；置位复位锁存器和 D 锁存器；电脑为什么需要时钟；只在时钟跳一下时才变的触发器；最后是寄存器，和一个跟着时钟一起数数的计数器。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-07.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/07/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "电路是怎么记住东西的：锁存器、触发器和寄存器", "description": "到现在为止，我们搭的每一个电路，一松开开关，答案就忘了。这一集，我们来搭一个会记住的。 两个门绕成一圈，留住自己的输出；置位复位锁存器和 D 锁存器；电脑为什么需要时钟；只在时钟跳一下时才变的触发器；最后是寄存器，和一个跟着时钟一起数数的计数器。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-07.webp"], "uploadDate": "2026-10-31T21:00:00+08:00", "duration": "PT4M23S", "embedUrl": "https://www.youtube.com/embed/Fa679kMISQc", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一个开关到 CPU · 第 7 集</p>
+      <h1 class="ep-title">电路是怎么记住东西的：锁存器、触发器和寄存器</h1>
+      <div class="vplayer" data-yt="Fa679kMISQc" data-title="电路是怎么记住东西的：锁存器、触发器和寄存器">
+        <button type="button" class="vplay" aria-label="播放: 电路是怎么记住东西的：锁存器、触发器和寄存器">
+          <img src="../../../../assets/img/videos/cpu-07.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/Fa679kMISQc" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">到现在为止，我们搭的每一个电路，一松开开关，答案就忘了。这一集，我们来搭一个会记住的。<br>两个门绕成一圈，留住自己的输出；置位复位锁存器和 D 锁存器；电脑为什么需要时钟；只在时钟跳一下时才变的触发器；最后是寄存器，和一个跟着时钟一起数数的计数器。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/Fa679kMISQc?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>一盏会记住的灯</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>一个忘不掉的环</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=53" data-t="53" rel="noopener"><span class="t">0:53</span>置位复位锁存器</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=111" data-t="111" rel="noopener"><span class="t">1:51</span>D 锁存器</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=144" data-t="144" rel="noopener"><span class="t">2:24</span>时钟和触发器</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=195" data-t="195" rel="noopener"><span class="t">3:15</span>寄存器和计数器</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=242" data-t="242" rel="noopener"><span class="t">4:02</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>按一下这个按钮，灯亮了。松开，灯还亮着。我们之前搭的电路，这时候早就忘了。这个却记住了。今天就用同样的门，搭出记忆。</p>
+        <p>窍门是绕一圈：拿一个或门，把它自己的输出接回它的一个输入。按一下按钮，输出变成 1；这个 1 又流回输入，所以松开按钮以后，或门还是一直出 1。它记住了，可是再也忘不掉：没有任何办法把它关掉。</p>
+        <p>所以换成两个或非门。或非门就是输出加了个非的或门：两个输入都是 0，它才出 1。把两个门交叉接起来：每个门的输出都接到另一个门的输入，两边各留一个空着的输入，一个叫“置位”，一个叫“复位”。按一下置位：下面那个门的输出变成 0，上面那个门看到两个 0，Q 就亮了。松开置位，Q 还亮着：是它自己把下面那个门压住了。按一下复位，Q 灭了；松开，它还是灭着。这就是一位的记忆，叫置位复位锁存器。只有一条规矩：别两个一起按。</p>
+        <p>为了好用，在前面加两个与门和一个非门。现在只有一根数据线 D，和一根写入线 W。W 是 1 的时候，Q 就照抄 D。W 一变成 0，前面的门就关上了，Q 留住 D 最后的那个值，D 后来怎么变都不管。这就是 D 锁存器：叫它写就写，别的时候就留着。</p>
+        <p>现在想象成千上万个锁存器一起干活，它们得商量好什么时候变。所以电脑里有一个时钟：一个在 0 和 1 之间来回跳的信号，一刻不停。现在的处理器，时钟大约每秒跳三十亿次。</p>
+        <p>把两个锁存器串起来，让时钟一前一后地打开它们，就成了一个触发器。触发器只在时钟从 0 变成 1 的那一瞬间抄一下 D，其余时间完全不理 D。你看：D 一直在乱动，Q 却只在时钟跳的时候才变。</p>
+        <p>四个触发器并排，接同一个时钟，就是一个寄存器：能存一个四位的数。每跳一下，寄存器就收进一个新数；两次之间，它把旧的数稳稳留住，给别的电路用。</p>
+        <p>再把寄存器接到一个“加一”的加法器上，加出来的和再送回寄存器。一跳：一。一跳：二。一跳：三。这就是计数器。处理器里就有一个一模一样的，用来记住程序跑到了哪一步，过几集再细讲。</p>
+        <p>总结一下：门绕成一圈能存一位，时钟告诉每一位什么时候变，一排触发器能存一个数。可寄存器只存得下几位，电脑要存几十亿位。下一集：内存条里面是什么。下集见。</p>
+        </div>
+        <p class="ep-close">下一集：内存条里面是什么。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../06/zh-cn/"><span>上一集 · 第 6 集</span><b>电脑怎么把文字、颜色和声音存成数字</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 8 集 <time datetime="2026-11-01T21:00:00+08:00" data-at="2026-11-01T21:00:00+08:00" data-fmt="when">11-01 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

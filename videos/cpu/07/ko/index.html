@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>회로는 어떻게 기억할까: 래치, 플립플롭, 레지스터 — 스위치 하나에서 CPU까지 #7</title>
+<meta name="description" content="지금까지 만든 회로는 모두 스위치에서 손을 떼는 순간 답을 잊어버렸어요. 이번에는 기억하는 회로를 만들어 봐요. 자기 출력을 붙들고 있는 게이트 두 개의 고리, 세트-리셋 래치, D 래치, 컴퓨터에 클럭이 필요한 이유, 똑딱할 때만 바뀌는 플립플롭, 그리고 마지막으로 레지스터와 클럭에 맞춰 수를 세는 카운터를 살펴봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/07/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/07/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/07/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/07/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/07/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/07/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/07/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/07/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/07/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="회로는 어떻게 기억할까: 래치, 플립플롭, 레지스터 — 스위치 하나에서 CPU까지 #7">
+<meta property="og:description" content="지금까지 만든 회로는 모두 스위치에서 손을 떼는 순간 답을 잊어버렸어요. 이번에는 기억하는 회로를 만들어 봐요. 자기 출력을 붙들고 있는 게이트 두 개의 고리, 세트-리셋 래치, D 래치, 컴퓨터에 클럭이 필요한 이유, 똑딱할 때만 바뀌는 플립플롭, 그리고 마지막으로 레지스터와 클럭에 맞춰 수를 세는 카운터를 살펴봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-07.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/07/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "회로는 어떻게 기억할까: 래치, 플립플롭, 레지스터", "description": "지금까지 만든 회로는 모두 스위치에서 손을 떼는 순간 답을 잊어버렸어요. 이번에는 기억하는 회로를 만들어 봐요. 자기 출력을 붙들고 있는 게이트 두 개의 고리, 세트-리셋 래치, D 래치, 컴퓨터에 클럭이 필요한 이유, 똑딱할 때만 바뀌는 플립플롭, 그리고 마지막으로 레지스터와 클럭에 맞춰 수를 세는 카운터를 살펴봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-07.webp"], "uploadDate": "2026-10-31T21:00:00+08:00", "duration": "PT4M23S", "embedUrl": "https://www.youtube.com/embed/Fa679kMISQc", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 7편</p>
+      <h1 class="ep-title">회로는 어떻게 기억할까: 래치, 플립플롭, 레지스터</h1>
+      <div class="vplayer" data-yt="Fa679kMISQc" data-title="회로는 어떻게 기억할까: 래치, 플립플롭, 레지스터">
+        <button type="button" class="vplay" aria-label="재생: 회로는 어떻게 기억할까: 래치, 플립플롭, 레지스터">
+          <img src="../../../../assets/img/videos/cpu-07.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/Fa679kMISQc" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">지금까지 만든 회로는 모두 스위치에서 손을 떼는 순간 답을 잊어버렸어요. 이번에는 기억하는 회로를 만들어 봐요.<br>자기 출력을 붙들고 있는 게이트 두 개의 고리, 세트-리셋 래치, D 래치, 컴퓨터에 클럭이 필요한 이유, 똑딱할 때만 바뀌는 플립플롭, 그리고 마지막으로 레지스터와 클럭에 맞춰 수를 세는 카운터를 살펴봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/Fa679kMISQc?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>기억하는 전구</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>잊지 못하는 고리</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=53" data-t="53" rel="noopener"><span class="t">0:53</span>세트-리셋 래치</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=111" data-t="111" rel="noopener"><span class="t">1:51</span>D 래치</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=144" data-t="144" rel="noopener"><span class="t">2:24</span>클럭과 플립플롭</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=195" data-t="195" rel="noopener"><span class="t">3:15</span>레지스터와 카운터</a></li>
+        <li><a href="https://youtu.be/Fa679kMISQc?t=242" data-t="242" rel="noopener"><span class="t">4:02</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>이 버튼을 누르면 전구가 켜져요. 손을 떼도 계속 켜져 있어요. 지금까지 만든 회로는 모두 이쯤이면 벌써 잊어버렸을 거예요. 이 회로는 기억해요. 오늘은 똑같은 게이트로 메모리를 만들어 봐요.</p>
+        <p>비결은 고리예요. OR 게이트를 하나 가져와서, 자기 출력을 자기 입력 중 하나에 다시 이어 주세요. 버튼을 누르면 출력이 1이 돼요. 그 1이 다시 입력으로 흘러 들어가서, 버튼에서 손을 떼도 OR 게이트는 계속 1을 내요. 기억은 해요. 하지만 이제는 절대 잊을 수 없어요. 끌 방법이 없거든요.</p>
+        <p>그래서 대신 NOR 게이트 두 개를 써요. NOR 게이트는 출력에 NOT을 단 OR 게이트예요. 두 입력이 모두 0일 때만 1을 내요. 두 게이트를 서로 엇갈리게 이어요. 각 게이트의 출력이 상대 게이트의 입력으로 들어가요. 양쪽에 입력이 하나씩 비어 있는데, 이게 &#x27;세트&#x27;와 &#x27;리셋&#x27;이에요. 세트를 눌러요. 아래쪽 게이트의 출력이 0으로 떨어지고, 위쪽 게이트는 이제 0 두 개를 보게 되어서, Q가 켜져요. 세트에서 손을 떼요. Q는 계속 켜져 있어요. Q가 스스로 아래쪽 게이트를 붙잡고 있기 때문이에요. 리셋을 누르면 Q가 꺼져요. 손을 떼도 계속 꺼져 있어요. 이것이 1비트짜리 메모리, 세트-리셋 래치예요. 규칙은 하나뿐이에요. 둘을 동시에 누르지 마세요.</p>
+        <p>더 쓰기 편하게 하려고, 앞에 AND 게이트 두 개와 NOT 게이트 하나를 붙여요. 이제 데이터 선 D와 쓰기 선 W가 생겨요. W가 1인 동안, Q는 D를 그대로 따라 해요. W가 0으로 떨어지면 앞쪽 게이트가 닫히고, Q는 D의 마지막 값을 그대로 유지해요. 그 뒤로 D가 어떻게 변하든 상관없어요. 이것이 D 래치예요. 시키면 쓰고, 나머지 시간에는 붙들고 있어요.</p>
+        <p>이제 이런 래치 수천 개가 함께 일한다고 상상해 보세요. 언제 바뀔지 서로 맞춰야 해요. 그래서 컴퓨터에는 클럭이 있어요. 0과 1 사이를 계속 오가며 똑딱거리는 신호예요. 요즘 프로세서의 클럭은 1초에 약 30억 번 똑딱거려요.</p>
+        <p>래치 두 개를 나란히 놓고, 클럭이 차례로 하나씩 열어 주게 해요. 그 결과가 플립플롭이에요. 플립플롭은 클럭이 0에서 1로 바뀌는 바로 그 순간에만 D를 복사해요. 나머지 시간에는 D를 완전히 무시해요. 보세요. D는 계속 흔들리지만, Q는 똑딱일 때만 바뀌어요.</p>
+        <p>같은 클럭에 플립플롭 네 개를 줄지어 놓으면 레지스터가 돼요. 4비트짜리 수를 담을 수 있어요. 똑딱할 때마다 레지스터는 새로운 수를 받아들여요. 똑딱과 똑딱 사이에는 옛 수를 그대로 붙들고 있어서, 다른 회로가 쓸 수 있어요.</p>
+        <p>이제 레지스터를 1을 더하는 가산기에 연결하고, 그 합을 다시 레지스터로 보내요. 똑딱, 1. 똑딱, 2. 똑딱, 3. 이것이 카운터예요. 프로세서도 이와 똑같은 걸 써서 프로그램의 어디쯤인지 기억해요. 자세한 건 몇 편 뒤에 다뤄요.</p>
+        <p>정리하면, 게이트로 만든 고리는 1비트를 담고, 클럭은 모든 비트에게 언제 바뀔지 알려 주고, 플립플롭이 늘어선 한 줄은 수를 담아요. 하지만 레지스터는 몇 비트밖에 담지 못하는데, 컴퓨터에는 수십억 비트가 필요해요. 다음 편에서는 메모리 칩 안에 뭐가 들었는지 알아봐요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 메모리 모듈 안에는 무엇이 들어 있을까요?</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../06/ko/"><span>이전 편 · 6편</span><b>컴퓨터는 글자, 색, 소리를 수로 어떻게 저장할까</b></a><div class="ep-pg next soon"><span>다음 편</span><b>8편은 <time datetime="2026-11-01T21:00:00+08:00" data-at="2026-11-01T21:00:00+08:00" data-fmt="when">11-01 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
