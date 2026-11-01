@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>¿Qué hay dentro de un módulo de memoria? SRAM, DRAM y flash — De un interruptor a una CPU #8</title>
+<meta name="description" content="Un módulo de memoria de 16 GB guarda unos diecisiete mil millones de bytes, y el procesador puede llegar a cualquiera de ellos en aproximadamente una diezmillonésima de segundo. Apilamos latches en filas, damos a cada fila una dirección y la elegimos con un decodificador. Luego comparamos las dos formas de construir una celda de memoria: la SRAM, con seis transistores, y la DRAM, con uno solo: una diminuta cubeta de carga que gotea y hay que refrescar. Además, la ROM y la flash, la memoria que sobrevive cuando se corta la corriente.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/08/es/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/08/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/08/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/08/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/08/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/08/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/08/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/08/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/08/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="¿Qué hay dentro de un módulo de memoria? SRAM, DRAM y flash — De un interruptor a una CPU #8">
+<meta property="og:description" content="Un módulo de memoria de 16 GB guarda unos diecisiete mil millones de bytes, y el procesador puede llegar a cualquiera de ellos en aproximadamente una diezmillonésima de segundo. Apilamos latches en filas, damos a cada fila una dirección y la elegimos con un decodificador. Luego comparamos las dos formas de construir una celda de memoria: la SRAM, con seis transistores, y la DRAM, con uno solo: una diminuta cubeta de carga que gotea y hay que refrescar. Además, la ROM y la flash, la memoria que sobrevive cuando se corta la corriente.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-08.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/08/es/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "¿Qué hay dentro de un módulo de memoria? SRAM, DRAM y flash", "description": "Un módulo de memoria de 16 GB guarda unos diecisiete mil millones de bytes, y el procesador puede llegar a cualquiera de ellos en aproximadamente una diezmillonésima de segundo. Apilamos latches en filas, damos a cada fila una dirección y la elegimos con un decodificador. Luego comparamos las dos formas de construir una celda de memoria: la SRAM, con seis transistores, y la DRAM, con uno solo: una diminuta cubeta de carga que gotea y hay que refrescar. Además, la ROM y la flash, la memoria que sobrevive cuando se corta la corriente.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-08.webp"], "uploadDate": "2026-11-01T21:00:00+08:00", "duration": "PT3M45S", "embedUrl": "https://www.youtube.com/embed/GPfV2EgPAO4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="es">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Todos los episodios</a> · De un interruptor a una CPU · Episodio 8</p>
+      <h1 class="ep-title">¿Qué hay dentro de un módulo de memoria? SRAM, DRAM y flash</h1>
+      <div class="vplayer" data-yt="GPfV2EgPAO4" data-title="¿Qué hay dentro de un módulo de memoria? SRAM, DRAM y flash">
+        <button type="button" class="vplay" aria-label="Reproducir: ¿Qué hay dentro de un módulo de memoria? SRAM, DRAM y flash">
+          <img src="../../../../assets/img/videos/cpu-08.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Al pulsar reproducir, el video se carga desde YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/GPfV2EgPAO4" rel="noopener">Ver en YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">Suscribirse en YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Un módulo de memoria de 16 GB guarda unos diecisiete mil millones de bytes, y el procesador puede llegar a cualquiera de ellos en aproximadamente una diezmillonésima de segundo.<br>Apilamos latches en filas, damos a cada fila una dirección y la elegimos con un decodificador. Luego comparamos las dos formas de construir una celda de memoria: la SRAM, con seis transistores, y la DRAM, con uno solo: una diminuta cubeta de carga que gotea y hay que refrescar. Además, la ROM y la flash, la memoria que sobrevive cuando se corta la corriente.</p>
+      <p class="ep-ai">Todas las animaciones de este video están dibujadas con código y la narración es una voz de IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Capítulos</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Dentro de un módulo de memoria</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=22" data-t="22" rel="noopener"><span class="t">0:22</span>Filas, direcciones y un decodificador</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>SRAM: seis transistores por bit</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=114" data-t="114" rel="noopener"><span class="t">1:54</span>DRAM: cubetas que gotean</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=168" data-t="168" rel="noopener"><span class="t">2:48</span>Memoria que sobrevive sin corriente</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=201" data-t="201" rel="noopener"><span class="t">3:21</span>Qué sigue</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcripción</h2>
+        <div class="ep-text">
+        <p>Este módulo de memoria guarda 16 GB: unos diecisiete mil millones de bytes. Cada uno tiene su propia dirección, y el procesador puede llegar a cualquiera de ellos en aproximadamente una diezmillonésima de segundo. Hoy vamos a mirar por dentro.</p>
+        <p>La vez pasada, un latch guardaba un bit. Pon ocho en fila y podrás guardar un byte. Apila las filas y dale un número a cada una: su dirección. Fila cero, fila uno, fila dos, y así sucesivamente. Para elegir una fila usamos un decodificador, el circuito del episodio tres. Tres bits de dirección encienden exactamente una de las ocho filas. Para leer, la fila elegida pone sus bits en las líneas de datos. Para escribir, las líneas de datos empujan bits nuevos hacia ella. Cada bit de dirección adicional duplica las filas. Treinta y cuatro bits bastan para diecisiete mil millones de direcciones.</p>
+        <p>Hay dos formas principales de construir cada celda. La primera es un pequeño bucle de dos puertas NOT, como nuestro latch, más dos interruptores para conectarlo. Son seis transistores por bit. Se llama RAM estática, o SRAM. Es muy rápida y conserva su bit mientras haya corriente. Pero seis transistores por bit ocupan mucho espacio. Por eso la SRAM se usa donde más importa la velocidad: en pequeñas memorias dentro del propio procesador. Las conoceremos en el episodio sobre las cachés.</p>
+        <p>La segunda forma es mucho más pequeña: un transistor y un diminuto condensador, una pequeña cubeta para carga eléctrica. Una cubeta llena es un uno. Una cubeta vacía es un cero. El problema: las cubetas gotean. Si se las deja solas, un uno se iría desvaneciendo poco a poco hasta convertirse en un cero. Así que la memoria lee cada fila y la vuelve a escribir enseguida, cada pocas centésimas de segundo, todo el día. Eso se llama refrescar. Esta es la RAM dinámica, o DRAM. Es más lenta que la SRAM, pero tan pequeña y barata que en un solo chip caben miles de millones de bits. Eso es lo que lleva tu módulo de memoria.</p>
+        <p>Todo esto lo olvida todo en cuanto se corta la corriente. Para los datos que deben sobrevivir, existe la memoria de solo lectura, o ROM, que queda fijada cuando se fabrica el chip. Y existe la memoria flash, que atrapa electrones en una diminuta isla aislada. Allí permanecen durante años, sin nada de corriente. La flash está en las memorias USB, los teléfonos y los SSD. Abriremos una en un episodio posterior.</p>
+        <p>En resumen: la memoria es una cuadrícula de celdas, una dirección elige una fila, la SRAM es rápida, la DRAM es densa y la flash conserva los datos sin corriente. Nuestra memoria está llena de números. Algunos son datos y otros son instrucciones. La próxima vez: cómo un número puede ser una orden. Nos vemos allí.</p>
+        </div>
+        <p class="ep-close">Próximo episodio: cómo un número se convierte en una orden. Las instrucciones de máquina.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../07/es/"><span>Anterior · Episodio 7</span><b>Cómo recuerda un circuito: latches, flip-flops y registros</b></a><div class="ep-pg next soon"><span>Siguiente</span><b>El episodio 9 sale el <time datetime="2026-11-02T21:00:00+08:00" data-at="2026-11-02T21:00:00+08:00" data-fmt="when">11-02 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

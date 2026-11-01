@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>メモリーモジュールの中身は？SRAM、DRAM、フラッシュメモリー — スイッチ1つからCPUまで #8</title>
+<meta name="description" content="16GBのメモリーモジュールには、約170億バイトが入っています。プロセッサーは、そのどれにでも、およそ1000万分の1秒でたどり着けます。 ラッチを積み重ねて行にし、行ごとにアドレスをつけて、デコーダーで選びます。そのうえで、メモリーのセルの作り方を2通り比べます。1ビットにトランジスタ6個のSRAMと、トランジスタ1個のDRAM。DRAMは電気をためた小さなバケツのようなもので、漏れてしまうため、リフレッシュが必要です。さらに、電源を切っても消えないメモリー、ROMとフラッシュメモリーも取り上げます。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/08/ja/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/08/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/08/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/08/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/08/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/08/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/08/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/08/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/08/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="メモリーモジュールの中身は？SRAM、DRAM、フラッシュメモリー — スイッチ1つからCPUまで #8">
+<meta property="og:description" content="16GBのメモリーモジュールには、約170億バイトが入っています。プロセッサーは、そのどれにでも、およそ1000万分の1秒でたどり着けます。 ラッチを積み重ねて行にし、行ごとにアドレスをつけて、デコーダーで選びます。そのうえで、メモリーのセルの作り方を2通り比べます。1ビットにトランジスタ6個のSRAMと、トランジスタ1個のDRAM。DRAMは電気をためた小さなバケツのようなもので、漏れてしまうため、リフレッシュが必要です。さらに、電源を切っても消えないメモリー、ROMとフラッシュメモリーも取り上げます。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-08.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/08/ja/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "メモリーモジュールの中身は？SRAM、DRAM、フラッシュメモリー", "description": "16GBのメモリーモジュールには、約170億バイトが入っています。プロセッサーは、そのどれにでも、およそ1000万分の1秒でたどり着けます。 ラッチを積み重ねて行にし、行ごとにアドレスをつけて、デコーダーで選びます。そのうえで、メモリーのセルの作り方を2通り比べます。1ビットにトランジスタ6個のSRAMと、トランジスタ1個のDRAM。DRAMは電気をためた小さなバケツのようなもので、漏れてしまうため、リフレッシュが必要です。さらに、電源を切っても消えないメモリー、ROMとフラッシュメモリーも取り上げます。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-08.webp"], "uploadDate": "2026-11-01T21:00:00+08:00", "duration": "PT3M45S", "embedUrl": "https://www.youtube.com/embed/GPfV2EgPAO4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ja">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">すべての回</a> · スイッチ1つからCPUまで · 第8話</p>
+      <h1 class="ep-title">メモリーモジュールの中身は？SRAM、DRAM、フラッシュメモリー</h1>
+      <div class="vplayer" data-yt="GPfV2EgPAO4" data-title="メモリーモジュールの中身は？SRAM、DRAM、フラッシュメモリー">
+        <button type="button" class="vplay" aria-label="再生: メモリーモジュールの中身は？SRAM、DRAM、フラッシュメモリー">
+          <img src="../../../../assets/img/videos/cpu-08.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">再生を押すと、動画をYouTubeから読み込みます。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/GPfV2EgPAO4" rel="noopener">YouTubeで見る</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTubeでチャンネル登録</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">16GBのメモリーモジュールには、約170億バイトが入っています。プロセッサーは、そのどれにでも、およそ1000万分の1秒でたどり着けます。<br>ラッチを積み重ねて行にし、行ごとにアドレスをつけて、デコーダーで選びます。そのうえで、メモリーのセルの作り方を2通り比べます。1ビットにトランジスタ6個のSRAMと、トランジスタ1個のDRAM。DRAMは電気をためた小さなバケツのようなもので、漏れてしまうため、リフレッシュが必要です。さらに、電源を切っても消えないメモリー、ROMとフラッシュメモリーも取り上げます。</p>
+      <p class="ep-ai">この動画のアニメーションは、すべてコードで描いています。ナレーションはAI音声です。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">チャプター</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>メモリーモジュールの中身</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=22" data-t="22" rel="noopener"><span class="t">0:22</span>行、アドレス、デコーダー</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>SRAM：1ビットにトランジスタ6個</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=114" data-t="114" rel="noopener"><span class="t">1:54</span>DRAM：漏れるバケツ</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=168" data-t="168" rel="noopener"><span class="t">2:48</span>電源を切っても消えないメモリー</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=201" data-t="201" rel="noopener"><span class="t">3:21</span>次回予告</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">ナレーション全文</h2>
+        <div class="ep-text">
+        <p>このメモリーモジュールには、16GBが入っています。約170億バイトです。そのバイトの一つひとつに、それぞれのアドレスがあり、プロセッサーは、どのバイトにも、およそ1000万分の1秒でたどり着けます。今日は、その中をのぞいてみましょう。</p>
+        <p>前回、ラッチは1ビットを保存しました。それを8個、横に並べると、1バイトを保存できます。その行を積み重ねて、それぞれの行に番号をつけます。これがアドレスです。0行目、1行目、2行目、というように続きます。行を選ぶには、デコーダーを使います。第3回に出てきた回路です。3ビットのアドレスで、8つの行のうち、ちょうど1つの行が光ります。読み出すときは、選ばれた行が、そのビットをデータ線に出します。書き込むときは、データ線が新しいビットをその行に押し込みます。アドレスのビットが1つ増えるごとに、行の数は2倍になります。34ビットあれば、170億個のアドレスに足ります。</p>
+        <p>セルの作り方は、大きく2つあります。1つめは、NOTゲート2つでできた小さなループで、私たちのラッチと同じです。それに、つなぐためのスイッチを2つ足します。1ビットにつき、トランジスタが6個です。これをスタティックRAM、略してSRAMといいます。とても速く、電源が入っているかぎり、ビットを保ちます。でも、1ビットにトランジスタ6個では、場所をたくさん取ります。そのため、SRAMは速さがいちばん大切な場所、つまりプロセッサー自身の中にある小さなメモリーに使われます。キャッシュの回で、また出会います。</p>
+        <p>2つめの方法は、ずっと小さくなります。トランジスタ1個と、小さなコンデンサー1個。電気をためる小さなバケツです。満タンのバケツが1、空っぽのバケツが0です。困ったことに、バケツは漏れます。放っておくと、1はゆっくり0に変わってしまいます。そこでメモリーは、100分の数秒ごとに、すべての行を読み出して、そのまま書き戻します。1日中、ずっとです。これをリフレッシュといいます。これがダイナミックRAM、略してDRAMです。SRAMより遅いのですが、とても小さくて安いので、1つのチップに何十億ビットも入ります。メモリーモジュールに載っているのは、これです。</p>
+        <p>これらはどれも、電源を切ると、すべて忘れてしまいます。残したいデータには、読み出し専用メモリー、ROMがあります。チップを作るときに、内容が決まります。もうひとつ、フラッシュメモリーがあります。電子を、小さな絶縁された島に閉じ込めます。電子は何年もそこにとどまり、電源はまったくいりません。フラッシュメモリーは、USBメモリー、スマートフォン、SSDに入っています。のちの回で、ひとつ分解してみます。</p>
+        <p>まとめです。メモリーはセルの格子で、アドレスが行を選びます。SRAMは速く、DRAMは高密度で、フラッシュは電源なしでデータを保ちます。メモリーは数でいっぱいです。その一部はデータで、一部は命令です。次回は、数がどうして命令になれるのか。また会いましょう。</p>
+        </div>
+        <p class="ep-close">次回：数がどうして命令になれるのか。機械語の命令のお話です。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../07/ja/"><span>前の回 · 第7話</span><b>回路はどうやって覚えるのか：ラッチ、フリップフロップ、レジスタ</b></a><div class="ep-pg next soon"><span>次の回</span><b>第9話は <time datetime="2026-11-02T21:00:00+08:00" data-at="2026-11-02T21:00:00+08:00" data-fmt="when">11-02 21:00 (UTC+8)</time> に公開</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

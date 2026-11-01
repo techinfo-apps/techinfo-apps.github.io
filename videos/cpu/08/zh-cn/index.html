@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>内存条里面是什么？SRAM、DRAM 和闪存 — 从一个开关到 CPU #8</title>
+<meta name="description" content="一根 16 GB 的内存条大约存着 170 亿个字节，而处理器大约只要千万分之一秒，就能拿到其中任何一个。 我们先把锁存器摞成一行行，给每一行编上地址，再用译码器把它挑出来；然后比较做一个存储单元的两种办法：一位六个晶体管的 SRAM，和一位一个晶体管的 DRAM（一个会漏电、必须不断刷新的装电荷的小桶）。最后还有 ROM 和闪存，断电也不会忘的存储。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/08/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/08/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/08/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/08/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/08/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/08/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/08/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/08/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/08/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="内存条里面是什么？SRAM、DRAM 和闪存 — 从一个开关到 CPU #8">
+<meta property="og:description" content="一根 16 GB 的内存条大约存着 170 亿个字节，而处理器大约只要千万分之一秒，就能拿到其中任何一个。 我们先把锁存器摞成一行行，给每一行编上地址，再用译码器把它挑出来；然后比较做一个存储单元的两种办法：一位六个晶体管的 SRAM，和一位一个晶体管的 DRAM（一个会漏电、必须不断刷新的装电荷的小桶）。最后还有 ROM 和闪存，断电也不会忘的存储。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-08.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/08/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "内存条里面是什么？SRAM、DRAM 和闪存", "description": "一根 16 GB 的内存条大约存着 170 亿个字节，而处理器大约只要千万分之一秒，就能拿到其中任何一个。 我们先把锁存器摞成一行行，给每一行编上地址，再用译码器把它挑出来；然后比较做一个存储单元的两种办法：一位六个晶体管的 SRAM，和一位一个晶体管的 DRAM（一个会漏电、必须不断刷新的装电荷的小桶）。最后还有 ROM 和闪存，断电也不会忘的存储。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-08.webp"], "uploadDate": "2026-11-01T21:00:00+08:00", "duration": "PT3M45S", "embedUrl": "https://www.youtube.com/embed/GPfV2EgPAO4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一个开关到 CPU · 第 8 集</p>
+      <h1 class="ep-title">内存条里面是什么？SRAM、DRAM 和闪存</h1>
+      <div class="vplayer" data-yt="GPfV2EgPAO4" data-title="内存条里面是什么？SRAM、DRAM 和闪存">
+        <button type="button" class="vplay" aria-label="播放: 内存条里面是什么？SRAM、DRAM 和闪存">
+          <img src="../../../../assets/img/videos/cpu-08.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/GPfV2EgPAO4" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">一根 16 GB 的内存条大约存着 170 亿个字节，而处理器大约只要千万分之一秒，就能拿到其中任何一个。<br>我们先把锁存器摞成一行行，给每一行编上地址，再用译码器把它挑出来；然后比较做一个存储单元的两种办法：一位六个晶体管的 SRAM，和一位一个晶体管的 DRAM（一个会漏电、必须不断刷新的装电荷的小桶）。最后还有 ROM 和闪存，断电也不会忘的存储。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>内存条里面</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=22" data-t="22" rel="noopener"><span class="t">0:22</span>行、地址和译码器</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>SRAM：一位六个晶体管</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=114" data-t="114" rel="noopener"><span class="t">1:54</span>DRAM：会漏的小桶</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=168" data-t="168" rel="noopener"><span class="t">2:48</span>断电也不会忘的存储</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=201" data-t="201" rel="noopener"><span class="t">3:21</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>这根内存条有十六 GB，大约一百七十亿个字节。每个字节都有自己的地址，处理器大约千万分之一秒就能拿到任何一个。今天就打开看看里面。</p>
+        <p>上一集，一个锁存器能存一位。八个排成一行，就能存一个字节。一行一行摞起来，每行编一个号，就是它的地址：第 0 行、第 1 行、第 2 行……往下排。要挑出一行，就用译码器，第 3 集讲过的那个电路：三位地址，正好点亮八行里的一行。读的时候，选中的那一行把它的位送到数据线上；写的时候，数据线把新的位推进去。地址每多一位，行数就翻一倍：三十四位就够一百七十亿个地址。</p>
+        <p>每一格主要有两种做法。第一种是两个非门绕成一个小圈，跟我们的锁存器一样，再加两个开关把它接出来，一位要六个晶体管。这叫静态内存，SRAM：很快，只要通着电就一直记得。可一位六个晶体管，太占地方。所以 SRAM 用在最讲究速度的地方：处理器里面的小内存。讲缓存那一集会再见到它。</p>
+        <p>第二种小得多：一个晶体管，加一个很小的电容，就是装电的小桶。桶满了就是 1，空着就是 0。麻烦在于这些桶会漏，放着不管，1 会慢慢漏成 0。所以内存每隔百分之几秒就把每一行读出来、马上写回去，一天到晚不停。这叫刷新。这就是动态内存，DRAM：比 SRAM 慢，可又小又便宜，一个芯片上放得下几十亿位，内存条上装的就是它。</p>
+        <p>这些内存一断电就全忘了。要保住的数据，可以放在只读存储器 ROM 里，芯片出厂时就定死了。还有闪存：把电子关在一个绝缘的小岛上，不通电也能待好多年。U 盘、手机、固态硬盘里都是闪存，后面会有一集专门打开看。</p>
+        <p>总结一下：内存是一大张格子，地址挑出一行；SRAM 快，DRAM 密，闪存断电也不丢。内存里装满了数，有的是数据，有的是指令。下一集：一个数怎么能是一条命令。下集见。</p>
+        </div>
+        <p class="ep-close">下一集：一个数怎么变成命令。机器指令。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../07/zh-cn/"><span>上一集 · 第 7 集</span><b>电路是怎么记住东西的：锁存器、触发器和寄存器</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 9 集 <time datetime="2026-11-02T21:00:00+08:00" data-at="2026-11-02T21:00:00+08:00" data-fmt="when">11-02 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

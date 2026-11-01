@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>메모리 모듈 안에는 무엇이 있을까: SRAM, DRAM, 플래시 — 스위치 하나에서 CPU까지 #8</title>
+<meta name="description" content="16GB 메모리 모듈에는 약 170억 바이트가 들어 있고, 프로세서는 그중 어느 것이든 대략 1000만 분의 1초 만에 찾아갈 수 있어요. 래치를 쌓아 행으로 만들고, 행마다 주소를 붙이고, 디코더로 그 행을 골라요. 그다음 메모리 칸을 만드는 두 가지 방법을 비교해요. 비트 하나에 트랜지스터가 여섯 개 드는 SRAM, 그리고 트랜지스터 하나로 만드는 DRAM이에요. DRAM은 전하를 담은 작은 양동이인데, 전하가 새서 계속 리프레시해야 해요. 전원이 꺼져도 남는 메모리인 ROM과 플래시도 함께 살펴봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/08/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/08/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/08/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/08/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/08/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/08/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/08/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/08/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/08/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="메모리 모듈 안에는 무엇이 있을까: SRAM, DRAM, 플래시 — 스위치 하나에서 CPU까지 #8">
+<meta property="og:description" content="16GB 메모리 모듈에는 약 170억 바이트가 들어 있고, 프로세서는 그중 어느 것이든 대략 1000만 분의 1초 만에 찾아갈 수 있어요. 래치를 쌓아 행으로 만들고, 행마다 주소를 붙이고, 디코더로 그 행을 골라요. 그다음 메모리 칸을 만드는 두 가지 방법을 비교해요. 비트 하나에 트랜지스터가 여섯 개 드는 SRAM, 그리고 트랜지스터 하나로 만드는 DRAM이에요. DRAM은 전하를 담은 작은 양동이인데, 전하가 새서 계속 리프레시해야 해요. 전원이 꺼져도 남는 메모리인 ROM과 플래시도 함께 살펴봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-08.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/08/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "메모리 모듈 안에는 무엇이 있을까: SRAM, DRAM, 플래시", "description": "16GB 메모리 모듈에는 약 170억 바이트가 들어 있고, 프로세서는 그중 어느 것이든 대략 1000만 분의 1초 만에 찾아갈 수 있어요. 래치를 쌓아 행으로 만들고, 행마다 주소를 붙이고, 디코더로 그 행을 골라요. 그다음 메모리 칸을 만드는 두 가지 방법을 비교해요. 비트 하나에 트랜지스터가 여섯 개 드는 SRAM, 그리고 트랜지스터 하나로 만드는 DRAM이에요. DRAM은 전하를 담은 작은 양동이인데, 전하가 새서 계속 리프레시해야 해요. 전원이 꺼져도 남는 메모리인 ROM과 플래시도 함께 살펴봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-08.webp"], "uploadDate": "2026-11-01T21:00:00+08:00", "duration": "PT3M45S", "embedUrl": "https://www.youtube.com/embed/GPfV2EgPAO4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 8편</p>
+      <h1 class="ep-title">메모리 모듈 안에는 무엇이 있을까: SRAM, DRAM, 플래시</h1>
+      <div class="vplayer" data-yt="GPfV2EgPAO4" data-title="메모리 모듈 안에는 무엇이 있을까: SRAM, DRAM, 플래시">
+        <button type="button" class="vplay" aria-label="재생: 메모리 모듈 안에는 무엇이 있을까: SRAM, DRAM, 플래시">
+          <img src="../../../../assets/img/videos/cpu-08.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/GPfV2EgPAO4" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">16GB 메모리 모듈에는 약 170억 바이트가 들어 있고, 프로세서는 그중 어느 것이든 대략 1000만 분의 1초 만에 찾아갈 수 있어요.<br>래치를 쌓아 행으로 만들고, 행마다 주소를 붙이고, 디코더로 그 행을 골라요. 그다음 메모리 칸을 만드는 두 가지 방법을 비교해요. 비트 하나에 트랜지스터가 여섯 개 드는 SRAM, 그리고 트랜지스터 하나로 만드는 DRAM이에요. DRAM은 전하를 담은 작은 양동이인데, 전하가 새서 계속 리프레시해야 해요. 전원이 꺼져도 남는 메모리인 ROM과 플래시도 함께 살펴봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>메모리 모듈 안</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=22" data-t="22" rel="noopener"><span class="t">0:22</span>행, 주소, 디코더</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>SRAM: 비트당 트랜지스터 여섯 개</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=114" data-t="114" rel="noopener"><span class="t">1:54</span>DRAM: 새는 양동이</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=168" data-t="168" rel="noopener"><span class="t">2:48</span>전원이 꺼져도 남는 메모리</a></li>
+        <li><a href="https://youtu.be/GPfV2EgPAO4?t=201" data-t="201" rel="noopener"><span class="t">3:21</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>이 메모리 모듈에는 16GB가 들어 있어요. 약 170억 바이트예요. 그 바이트 하나하나에는 저마다 주소가 있어요. 프로세서는 그중 어느 것이든 대략 1000만 분의 1초 만에 찾아갈 수 있어요. 오늘은 그 안을 들여다봐요.</p>
+        <p>지난 편에서 래치 하나가 1비트를 저장했어요. 이걸 여덟 개 한 줄로 놓으면 1바이트를 저장할 수 있어요. 이 행들을 쌓고, 행마다 번호를 붙여요. 그게 바로 주소예요. 0번 행, 1번 행, 2번 행, 이렇게 이어져요. 행을 고르려면 디코더를 써요. 3편에 나왔던 그 회로예요. 주소 3비트로 여덟 개 행 중 정확히 한 행에만 불이 들어와요. 읽을 때는 선택된 행이 자기 비트를 데이터 선에 내보내요. 쓸 때는 데이터 선이 새 비트를 그 행에 밀어 넣어요. 주소 비트가 하나 늘 때마다 행 수는 두 배가 돼요. 34비트면 170억 개의 주소를 만들기에 충분해요.</p>
+        <p>각 칸을 만드는 방법은 크게 두 가지예요. 첫 번째는 NOT 게이트 두 개로 만든 작은 고리예요. 우리의 래치와 같아요. 여기에 이어 주는 스위치 두 개를 더해요. 그러면 비트 하나에 트랜지스터가 여섯 개예요. 이걸 정적 램, SRAM이라고 불러요. 아주 빠르고, 전원이 켜져 있는 동안은 비트를 계속 기억해요. 하지만 비트 하나에 트랜지스터가 여섯 개면 자리를 많이 차지해요. 그래서 SRAM은 속도가 가장 중요한 곳, 프로세서 안에 있는 작은 메모리에 쓰여요. 캐시를 다루는 편에서 만나게 돼요.</p>
+        <p>두 번째 방법은 훨씬 작아요. 트랜지스터 하나와 아주 작은 커패시터 하나예요. 전하를 담는 작은 양동이죠. 양동이가 가득 차 있으면 1이고, 비어 있으면 0이에요. 문제는 양동이가 샌다는 거예요. 그대로 두면 1은 서서히 0으로 변해 버려요. 그래서 메모리는 100분의 몇 초마다 모든 행을 읽어서 곧바로 다시 써 넣어요. 하루 종일 쉬지 않고요. 이걸 리프레시라고 해요. 이것이 동적 램, DRAM이에요. SRAM보다는 느리지만 아주 작고 저렴해서, 칩 하나에 수십억 비트가 들어가요. 메모리 모듈에 들어 있는 게 바로 이거예요.</p>
+        <p>이런 메모리는 전원이 꺼지면 모든 걸 잊어버려요. 꼭 남아야 하는 데이터를 위한 것이 읽기 전용 메모리, ROM이에요. 칩을 만들 때 내용이 정해져요. 그리고 플래시 메모리가 있어요. 전자를 아주 작은 절연된 섬에 가두어 둬요. 전자는 전원이 전혀 없어도 몇 년 동안 그곳에 머물러요. 플래시는 USB 메모리, 휴대폰, SSD에 들어 있어요. 나중 편에서 하나를 열어 볼 거예요.</p>
+        <p>정리하면, 메모리는 칸으로 이루어진 격자이고, 주소가 행 하나를 고르고, SRAM은 빠르고, DRAM은 촘촘하고, 플래시는 전원 없이도 데이터를 지켜요. 우리 메모리는 수로 가득 차 있어요. 어떤 수는 데이터이고, 어떤 수는 명령이에요. 다음 편에서는 수가 어떻게 명령이 될 수 있는지 알아봐요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 수가 어떻게 명령이 될까요? 기계어 명령어 이야기예요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../07/ko/"><span>이전 편 · 7편</span><b>회로는 어떻게 기억할까: 래치, 플립플롭, 레지스터</b></a><div class="ep-pg next soon"><span>다음 편</span><b>9편은 <time datetime="2026-11-02T21:00:00+08:00" data-at="2026-11-02T21:00:00+08:00" data-fmt="when">11-02 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
