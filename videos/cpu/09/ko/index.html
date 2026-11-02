@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>수가 명령이 되는 방법: 기계어 명령어 — 스위치 하나에서 CPU까지 #9</title>
+<meta name="description" content="이 16비트 수는 명령어예요. 프로세서에게 레지스터 두 개를 더하라고 알려 줘요. 아주 작은 명령어 집합을 만들고, 명령어를 필드(연산 코드, 레지스터, 수)로 나누고, 네 가지 주소 지정 방식을 써 봐요. 5와 3을 더해 답을 저장하는 네 줄짜리 프로그램을 쓰고, 마지막으로 두 가지 큰 설계 방식인 RISC와 CISC를 비교해요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/09/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/09/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/09/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/09/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/09/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/09/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/09/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/09/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/09/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="수가 명령이 되는 방법: 기계어 명령어 — 스위치 하나에서 CPU까지 #9">
+<meta property="og:description" content="이 16비트 수는 명령어예요. 프로세서에게 레지스터 두 개를 더하라고 알려 줘요. 아주 작은 명령어 집합을 만들고, 명령어를 필드(연산 코드, 레지스터, 수)로 나누고, 네 가지 주소 지정 방식을 써 봐요. 5와 3을 더해 답을 저장하는 네 줄짜리 프로그램을 쓰고, 마지막으로 두 가지 큰 설계 방식인 RISC와 CISC를 비교해요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-09.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/09/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "수가 명령이 되는 방법: 기계어 명령어", "description": "이 16비트 수는 명령어예요. 프로세서에게 레지스터 두 개를 더하라고 알려 줘요. 아주 작은 명령어 집합을 만들고, 명령어를 필드(연산 코드, 레지스터, 수)로 나누고, 네 가지 주소 지정 방식을 써 봐요. 5와 3을 더해 답을 저장하는 네 줄짜리 프로그램을 쓰고, 마지막으로 두 가지 큰 설계 방식인 RISC와 CISC를 비교해요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-09.webp"], "uploadDate": "2026-11-02T21:00:00+08:00", "duration": "PT3M48S", "embedUrl": "https://www.youtube.com/embed/4FcbHOMVpOg", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 9편</p>
+      <h1 class="ep-title">수가 명령이 되는 방법: 기계어 명령어</h1>
+      <div class="vplayer" data-yt="4FcbHOMVpOg" data-title="수가 명령이 되는 방법: 기계어 명령어">
+        <button type="button" class="vplay" aria-label="재생: 수가 명령이 되는 방법: 기계어 명령어">
+          <img src="../../../../assets/img/videos/cpu-09.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/4FcbHOMVpOg" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">이 16비트 수는 명령어예요. 프로세서에게 레지스터 두 개를 더하라고 알려 줘요.<br>아주 작은 명령어 집합을 만들고, 명령어를 필드(연산 코드, 레지스터, 수)로 나누고, 네 가지 주소 지정 방식을 써 봐요. 5와 3을 더해 답을 저장하는 네 줄짜리 프로그램을 쓰고, 마지막으로 두 가지 큰 설계 방식인 RISC와 CISC를 비교해요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>이 수는 명령</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>연산 코드, 레지스터, 수</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=86" data-t="86" rel="noopener"><span class="t">1:26</span>주소 지정 방식</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>작은 프로그램</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=165" data-t="165" rel="noopener"><span class="t">2:45</span>RISC와 CISC</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=209" data-t="209" rel="noopener"><span class="t">3:29</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>여기 16비트짜리 수가 있어요. 메모리 안에서는 색깔이나 글자가 될 수도 있어요. 하지만 프로세서가 이것을 명령어로 읽으면 이런 뜻이 돼요. 레지스터 2를 레지스터 1에 더하라. 오늘은 수가 어떻게 명령이 되는지 알아봐요.</p>
+        <p>모든 프로세서에는 할 수 있는 일을 적은 정해진 목록이 있어요. 이걸 명령어 집합이라고 해요. 명령어마다 자기만의 코드 번호가 있어요. 아주 작은 명령어 집합을 직접 만들어 봐요. 우리 명령어는 길이가 16비트이고, 여러 필드로 나뉘어 있어요. 처음 4비트는 연산 코드(옵코드)로, 어떤 연산을 할지 정해요. 0010은 더하기라는 뜻이에요. 그다음 2비트는 레지스터 하나를 고르고, 그다음 2비트는 두 번째 레지스터를 골라요. 우리 프로세서에는 레지스터가 네 개 있고, 0번부터 3번까지 번호가 붙어 있어요. 마지막 8비트에는 명령어에 필요할 때 수나 메모리 주소가 들어가요. 0과 1을 쭉 적는 건 너무 힘들어서, 사람들은 대신 짧은 이름을 써요. ADD R1, R2처럼요. 이걸 어셈블리어라고 해요. 어셈블러라는 프로그램이 이걸 다시 수로 바꿔 줘요.</p>
+        <p>명령어가 데이터를 어디에서 가져올지 알려 주는 방법은 몇 가지가 있어요. 이걸 주소 지정 방식이라고 해요. 즉시 주소 지정: 수가 명령어 안에 들어 있어요. LOAD R1, #5는 5를 곧바로 레지스터 1에 넣어요. 레지스터 주소 지정: 데이터가 이미 레지스터에 있어요. ADD R1, R2는 두 레지스터를 더해요. 직접 주소 지정: 명령어에 메모리 주소가 들어 있어요. LOAD R1, [12]는 메모리 12번 칸에 저장된 것을 무엇이든 가져와요. 간접 주소 지정: 주소를 레지스터가 가지고 있어요. LOAD R1, [R2]는 R2에 들어 있는 주소에서 읽어요. R2를 바꾸면 같은 명령어가 다른 칸을 읽어요. 이렇게 프로그램은 목록을 차례로 훑어 가요.</p>
+        <p>프로그램은 이런 수들이 메모리에 차례로 놓여 있는 것일 뿐이에요. 5와 3을 더해서 답을 15번 칸에 저장하는 프로그램이에요. 5를 불러오고, 3을 불러오고, 더하고, 저장해요. 명령어 네 개, 64비트예요.</p>
+        <p>실제 명령어 집합은 크게 두 가지 방식이 있어요. RISC, 즉 축소 명령어 집합은 모든 명령어를 단순하게 유지해요. 길이가 모두 같고, 명령어마다 작은 일 하나만 해요. CISC, 즉 복합 명령어 집합은 명령어가 훨씬 많아요. 긴 것도 있고, 명령어 하나가 메모리에서 불러와서 더하는 것처럼 여러 단계를 한 번에 해내기도 해요. 휴대폰과 최근 노트북 상당수는 RISC 설계를 써요. 데스크톱 PC는 대부분 CISC 설계를 쓰지만, 칩 안에서는 어차피 큰 명령어를 작고 단순한 단계로 쪼개요.</p>
+        <p>정리하면, 명령어는 필드로 나뉜 수예요. 연산 코드와, 데이터를 어디서 찾을지가 들어 있어요. 프로그램은 그런 명령어들의 목록이에요. 그런데 이 수들을 하나씩 읽고 실제로 실행하는 건 누구일까요? 다음 편에서는 CPU가 프로그램을 실행하는 방법을 알아봐요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: CPU는 프로그램을 실제로 어떻게 실행할까요? 인출, 해독, 실행이에요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../08/ko/"><span>이전 편 · 8편</span><b>메모리 모듈 안에는 무엇이 있을까: SRAM, DRAM, 플래시</b></a><div class="ep-pg next soon"><span>다음 편</span><b>10편은 <time datetime="2026-11-03T21:00:00+08:00" data-at="2026-11-03T21:00:00+08:00" data-fmt="when">11-03 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

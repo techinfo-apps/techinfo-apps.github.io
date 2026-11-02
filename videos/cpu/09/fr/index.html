@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Du nombre à la commande : les instructions machine — D&#x27;un interrupteur à un processeur #9</title>
+<meta name="description" content="Ce nombre de 16 bits est une instruction : il dit au processeur d&#x27;additionner deux registres. Nous inventons un tout petit jeu d&#x27;instructions, découpons chaque instruction en champs (code opération, registres, nombre), essayons quatre modes d&#x27;adressage, écrivons un programme de quatre lignes qui additionne 5 et 3 et range la réponse, et comparons les deux grands styles de conception : RISC et CISC.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/09/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/09/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/09/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/09/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/09/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/09/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/09/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/09/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/09/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Du nombre à la commande : les instructions machine — D&#x27;un interrupteur à un processeur #9">
+<meta property="og:description" content="Ce nombre de 16 bits est une instruction : il dit au processeur d&#x27;additionner deux registres. Nous inventons un tout petit jeu d&#x27;instructions, découpons chaque instruction en champs (code opération, registres, nombre), essayons quatre modes d&#x27;adressage, écrivons un programme de quatre lignes qui additionne 5 et 3 et range la réponse, et comparons les deux grands styles de conception : RISC et CISC.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-09.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/09/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Du nombre à la commande : les instructions machine", "description": "Ce nombre de 16 bits est une instruction : il dit au processeur d'additionner deux registres. Nous inventons un tout petit jeu d'instructions, découpons chaque instruction en champs (code opération, registres, nombre), essayons quatre modes d'adressage, écrivons un programme de quatre lignes qui additionne 5 et 3 et range la réponse, et comparons les deux grands styles de conception : RISC et CISC.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-09.webp"], "uploadDate": "2026-11-02T21:00:00+08:00", "duration": "PT3M48S", "embedUrl": "https://www.youtube.com/embed/4FcbHOMVpOg", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;un interrupteur à un processeur · Épisode 9</p>
+      <h1 class="ep-title">Du nombre à la commande : les instructions machine</h1>
+      <div class="vplayer" data-yt="4FcbHOMVpOg" data-title="Du nombre à la commande : les instructions machine">
+        <button type="button" class="vplay" aria-label="Lire: Du nombre à la commande : les instructions machine">
+          <img src="../../../../assets/img/videos/cpu-09.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/4FcbHOMVpOg" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Ce nombre de 16 bits est une instruction : il dit au processeur d&#x27;additionner deux registres.<br>Nous inventons un tout petit jeu d&#x27;instructions, découpons chaque instruction en champs (code opération, registres, nombre), essayons quatre modes d&#x27;adressage, écrivons un programme de quatre lignes qui additionne 5 et 3 et range la réponse, et comparons les deux grands styles de conception : RISC et CISC.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Ce nombre est une commande</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>Code opération, registres, nombre</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=86" data-t="86" rel="noopener"><span class="t">1:26</span>Les modes d&#x27;adressage</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>Un tout petit programme</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=165" data-t="165" rel="noopener"><span class="t">2:45</span>RISC et CISC</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=209" data-t="209" rel="noopener"><span class="t">3:29</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Voici un nombre de seize bits. En mémoire, il pourrait être une couleur ou une lettre. Mais quand le processeur le lit comme une instruction, cela signifie : ajouter le registre deux au registre un. Aujourd&#x27;hui : comment des nombres deviennent des commandes.</p>
+        <p>Chaque processeur a une liste fixe de ce qu&#x27;il sait faire, appelée son jeu d&#x27;instructions. Chaque instruction a son propre numéro de code. Inventons-en un tout petit. Nos instructions font seize bits et sont découpées en champs. Les quatre premiers bits forment le code opération (opcode) : quelle opération effectuer. 0010 signifie addition. Les deux bits suivants choisissent un registre, et les deux d&#x27;après choisissent un second registre. Notre processeur en a quatre, numérotés de zéro à trois. Les huit derniers bits contiennent un nombre ou une adresse mémoire, quand l&#x27;instruction en a besoin. Écrire des 1 et des 0 est pénible, alors on écrit plutôt un nom court : ADD R1, R2. C&#x27;est ce qu&#x27;on appelle le langage assembleur. Un programme appelé assembleur le retransforme en nombres.</p>
+        <p>Une instruction peut indiquer d&#x27;où viennent ses données de plusieurs façons. On les appelle modes d&#x27;adressage. Immédiat : le nombre est dans l&#x27;instruction elle-même. LOAD R1, #5 place directement 5 dans le registre un. Registre : les données sont déjà dans des registres. ADD R1, R2 additionne les deux registres. Direct : l&#x27;instruction contient une adresse mémoire. LOAD R1, [12] va chercher ce qui est stocké dans la cellule mémoire douze. Indirect : un registre contient l&#x27;adresse. LOAD R1, [R2] lit à l&#x27;adresse contenue dans R2. Changez R2, et la même instruction lit une autre cellule. C&#x27;est ainsi qu&#x27;un programme parcourt une liste.</p>
+        <p>Un programme n&#x27;est que ces nombres, les uns après les autres en mémoire. En voici un qui additionne cinq et trois, et range la réponse dans la cellule quinze. Charger cinq. Charger trois. Additionner. Stocker. Quatre instructions, soixante-quatre bits.</p>
+        <p>Les jeux d&#x27;instructions réels existent en deux grands styles. Le RISC, ou jeu d&#x27;instructions réduit, garde chaque instruction simple : la même longueur, une petite tâche chacune. Le CISC, ou jeu d&#x27;instructions complexe, a beaucoup plus d&#x27;instructions. Certaines sont longues, et une seule instruction peut faire plusieurs étapes, comme charger depuis la mémoire et additionner, d&#x27;un seul coup. Les téléphones et de nombreux ordinateurs portables récents utilisent des conceptions RISC. La plupart des ordinateurs de bureau utilisent une conception CISC, mais à l&#x27;intérieur, la puce découpe de toute façon les grosses instructions en petites étapes simples.</p>
+        <p>En résumé : une instruction est un nombre découpé en champs, un code opération et l&#x27;endroit où trouver ses données. Un programme est une liste d&#x27;instructions. Mais qui lit ces nombres un par un, et les exécute réellement ? La prochaine fois : comment le CPU exécute un programme. À bientôt.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : comment le CPU exécute vraiment un programme. Lecture, décodage, exécution.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../08/fr/"><span>Précédent · Épisode 8</span><b>Que contient une barrette de mémoire ? SRAM, DRAM et flash</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 10 sort le <time datetime="2026-11-03T21:00:00+08:00" data-at="2026-11-03T21:00:00+08:00" data-fmt="when">11-03 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

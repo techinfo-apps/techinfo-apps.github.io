@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cómo un número se convierte en una orden: instrucciones de máquina — De un interruptor a una CPU #9</title>
+<meta name="description" content="Este número de 16 bits es una instrucción: le dice al procesador que sume dos registros. Inventamos un conjunto de instrucciones diminuto, dividimos cada instrucción en campos (código de operación, registros, número), probamos cuatro modos de direccionamiento, escribimos un programa de cuatro líneas que suma 5 y 3 y guarda la respuesta, y comparamos los dos grandes estilos de diseño: RISC y CISC.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/09/es/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/09/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/09/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/09/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/09/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/09/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/09/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/09/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/09/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Cómo un número se convierte en una orden: instrucciones de máquina — De un interruptor a una CPU #9">
+<meta property="og:description" content="Este número de 16 bits es una instrucción: le dice al procesador que sume dos registros. Inventamos un conjunto de instrucciones diminuto, dividimos cada instrucción en campos (código de operación, registros, número), probamos cuatro modos de direccionamiento, escribimos un programa de cuatro líneas que suma 5 y 3 y guarda la respuesta, y comparamos los dos grandes estilos de diseño: RISC y CISC.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-09.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/09/es/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Cómo un número se convierte en una orden: instrucciones de máquina", "description": "Este número de 16 bits es una instrucción: le dice al procesador que sume dos registros. Inventamos un conjunto de instrucciones diminuto, dividimos cada instrucción en campos (código de operación, registros, número), probamos cuatro modos de direccionamiento, escribimos un programa de cuatro líneas que suma 5 y 3 y guarda la respuesta, y comparamos los dos grandes estilos de diseño: RISC y CISC.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-09.webp"], "uploadDate": "2026-11-02T21:00:00+08:00", "duration": "PT3M48S", "embedUrl": "https://www.youtube.com/embed/4FcbHOMVpOg", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="es">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Todos los episodios</a> · De un interruptor a una CPU · Episodio 9</p>
+      <h1 class="ep-title">Cómo un número se convierte en una orden: instrucciones de máquina</h1>
+      <div class="vplayer" data-yt="4FcbHOMVpOg" data-title="Cómo un número se convierte en una orden: instrucciones de máquina">
+        <button type="button" class="vplay" aria-label="Reproducir: Cómo un número se convierte en una orden: instrucciones de máquina">
+          <img src="../../../../assets/img/videos/cpu-09.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Al pulsar reproducir, el video se carga desde YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/4FcbHOMVpOg" rel="noopener">Ver en YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">Suscribirse en YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Este número de 16 bits es una instrucción: le dice al procesador que sume dos registros.<br>Inventamos un conjunto de instrucciones diminuto, dividimos cada instrucción en campos (código de operación, registros, número), probamos cuatro modos de direccionamiento, escribimos un programa de cuatro líneas que suma 5 y 3 y guarda la respuesta, y comparamos los dos grandes estilos de diseño: RISC y CISC.</p>
+      <p class="ep-ai">Todas las animaciones de este video están dibujadas con código y la narración es una voz de IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Capítulos</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Este número es una orden</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>Código de operación, registros, número</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=86" data-t="86" rel="noopener"><span class="t">1:26</span>Modos de direccionamiento</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>Un programa diminuto</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=165" data-t="165" rel="noopener"><span class="t">2:45</span>RISC y CISC</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=209" data-t="209" rel="noopener"><span class="t">3:29</span>Qué sigue</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcripción</h2>
+        <div class="ep-text">
+        <p>Aquí tienes un número de dieciséis bits. En la memoria podría ser un color o una letra. Pero cuando el procesador lo lee como una instrucción, significa: suma el registro dos al registro uno. Hoy: cómo los números se convierten en órdenes.</p>
+        <p>Todo procesador tiene una lista fija de las cosas que puede hacer, llamada su conjunto de instrucciones. Cada instrucción tiene su propio número de código. Inventemos uno diminuto. Nuestras instrucciones miden dieciséis bits y están divididas en campos. Los primeros cuatro bits son el código de operación (opcode): qué operación hacer. 0010 significa sumar. Los dos bits siguientes eligen un registro, y los dos que vienen después eligen un segundo registro. Nuestro procesador tiene cuatro, numerados del cero al tres. Los últimos ocho bits guardan un número o una dirección de memoria, cuando la instrucción lo necesita. Escribir unos y ceros es muy tedioso, así que la gente escribe un nombre corto: ADD R1, R2. Eso se llama lenguaje ensamblador. Un programa llamado ensamblador lo convierte de nuevo en números.</p>
+        <p>Hay varias formas de que una instrucción indique de dónde salen sus datos. Se llaman modos de direccionamiento. Inmediato: el número está dentro de la propia instrucción. LOAD R1, #5 mete el 5 directamente en el registro uno. Registro: los datos ya están en los registros. ADD R1, R2 suma los dos registros. Directo: la instrucción contiene una dirección de memoria. LOAD R1, [12] trae lo que haya guardado en la celda de memoria doce. Indirecto: un registro contiene la dirección. LOAD R1, [R2] lee de la dirección que hay en R2. Cambia R2 y la misma instrucción lee otra celda. Así es como un programa recorre una lista.</p>
+        <p>Un programa son solo estos números, uno tras otro en la memoria. Este suma cinco y tres, y guarda la respuesta en la celda quince. Carga cinco. Carga tres. Suma. Guarda. Cuatro instrucciones, sesenta y cuatro bits.</p>
+        <p>Los conjuntos de instrucciones reales vienen en dos estilos principales. RISC, un conjunto reducido de instrucciones, mantiene cada instrucción simple: la misma longitud, un trabajo pequeño cada una. CISC, un conjunto complejo de instrucciones, tiene muchas más instrucciones. Algunas son largas, y una sola instrucción puede hacer varios pasos, como cargar desde la memoria y sumar, de una vez. Los teléfonos y muchas computadoras portátiles más nuevas usan diseños RISC. La mayoría de las computadoras de escritorio usan un diseño CISC, aunque por dentro el chip, de todos modos, divide las instrucciones grandes en pasos pequeños y simples.</p>
+        <p>En resumen: una instrucción es un número con campos: un código de operación y dónde encontrar sus datos. Un programa es una lista de ellas. Pero ¿quién lee estos números uno por uno y los ejecuta de verdad? La próxima vez: cómo la CPU ejecuta un programa. Nos vemos allí.</p>
+        </div>
+        <p class="ep-close">Próximo episodio: cómo ejecuta de verdad un programa la CPU. Búsqueda, decodificación, ejecución.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../08/es/"><span>Anterior · Episodio 8</span><b>¿Qué hay dentro de un módulo de memoria? SRAM, DRAM y flash</b></a><div class="ep-pg next soon"><span>Siguiente</span><b>El episodio 10 sale el <time datetime="2026-11-03T21:00:00+08:00" data-at="2026-11-03T21:00:00+08:00" data-fmt="when">11-03 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>数はどうやって命令になるのか：機械語の命令 — スイッチ1つからCPUまで #9</title>
+<meta name="description" content="この16ビットの数は命令です。プロセッサーに、2つのレジスタを足すよう伝えています。 ごく小さな命令セットを作り、命令をフィールド（オペコード、レジスタ、数）に分け、4種類のアドレッシングモードを試します。5と3を足して答えを保存する4行のプログラムを書き、最後に2つの大きな設計の流儀、RISCとCISCを比べます。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/09/ja/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/09/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/09/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/09/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/09/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/09/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/09/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/09/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/09/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="数はどうやって命令になるのか：機械語の命令 — スイッチ1つからCPUまで #9">
+<meta property="og:description" content="この16ビットの数は命令です。プロセッサーに、2つのレジスタを足すよう伝えています。 ごく小さな命令セットを作り、命令をフィールド（オペコード、レジスタ、数）に分け、4種類のアドレッシングモードを試します。5と3を足して答えを保存する4行のプログラムを書き、最後に2つの大きな設計の流儀、RISCとCISCを比べます。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-09.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/09/ja/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "数はどうやって命令になるのか：機械語の命令", "description": "この16ビットの数は命令です。プロセッサーに、2つのレジスタを足すよう伝えています。 ごく小さな命令セットを作り、命令をフィールド（オペコード、レジスタ、数）に分け、4種類のアドレッシングモードを試します。5と3を足して答えを保存する4行のプログラムを書き、最後に2つの大きな設計の流儀、RISCとCISCを比べます。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-09.webp"], "uploadDate": "2026-11-02T21:00:00+08:00", "duration": "PT3M48S", "embedUrl": "https://www.youtube.com/embed/4FcbHOMVpOg", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ja">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">すべての回</a> · スイッチ1つからCPUまで · 第9話</p>
+      <h1 class="ep-title">数はどうやって命令になるのか：機械語の命令</h1>
+      <div class="vplayer" data-yt="4FcbHOMVpOg" data-title="数はどうやって命令になるのか：機械語の命令">
+        <button type="button" class="vplay" aria-label="再生: 数はどうやって命令になるのか：機械語の命令">
+          <img src="../../../../assets/img/videos/cpu-09.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">再生を押すと、動画をYouTubeから読み込みます。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/4FcbHOMVpOg" rel="noopener">YouTubeで見る</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTubeでチャンネル登録</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">この16ビットの数は命令です。プロセッサーに、2つのレジスタを足すよう伝えています。<br>ごく小さな命令セットを作り、命令をフィールド（オペコード、レジスタ、数）に分け、4種類のアドレッシングモードを試します。5と3を足して答えを保存する4行のプログラムを書き、最後に2つの大きな設計の流儀、RISCとCISCを比べます。</p>
+      <p class="ep-ai">この動画のアニメーションは、すべてコードで描いています。ナレーションはAI音声です。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">チャプター</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>この数は命令</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>オペコード、レジスタ、数</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=86" data-t="86" rel="noopener"><span class="t">1:26</span>アドレッシングモード</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>小さなプログラム</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=165" data-t="165" rel="noopener"><span class="t">2:45</span>RISCとCISC</a></li>
+        <li><a href="https://youtu.be/4FcbHOMVpOg?t=209" data-t="209" rel="noopener"><span class="t">3:29</span>次回予告</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">ナレーション全文</h2>
+        <div class="ep-text">
+        <p>これは16ビットの数です。メモリーの中では、色や文字になることもあります。でも、プロセッサーが命令として読むと、意味はこうなります。レジスタ2をレジスタ1に足す。今日は、数がどうやって命令になるのかを見ていきます。</p>
+        <p>どのプロセッサーにも、できることを並べた決まった一覧があり、これを命令セットといいます。命令にはそれぞれ、専用のコード番号がついています。ごく小さな命令セットを、自分たちで作ってみましょう。この命令は16ビットの長さで、いくつかのフィールドに分かれています。最初の4ビットがオペコードで、どの演算をするかを表します。0010は足し算です。次の2ビットでレジスタを1つ選び、その次の2ビットで2つめのレジスタを選びます。このプロセッサーのレジスタは4つで、0から3まで番号がついています。最後の8ビットには、命令が必要とするとき、数かメモリーのアドレスが入ります。0と1を書き並べるのは大変なので、人は代わりに短い名前を書きます。ADD R1, R2のようにです。これをアセンブリ言語といいます。アセンブラというプログラムが、それを数に戻してくれます。</p>
+        <p>命令が、データをどこから持ってくるかを示す方法は、いくつかあります。これをアドレッシングモードといいます。即値：数が命令の中に入っています。LOAD R1, #5は、5をそのままレジスタ1に入れます。レジスタ：データはすでにレジスタの中にあります。ADD R1, R2は、2つのレジスタを足します。直接：命令の中にメモリーのアドレスが入っています。LOAD R1, [12]は、メモリーの12番地のセルに入っているものを何でも持ってきます。間接：アドレスはレジスタの中にあります。LOAD R1, [R2]は、R2に入っているアドレスから読みます。R2を変えれば、同じ命令が別のセルを読みます。プログラムはこうして、リストを順にたどっていきます。</p>
+        <p>プログラムとは、こうした数がメモリーに順に並んだものにすぎません。これは、5と3を足して、答えを15番地のセルに保存するプログラムです。5を読み込み、3を読み込み、足して、保存します。4つの命令で、64ビットです。</p>
+        <p>実際の命令セットには、大きく2つの流儀があります。RISC、つまり縮小命令セットは、どの命令も単純にしておきます。長さは同じで、1つの命令がする仕事は小さなもの1つです。CISC、つまり複合命令セットには、命令がずっとたくさんあります。長いものもあり、1つの命令でいくつもの手順、たとえばメモリーから読み込んで足す、までを一度にこなせます。スマートフォンや、新しいノートパソコンの多くは、RISC設計を使っています。デスクトップPCの多くはCISC設計ですが、チップの内部では、大きな命令をやはり小さく単純な手順に分けています。</p>
+        <p>まとめです。命令とは、フィールドに分かれた数で、オペコードと、データの見つけ方が入っています。プログラムは、その命令を並べたものです。では、これらの数を1つずつ読んで、実際に実行するのは誰でしょう。次回は、CPUがプログラムを実行するしくみです。また会いましょう。</p>
+        </div>
+        <p class="ep-close">次回：CPUがプログラムを実際に実行するしくみ。フェッチ、デコード、実行のお話です。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../08/ja/"><span>前の回 · 第8話</span><b>メモリーモジュールの中身は？SRAM、DRAM、フラッシュメモリー</b></a><div class="ep-pg next soon"><span>次の回</span><b>第10話は <time datetime="2026-11-03T21:00:00+08:00" data-at="2026-11-03T21:00:00+08:00" data-fmt="when">11-03 21:00 (UTC+8)</time> に公開</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
