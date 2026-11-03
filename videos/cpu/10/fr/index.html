@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Un CPU exécute un programme : lire, décoder, exécuter — D&#x27;un interrupteur à un processeur #10</title>
+<meta name="description" content="Les instructions sont en mémoire. Regardons maintenant un processeur les exécuter, étape par étape. Nous présentons le chemin de données (compteur de programme, registre d&#x27;instruction, décodeur, registres, ALU), déroulons la lecture, le décodage et l&#x27;exécution d&#x27;un petit programme, puis ajoutons des sauts, pour qu&#x27;une boucle de compte à rebours tourne jusqu&#x27;à atteindre zéro.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/10/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/10/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/10/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/10/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/10/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/10/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/10/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/10/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/10/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Un CPU exécute un programme : lire, décoder, exécuter — D&#x27;un interrupteur à un processeur #10">
+<meta property="og:description" content="Les instructions sont en mémoire. Regardons maintenant un processeur les exécuter, étape par étape. Nous présentons le chemin de données (compteur de programme, registre d&#x27;instruction, décodeur, registres, ALU), déroulons la lecture, le décodage et l&#x27;exécution d&#x27;un petit programme, puis ajoutons des sauts, pour qu&#x27;une boucle de compte à rebours tourne jusqu&#x27;à atteindre zéro.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-10.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/10/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Un CPU exécute un programme : lire, décoder, exécuter", "description": "Les instructions sont en mémoire. Regardons maintenant un processeur les exécuter, étape par étape. Nous présentons le chemin de données (compteur de programme, registre d'instruction, décodeur, registres, ALU), déroulons la lecture, le décodage et l'exécution d'un petit programme, puis ajoutons des sauts, pour qu'une boucle de compte à rebours tourne jusqu'à atteindre zéro.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-10.webp"], "uploadDate": "2026-11-03T21:00:00+08:00", "duration": "PT3M49S", "embedUrl": "https://www.youtube.com/embed/0kFxrtxEIBc", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;un interrupteur à un processeur · Épisode 10</p>
+      <h1 class="ep-title">Un CPU exécute un programme : lire, décoder, exécuter</h1>
+      <div class="vplayer" data-yt="0kFxrtxEIBc" data-title="Un CPU exécute un programme : lire, décoder, exécuter">
+        <button type="button" class="vplay" aria-label="Lire: Un CPU exécute un programme : lire, décoder, exécuter">
+          <img src="../../../../assets/img/videos/cpu-10.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/0kFxrtxEIBc" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Les instructions sont en mémoire. Regardons maintenant un processeur les exécuter, étape par étape.<br>Nous présentons le chemin de données (compteur de programme, registre d&#x27;instruction, décodeur, registres, ALU), déroulons la lecture, le décodage et l&#x27;exécution d&#x27;un petit programme, puis ajoutons des sauts, pour qu&#x27;une boucle de compte à rebours tourne jusqu&#x27;à atteindre zéro.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Des nombres qui agissent</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=25" data-t="25" rel="noopener"><span class="t">0:25</span>Le chemin de données</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=60" data-t="60" rel="noopener"><span class="t">1:00</span>Lecture, décodage, exécution</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=138" data-t="138" rel="noopener"><span class="t">2:18</span>Sauts et boucles</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=207" data-t="207" rel="noopener"><span class="t">3:27</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>La dernière fois, nous avons écrit un programme : quatre nombres rangés en mémoire. Mais des nombres ne font rien tout seuls. Il faut quelque chose qui les lise, un par un, et les exécute. Ce quelque chose, c&#x27;est le CPU. Aujourd&#x27;hui, nous le regardons exécuter un programme, pas à pas.</p>
+        <p>Voici les pièces. La mémoire contient le programme. Le compteur de programme, le compteur de l&#x27;épisode 7, contient l&#x27;adresse de la prochaine instruction. Le registre d&#x27;instruction contient l&#x27;instruction en cours de traitement. Un décodeur lit ses champs. Il y a ensuite les quatre registres, et l&#x27;ALU de l&#x27;épisode 3, qui fait les vrais calculs. Tout cela est relié par des fils appelés bus. L&#x27;ensemble forme le chemin de données.</p>
+        <p>Chaque instruction passe par les trois mêmes étapes. Étape un : la lecture (fetch). Le compteur de programme envoie son adresse, zéro, à la mémoire. La mémoire renvoie l&#x27;instruction qui s&#x27;y trouve, dans le registre d&#x27;instruction. Et le compteur de programme ajoute un, si bien qu&#x27;il pointe déjà vers l&#x27;instruction suivante.</p>
+        <p>Étape deux : le décodage (decode). Le décodeur découpe l&#x27;instruction en champs. Code opération 0001 : charger un nombre. Champ de registre : R1. Champ de nombre : cinq.</p>
+        <p>Étape trois : l&#x27;exécution (execute). Le nombre cinq entre directement dans le registre un.</p>
+        <p>Puis tout recommence : lecture, décodage, exécution. Charger trois dans R2. Additionner R1 et R2 dans l&#x27;ALU : huit. Stocker R1 dans la cellule mémoire quinze. La réponse est en mémoire. Lecture, décodage, exécution, encore et encore. Un processeur moderne fait cela des milliards de fois par seconde.</p>
+        <p>Jusqu&#x27;ici, le compteur de programme ne fait que compter vers le haut. Mais un programme qui descend toujours tout droit ne peut rien répéter. Pour cela, il faut un saut. Une instruction de saut place une nouvelle adresse dans le compteur de programme. Au lieu de la ligne suivante, le CPU continue à partir de là. Un saut conditionnel ne saute que si quelque chose est vrai, comme l&#x27;indicateur de zéro de l&#x27;épisode 3. C&#x27;est ainsi qu&#x27;un programme prend une décision.</p>
+        <p>Voici un compte à rebours. Mettez trois dans R1, et un dans R2. Soustrayez : R1 vaut deux. Ce n&#x27;est pas zéro, donc on ne saute pas à la fin. On saute en arrière, vers la soustraction. R1 vaut un. Encore une fois. R1 vaut zéro, l&#x27;indicateur de zéro s&#x27;allume, et cette fois le saut conditionnel va à la fin. Chaque boucle et chaque « si », dans tous les programmes que vous avez déjà utilisés, se ramène à des sauts comme ceux-ci.</p>
+        <p>Donc : lecture, décodage, exécution, et on recommence. Et les sauts permettent au compteur de programme de se déplacer. Mais qui actionne tous ces interrupteurs au bon moment, en disant à chaque registre quand charger et à l&#x27;ALU quoi faire ? La prochaine fois : l&#x27;unité de commande. À bientôt.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : l&#x27;unité de commande, la partie qui actionne tous les interrupteurs.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../09/fr/"><span>Précédent · Épisode 9</span><b>Du nombre à la commande : les instructions machine</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 11 sort le <time datetime="2026-11-04T21:00:00+08:00" data-at="2026-11-04T21:00:00+08:00" data-fmt="when">11-04 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

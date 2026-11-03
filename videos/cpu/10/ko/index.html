@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPU는 프로그램을 어떻게 실행할까: 인출, 해독, 실행 — 스위치 하나에서 CPU까지 #10</title>
+<meta name="description" content="명령어는 메모리에 들어 있어요. 이제 프로세서가 그 명령어를 한 단계씩 실행하는 모습을 지켜봐요. 데이터 경로(프로그램 카운터, 명령어 레지스터, 디코더, 레지스터, ALU)를 펼쳐 놓고, 작은 프로그램으로 인출, 해독, 실행을 한 단계씩 따라가요. 그다음 점프를 더해서, 카운트다운 반복이 0이 될 때까지 돌아가게 해요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/10/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/10/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/10/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/10/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/10/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/10/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/10/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/10/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/10/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="CPU는 프로그램을 어떻게 실행할까: 인출, 해독, 실행 — 스위치 하나에서 CPU까지 #10">
+<meta property="og:description" content="명령어는 메모리에 들어 있어요. 이제 프로세서가 그 명령어를 한 단계씩 실행하는 모습을 지켜봐요. 데이터 경로(프로그램 카운터, 명령어 레지스터, 디코더, 레지스터, ALU)를 펼쳐 놓고, 작은 프로그램으로 인출, 해독, 실행을 한 단계씩 따라가요. 그다음 점프를 더해서, 카운트다운 반복이 0이 될 때까지 돌아가게 해요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-10.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/10/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "CPU는 프로그램을 어떻게 실행할까: 인출, 해독, 실행", "description": "명령어는 메모리에 들어 있어요. 이제 프로세서가 그 명령어를 한 단계씩 실행하는 모습을 지켜봐요. 데이터 경로(프로그램 카운터, 명령어 레지스터, 디코더, 레지스터, ALU)를 펼쳐 놓고, 작은 프로그램으로 인출, 해독, 실행을 한 단계씩 따라가요. 그다음 점프를 더해서, 카운트다운 반복이 0이 될 때까지 돌아가게 해요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-10.webp"], "uploadDate": "2026-11-03T21:00:00+08:00", "duration": "PT3M49S", "embedUrl": "https://www.youtube.com/embed/0kFxrtxEIBc", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 10편</p>
+      <h1 class="ep-title">CPU는 프로그램을 어떻게 실행할까: 인출, 해독, 실행</h1>
+      <div class="vplayer" data-yt="0kFxrtxEIBc" data-title="CPU는 프로그램을 어떻게 실행할까: 인출, 해독, 실행">
+        <button type="button" class="vplay" aria-label="재생: CPU는 프로그램을 어떻게 실행할까: 인출, 해독, 실행">
+          <img src="../../../../assets/img/videos/cpu-10.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/0kFxrtxEIBc" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">명령어는 메모리에 들어 있어요. 이제 프로세서가 그 명령어를 한 단계씩 실행하는 모습을 지켜봐요.<br>데이터 경로(프로그램 카운터, 명령어 레지스터, 디코더, 레지스터, ALU)를 펼쳐 놓고, 작은 프로그램으로 인출, 해독, 실행을 한 단계씩 따라가요. 그다음 점프를 더해서, 카운트다운 반복이 0이 될 때까지 돌아가게 해요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>일을 하는 수</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=25" data-t="25" rel="noopener"><span class="t">0:25</span>데이터 경로</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=60" data-t="60" rel="noopener"><span class="t">1:00</span>인출, 해독, 실행</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=138" data-t="138" rel="noopener"><span class="t">2:18</span>점프와 반복</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=207" data-t="207" rel="noopener"><span class="t">3:27</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>지난 편에서는 프로그램을 하나 썼어요. 메모리에 놓인 수 네 개예요. 하지만 수는 혼자서 아무것도 하지 못해요. 누군가가 수를 하나씩 읽어서 실행해야 해요. 그 누군가가 바로 CPU예요. 오늘은 CPU가 프로그램을 한 단계씩 실행하는 모습을 지켜봐요.</p>
+        <p>먼저 부품을 살펴봐요. 메모리는 프로그램을 담고 있어요. 프로그램 카운터는 7편에서 본 그 카운터로, 다음 명령어의 주소를 담고 있어요. 명령어 레지스터는 지금 처리 중인 명령어를 담고 있어요. 디코더가 그 필드를 읽어요. 그리고 레지스터 네 개와, 3편에서 본 ALU가 있어요. 실제로 계산을 하는 건 ALU예요. 이 모든 것은 버스라는 배선으로 이어져 있어요. 전체를 합쳐서 데이터 경로라고 해요.</p>
+        <p>모든 명령어는 똑같은 세 단계를 거쳐요. 첫 번째 단계는 인출(fetch)이에요. 프로그램 카운터가 주소 0을 메모리에 보내요. 메모리는 그 주소에 저장된 명령어를 명령어 레지스터로 돌려보내요. 그러고 나서 프로그램 카운터는 1을 더해서, 벌써 다음 명령어를 가리켜요.</p>
+        <p>두 번째 단계는 해독(decode)이에요. 디코더가 명령어를 필드로 나눠요. 연산 코드는 0001이고, 수를 불러온다는 뜻이에요. 레지스터 필드는 R1, 수 필드는 5예요.</p>
+        <p>세 번째 단계는 실행(execute)이에요. 수 5가 곧바로 레지스터 1에 들어가요.</p>
+        <p>그러고는 처음부터 다시 시작해요. 인출, 해독, 실행. R2에 3을 불러와요. ALU에서 R1과 R2를 더하면 8이에요. R1을 메모리 15번 칸에 저장해요. 답이 메모리에 들어갔어요. 인출, 해독, 실행을 계속 되풀이해요. 요즘 프로세서는 이걸 1초에 수십억 번 해요.</p>
+        <p>지금까지 프로그램 카운터는 위로 세기만 했어요. 하지만 위에서 아래로 곧장 내려가기만 하는 프로그램은 아무것도 반복할 수 없어요. 그러려면 점프가 필요해요. 점프 명령어는 프로그램 카운터에 새 주소를 넣어요. 다음 줄 대신, CPU는 그곳에서부터 이어서 실행해요. 조건부 점프는 어떤 조건이 참일 때만 점프해요. 3편에서 본 제로 플래그 같은 거예요. 프로그램은 이렇게 결정을 내려요.</p>
+        <p>카운트다운 예를 볼게요. R1에 3을, R2에 1을 넣어요. 빼면 R1은 2가 돼요. 0이 아니니까 끝으로 점프하지 않아요. 뺄셈 줄로 다시 점프해요. R1은 1이 돼요. 한 번 더. R1이 0이 되고, 제로 플래그에 불이 들어오고, 이번에는 조건부 점프가 끝으로 가요. 여러분이 써 본 모든 프로그램의 모든 반복과 모든 if는, 결국 이런 점프로 이루어져요.</p>
+        <p>정리하면, 인출, 해독, 실행, 그리고 반복이에요. 그리고 점프 덕분에 프로그램 카운터는 여기저기로 움직일 수 있어요. 그런데 알맞은 순간에 이 모든 스위치를 바꿔 주고, 각 레지스터에는 언제 값을 넣을지, ALU에는 무엇을 할지 알려 주는 건 누구일까요? 다음 편에서는 제어 장치를 알아봐요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 제어 장치, 모든 스위치를 바꿔 주는 부분이에요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../09/ko/"><span>이전 편 · 9편</span><b>수가 명령이 되는 방법: 기계어 명령어</b></a><div class="ep-pg next soon"><span>다음 편</span><b>11편은 <time datetime="2026-11-04T21:00:00+08:00" data-at="2026-11-04T21:00:00+08:00" data-fmt="when">11-04 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

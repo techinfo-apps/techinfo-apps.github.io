@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPUはプログラムをどう実行するのか：フェッチ、デコード、実行 — スイッチ1つからCPUまで #10</title>
+<meta name="description" content="命令はメモリーに入っています。今回は、プロセッサーがそれを1つずつ実行していくようすを見ます。 まずデータパス（プログラムカウンター、命令レジスタ、デコーダー、レジスタ、ALU）を組み立て、小さなプログラムでフェッチ、デコード、実行を一歩ずつ追いかけます。そのあとジャンプを加えて、0になるまで続くカウントダウンのループを動かします。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/10/ja/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/10/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/10/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/10/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/10/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/10/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/10/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/10/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/10/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="CPUはプログラムをどう実行するのか：フェッチ、デコード、実行 — スイッチ1つからCPUまで #10">
+<meta property="og:description" content="命令はメモリーに入っています。今回は、プロセッサーがそれを1つずつ実行していくようすを見ます。 まずデータパス（プログラムカウンター、命令レジスタ、デコーダー、レジスタ、ALU）を組み立て、小さなプログラムでフェッチ、デコード、実行を一歩ずつ追いかけます。そのあとジャンプを加えて、0になるまで続くカウントダウンのループを動かします。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-10.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/10/ja/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "CPUはプログラムをどう実行するのか：フェッチ、デコード、実行", "description": "命令はメモリーに入っています。今回は、プロセッサーがそれを1つずつ実行していくようすを見ます。 まずデータパス（プログラムカウンター、命令レジスタ、デコーダー、レジスタ、ALU）を組み立て、小さなプログラムでフェッチ、デコード、実行を一歩ずつ追いかけます。そのあとジャンプを加えて、0になるまで続くカウントダウンのループを動かします。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-10.webp"], "uploadDate": "2026-11-03T21:00:00+08:00", "duration": "PT3M49S", "embedUrl": "https://www.youtube.com/embed/0kFxrtxEIBc", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ja">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">すべての回</a> · スイッチ1つからCPUまで · 第10話</p>
+      <h1 class="ep-title">CPUはプログラムをどう実行するのか：フェッチ、デコード、実行</h1>
+      <div class="vplayer" data-yt="0kFxrtxEIBc" data-title="CPUはプログラムをどう実行するのか：フェッチ、デコード、実行">
+        <button type="button" class="vplay" aria-label="再生: CPUはプログラムをどう実行するのか：フェッチ、デコード、実行">
+          <img src="../../../../assets/img/videos/cpu-10.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">再生を押すと、動画をYouTubeから読み込みます。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/0kFxrtxEIBc" rel="noopener">YouTubeで見る</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTubeでチャンネル登録</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">命令はメモリーに入っています。今回は、プロセッサーがそれを1つずつ実行していくようすを見ます。<br>まずデータパス（プログラムカウンター、命令レジスタ、デコーダー、レジスタ、ALU）を組み立て、小さなプログラムでフェッチ、デコード、実行を一歩ずつ追いかけます。そのあとジャンプを加えて、0になるまで続くカウントダウンのループを動かします。</p>
+      <p class="ep-ai">この動画のアニメーションは、すべてコードで描いています。ナレーションはAI音声です。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">チャプター</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>動きだす数</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=25" data-t="25" rel="noopener"><span class="t">0:25</span>データパス</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=60" data-t="60" rel="noopener"><span class="t">1:00</span>フェッチ、デコード、実行</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=138" data-t="138" rel="noopener"><span class="t">2:18</span>ジャンプとループ</a></li>
+        <li><a href="https://youtu.be/0kFxrtxEIBc?t=207" data-t="207" rel="noopener"><span class="t">3:27</span>次回予告</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">ナレーション全文</h2>
+        <div class="ep-text">
+        <p>前回は、プログラムを書きました。メモリーに並んだ、4つの数です。でも、数は自分では何もしません。誰かがそれを1つずつ読んで、実行しなければなりません。その誰かが、CPUです。今日は、CPUがプログラムを実行していくようすを、一歩ずつ見ていきます。</p>
+        <p>まず、部品を見ましょう。メモリーは、プログラムを保持します。プログラムカウンターは、第7回に出てきたカウンターで、次の命令のアドレスを保持します。命令レジスタは、いま処理している命令を保持します。デコーダーが、そのフィールドを読み取ります。そして4つのレジスタと、第3回のALUがあります。実際に計算をするのがALUです。これらすべてを、バスと呼ばれる配線がつないでいます。全体をまとめて、データパスといいます。</p>
+        <p>どの命令も、同じ3つのステップを通ります。ステップ1、フェッチです。プログラムカウンターが、アドレス0をメモリーに送ります。メモリーは、そこに入っている命令を、命令レジスタに送り返します。そしてプログラムカウンターが1を足すので、もう次の命令を指しています。</p>
+        <p>ステップ2、デコードです。デコーダーが、命令をフィールドに分けます。オペコード0001は、数を読み込む命令です。レジスタのフィールドはR1、数のフィールドは5です。</p>
+        <p>ステップ3、実行です。数の5が、そのままレジスタ1に入ります。</p>
+        <p>そしてまた最初から、フェッチ、デコード、実行です。R2に3を読み込みます。ALUでR1とR2を足すと、8になります。R1をメモリーの15番地のセルに保存します。答えがメモリーに入りました。フェッチ、デコード、実行を、何度も何度も繰り返します。現代のプロセッサーは、これを1秒間に何十億回も行います。</p>
+        <p>ここまでのプログラムカウンターは、数を増やしていくだけでした。でも、上から下へ進むだけのプログラムでは、何も繰り返せません。そこで必要になるのが、ジャンプです。ジャンプ命令は、新しいアドレスをプログラムカウンターに入れます。次の行ではなく、そこからCPUが続きを実行します。条件ジャンプは、何かが成り立つときだけジャンプします。たとえば、第3回のゼロフラグです。プログラムは、こうして判断をします。</p>
+        <p>カウントダウンの例です。R1に3、R2に1を入れます。引き算すると、R1は2になります。ゼロではないので、終わりへはジャンプしません。引き算の行へジャンプして戻ります。R1は1になります。もう一度。R1が0になり、ゼロフラグが点灯して、今度は条件ジャンプが終わりへ進みます。これまでに使ってきたどのプログラムの、どんなループも、どんな「もし〜なら」も、結局はこうしたジャンプに行き着きます。</p>
+        <p>まとめです。フェッチ、デコード、実行、そして繰り返し。ジャンプのおかげで、プログラムカウンターはあちこちへ動けます。では、これらのスイッチをちょうどよい瞬間に切り替えて、各レジスタにいつ取り込むか、ALUに何をするかを伝えるのは誰でしょう。次回は、制御装置です。また会いましょう。</p>
+        </div>
+        <p class="ep-close">次回：制御装置。すべてのスイッチを切り替える部分のお話です。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../09/ja/"><span>前の回 · 第9話</span><b>数はどうやって命令になるのか：機械語の命令</b></a><div class="ep-pg next soon"><span>次の回</span><b>第11話は <time datetime="2026-11-04T21:00:00+08:00" data-at="2026-11-04T21:00:00+08:00" data-fmt="when">11-04 21:00 (UTC+8)</time> に公開</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
