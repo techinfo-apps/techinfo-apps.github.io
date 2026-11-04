@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>誰來告訴 CPU 該做什麼？控制單元、硬佈線與微碼 — 從一個開關到 CPU #11</title>
+<meta name="description" content="擷取、解碼、執行的每一步，都得在正確的時刻把正確的線打開。總得有個東西來做這件事。 我們先列出所有控制線，把它們寫成控制字，看看控制單元讀的是什麼（運算碼和步驟），再用兩種辦法把它做出來：用邏輯閘直接佈線的硬佈線，以及從一張叫微碼的小表格讀出來的微程式控制。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/11/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/11/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/11/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/11/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/11/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/11/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/11/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/11/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/11/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="誰來告訴 CPU 該做什麼？控制單元、硬佈線與微碼 — 從一個開關到 CPU #11">
+<meta property="og:description" content="擷取、解碼、執行的每一步，都得在正確的時刻把正確的線打開。總得有個東西來做這件事。 我們先列出所有控制線，把它們寫成控制字，看看控制單元讀的是什麼（運算碼和步驟），再用兩種辦法把它做出來：用邏輯閘直接佈線的硬佈線，以及從一張叫微碼的小表格讀出來的微程式控制。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-11.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/11/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "誰來告訴 CPU 該做什麼？控制單元、硬佈線與微碼", "description": "擷取、解碼、執行的每一步，都得在正確的時刻把正確的線打開。總得有個東西來做這件事。 我們先列出所有控制線，把它們寫成控制字，看看控制單元讀的是什麼（運算碼和步驟），再用兩種辦法把它做出來：用邏輯閘直接佈線的硬佈線，以及從一張叫微碼的小表格讀出來的微程式控制。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-11.webp"], "uploadDate": "2026-11-04T21:00:00+08:00", "duration": "PT3M33S", "embedUrl": "https://www.youtube.com/embed/T9eDkT2NvBw", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一個開關到 CPU · 第 11 集</p>
+      <h1 class="ep-title">誰來告訴 CPU 該做什麼？控制單元、硬佈線與微碼</h1>
+      <div class="vplayer" data-yt="T9eDkT2NvBw" data-title="誰來告訴 CPU 該做什麼？控制單元、硬佈線與微碼">
+        <button type="button" class="vplay" aria-label="播放: 誰來告訴 CPU 該做什麼？控制單元、硬佈線與微碼">
+          <img src="../../../../assets/img/videos/cpu-11.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/T9eDkT2NvBw" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">擷取、解碼、執行的每一步，都得在正確的時刻把正確的線打開。總得有個東西來做這件事。<br>我們先列出所有控制線，把它們寫成控制字，看看控制單元讀的是什麼（運算碼和步驟），再用兩種辦法把它做出來：用邏輯閘直接佈線的硬佈線，以及從一張叫微碼的小表格讀出來的微程式控制。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>誰來撥這些開關？</a></li>
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>控制線與控制字</a></li>
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>控制單元讀什麼</a></li>
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=93" data-t="93" rel="noopener"><span class="t">1:33</span>硬佈線控制</a></li>
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=129" data-t="129" rel="noopener"><span class="t">2:09</span>微碼</a></li>
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=189" data-t="189" rel="noopener"><span class="t">3:09</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>看看上一集我們搭好的所有部件。每一步，它們裡面都有數十個小開關，必須撥成完全正確的模式。載入這個暫存器，不要載入那個。做加法，不要做減法。讀取記憶體，不要寫入。誰來決定？今天，我們來認識控制單元。</p>
+        <p>每個部件都有控制輸入：有的線說「現在載入」，有的線負責選擇加法或減法。我們的小 CPU 有八條。把它們的 1 和 0 並排寫下來，就是一個控制字。擷取時，控制字永遠一樣：讀取記憶體、載入指令暫存器，再把程式計數器加 1。執行 ADD 時：叫 ALU 做加法，再把結果載入暫存器。每條指令的每一個步驟，都有自己的控制字。</p>
+        <p>控制單元的工作，是在正確的時刻產生正確的控制字。它看三樣東西：運算碼、現在進行到哪一步，還有旗標。步驟來自一個小小的計數器，依序數著擷取、解碼、執行，每來一條新指令就從頭開始。</p>
+        <p>經典的做法有兩種。第一種叫硬佈線：先想清楚每條控制線的邏輯，再直接用閘搭出來。例如「載入暫存器」這條線，在執行這一步時，只要運算碼是載入、加法或減法，就會打開。三個及閘（AND）和一個或閘（OR）。硬佈線控制很快。但它是一團固定的閘，要改一條指令，就得重新設計電路。</p>
+        <p>第二種是微程式控制：把每一個控制字都存在控制單元內部的一小塊記憶體裡，每條指令的每一步佔一列。運算碼和步驟合起來是一個位址。控制單元只要讀出那一列，裡面的位元就成了控制線。這是一段用來執行程式的小程式，叫作微碼。要加入複雜的指令，只要多加幾列就行了。它比較慢，因為每一步都要讀一次記憶體。但設計起來容易得多，而且有些處理器在晶片賣出之後，甚至還能更新。</p>
+        <p>現代的處理器兩種都用：簡單的指令走快速的硬佈線邏輯，少見的複雜指令則退回到微碼。</p>
+        <p>總結一下：控制單元把每個運算碼和步驟變成控制字，要嘛用閘算出來，要嘛從一小塊存放微碼的記憶體裡讀出來。可是目前每條指令都要走好幾步，其中一個部件在工作時，大多數部件都閒著。下一集：像生產線一樣的訣竅，叫作管線化。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：管線化。同時處理好幾條指令。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../10/zh-tw/"><span>上一集 · 第 10 集</span><b>CPU 如何執行程式：擷取、解碼、執行</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 12 集 <time datetime="2026-11-05T21:00:00+08:00" data-at="2026-11-05T21:00:00+08:00" data-fmt="when">11-05 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

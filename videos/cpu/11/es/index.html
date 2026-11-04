@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>¿Quién dirige la CPU? Unidad de control: cableada o microcódigo — De un interruptor a una CPU #11</title>
+<meta name="description" content="Cada paso de búsqueda, decodificación y ejecución significa activar los cables correctos en el momento correcto. Alguien tiene que encargarse de eso. Listamos las líneas de control, las escribimos como palabras de control, vemos qué lee la unidad de control (el código de operación y el paso) y luego la construimos de dos maneras: cableada con puertas lógicas, y microprogramada a partir de una tabla pequeña llamada microcódigo.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/11/es/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/11/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/11/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/11/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/11/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/11/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/11/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/11/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/11/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="¿Quién dirige la CPU? Unidad de control: cableada o microcódigo — De un interruptor a una CPU #11">
+<meta property="og:description" content="Cada paso de búsqueda, decodificación y ejecución significa activar los cables correctos en el momento correcto. Alguien tiene que encargarse de eso. Listamos las líneas de control, las escribimos como palabras de control, vemos qué lee la unidad de control (el código de operación y el paso) y luego la construimos de dos maneras: cableada con puertas lógicas, y microprogramada a partir de una tabla pequeña llamada microcódigo.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-11.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/11/es/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "¿Quién dirige la CPU? Unidad de control: cableada o microcódigo", "description": "Cada paso de búsqueda, decodificación y ejecución significa activar los cables correctos en el momento correcto. Alguien tiene que encargarse de eso. Listamos las líneas de control, las escribimos como palabras de control, vemos qué lee la unidad de control (el código de operación y el paso) y luego la construimos de dos maneras: cableada con puertas lógicas, y microprogramada a partir de una tabla pequeña llamada microcódigo.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-11.webp"], "uploadDate": "2026-11-04T21:00:00+08:00", "duration": "PT3M33S", "embedUrl": "https://www.youtube.com/embed/T9eDkT2NvBw", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="es">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Todos los episodios</a> · De un interruptor a una CPU · Episodio 11</p>
+      <h1 class="ep-title">¿Quién dirige la CPU? Unidad de control: cableada o microcódigo</h1>
+      <div class="vplayer" data-yt="T9eDkT2NvBw" data-title="¿Quién dirige la CPU? Unidad de control: cableada o microcódigo">
+        <button type="button" class="vplay" aria-label="Reproducir: ¿Quién dirige la CPU? Unidad de control: cableada o microcódigo">
+          <img src="../../../../assets/img/videos/cpu-11.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Al pulsar reproducir, el video se carga desde YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/T9eDkT2NvBw" rel="noopener">Ver en YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">Suscribirse en YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Cada paso de búsqueda, decodificación y ejecución significa activar los cables correctos en el momento correcto. Alguien tiene que encargarse de eso.<br>Listamos las líneas de control, las escribimos como palabras de control, vemos qué lee la unidad de control (el código de operación y el paso) y luego la construimos de dos maneras: cableada con puertas lógicas, y microprogramada a partir de una tabla pequeña llamada microcódigo.</p>
+      <p class="ep-ai">Todas las animaciones de este video están dibujadas con código y la narración es una voz de IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Capítulos</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>¿Quién acciona los interruptores?</a></li>
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>Líneas de control y palabras de control</a></li>
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=70" data-t="70" rel="noopener"><span class="t">1:10</span>Qué lee la unidad de control</a></li>
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=93" data-t="93" rel="noopener"><span class="t">1:33</span>Control cableado</a></li>
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=129" data-t="129" rel="noopener"><span class="t">2:09</span>Microcódigo</a></li>
+        <li><a href="https://youtu.be/T9eDkT2NvBw?t=189" data-t="189" rel="noopener"><span class="t">3:09</span>Qué sigue</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcripción</h2>
+        <div class="ep-text">
+        <p>Mira todas las piezas que construimos la vez pasada. En cada paso, decenas de diminutos interruptores que hay dentro de ellas deben cambiar de posición con el patrón exacto. Carga este registro, no ese. Suma, no restes. Lee la memoria, no la escribas. ¿Quién decide? Hoy conocemos la unidad de control.</p>
+        <p>Cada pieza tiene entradas de control: una línea que dice «carga ahora», o una línea que elige entre sumar y restar. Nuestra pequeña CPU tiene ocho. Escritos uno al lado del otro, sus unos y ceros forman una palabra de control. En la búsqueda, la palabra siempre es la misma: leer la memoria, cargar el registro de instrucción y sumar uno al contador de programa. Para ADD, durante la ejecución: decirle a la ALU que sume y cargar el resultado en el registro. Cada paso de cada instrucción tiene su propia palabra de control.</p>
+        <p>El trabajo de la unidad de control es producir la palabra de control correcta en el momento correcto. Mira tres cosas: el código de operación, en qué paso estamos y las banderas. El paso viene de un contador diminuto que va marcando búsqueda, decodificación, ejecución, y vuelve a empezar con cada instrucción nueva.</p>
+        <p>Hay dos formas clásicas de construirla. La primera es el control cableado: se deduce la lógica de cada línea de control y se construye directamente con puertas. Por ejemplo, la línea «cargar un registro» se activa durante la ejecución si el código de operación es una carga, una suma o una resta. Tres puertas AND y una puerta OR. El control cableado es rápido. Pero es una maraña fija de puertas, y cambiar una sola instrucción significa rediseñar el circuito.</p>
+        <p>La segunda forma es la microprogramada: se guarda cada palabra de control en una memoria pequeña dentro de la unidad de control, con una fila por cada paso de cada instrucción. El código de operación y el paso, juntos, forman una dirección. La unidad de control simplemente lee esa fila, y los bits que contiene se convierten en las líneas de control. Es un programa diminuto que ejecuta el programa, y se llama microcódigo. Añadir una instrucción complicada solo significa añadir más filas. Es más lenta, porque cada paso implica una lectura de memoria. Pero es mucho más fácil de diseñar, y en algunos procesadores incluso se puede actualizar después de vender el chip.</p>
+        <p>Los procesadores modernos combinan ambas: las instrucciones simples se ejecutan con lógica cableada rápida, y las raras y complejas recurren al microcódigo.</p>
+        <p>En resumen: la unidad de control convierte cada código de operación y cada paso en una palabra de control, ya sea con puertas o a partir de una pequeña memoria de microcódigo. Pero ahora mismo, cada instrucción necesita varios pasos, y casi todas las piezas esperan sin hacer nada mientras una trabaja. La próxima vez: el truco de la cadena de montaje llamado segmentación (pipelining). Nos vemos allí.</p>
+        </div>
+        <p class="ep-close">Próximo episodio: la segmentación (pipelining). Trabajar en varias instrucciones a la vez.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../10/es/"><span>Anterior · Episodio 10</span><b>Cómo ejecuta una CPU un programa: buscar, decodificar, ejecutar</b></a><div class="ep-pg next soon"><span>Siguiente</span><b>El episodio 12 sale el <time datetime="2026-11-05T21:00:00+08:00" data-at="2026-11-05T21:00:00+08:00" data-fmt="when">11-05 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
