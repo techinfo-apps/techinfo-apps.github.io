@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPUのパイプライン：プロセッサーが命令を重ねるしくみ — スイッチ1つからCPUまで #12</title>
+<meta name="description" content="洗濯物4回分を1回ずつ片づけると12時間かかりますが、重ねて進めれば6時間で済みます。プロセッサーも、同じ工夫を使っています。 フェッチ、デコード、実行を重ねて、1拍ごとに1つの命令が完了するようにし、そのうえで起こる問題を見ていきます。データハザード、ストール、答えをALUから直接送り返すフォワーディング、そして、パイプラインにすでに入っている命令を捨ててしまうジャンプです。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/12/ja/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/12/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/12/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/12/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/12/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/12/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/12/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/12/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/12/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="CPUのパイプライン：プロセッサーが命令を重ねるしくみ — スイッチ1つからCPUまで #12">
+<meta property="og:description" content="洗濯物4回分を1回ずつ片づけると12時間かかりますが、重ねて進めれば6時間で済みます。プロセッサーも、同じ工夫を使っています。 フェッチ、デコード、実行を重ねて、1拍ごとに1つの命令が完了するようにし、そのうえで起こる問題を見ていきます。データハザード、ストール、答えをALUから直接送り返すフォワーディング、そして、パイプラインにすでに入っている命令を捨ててしまうジャンプです。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-12.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/12/ja/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "CPUのパイプライン：プロセッサーが命令を重ねるしくみ", "description": "洗濯物4回分を1回ずつ片づけると12時間かかりますが、重ねて進めれば6時間で済みます。プロセッサーも、同じ工夫を使っています。 フェッチ、デコード、実行を重ねて、1拍ごとに1つの命令が完了するようにし、そのうえで起こる問題を見ていきます。データハザード、ストール、答えをALUから直接送り返すフォワーディング、そして、パイプラインにすでに入っている命令を捨ててしまうジャンプです。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-12.webp"], "uploadDate": "2026-11-05T21:00:00+08:00", "duration": "PT3M32S", "embedUrl": "https://www.youtube.com/embed/OZ79gkAKfaY", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ja">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">すべての回</a> · スイッチ1つからCPUまで · 第12話</p>
+      <h1 class="ep-title">CPUのパイプライン：プロセッサーが命令を重ねるしくみ</h1>
+      <div class="vplayer" data-yt="OZ79gkAKfaY" data-title="CPUのパイプライン：プロセッサーが命令を重ねるしくみ">
+        <button type="button" class="vplay" aria-label="再生: CPUのパイプライン：プロセッサーが命令を重ねるしくみ">
+          <img src="../../../../assets/img/videos/cpu-12.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">再生を押すと、動画をYouTubeから読み込みます。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/OZ79gkAKfaY" rel="noopener">YouTubeで見る</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTubeでチャンネル登録</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">洗濯物4回分を1回ずつ片づけると12時間かかりますが、重ねて進めれば6時間で済みます。プロセッサーも、同じ工夫を使っています。<br>フェッチ、デコード、実行を重ねて、1拍ごとに1つの命令が完了するようにし、そのうえで起こる問題を見ていきます。データハザード、ストール、答えをALUから直接送り返すフォワーディング、そして、パイプラインにすでに入っている命令を捨ててしまうジャンプです。</p>
+      <p class="ep-ai">この動画のアニメーションは、すべてコードで描いています。ナレーションはAI音声です。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">チャプター</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>4回分の洗濯物</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=34" data-t="34" rel="noopener"><span class="t">0:34</span>命令を重ねる</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=92" data-t="92" rel="noopener"><span class="t">1:32</span>データハザード、ストール、フォワーディング</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=153" data-t="153" rel="noopener"><span class="t">2:33</span>ジャンプと捨てられる命令</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=186" data-t="186" rel="noopener"><span class="t">3:06</span>次回予告</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">ナレーション全文</h2>
+        <div class="ep-text">
+        <p>洗濯物が4回分あります。どれも、洗う、乾かす、たたむが必要で、1つにつき1時間ずつかかります。1回分ずつ、最初から最後までやると、12時間かかります。でも、最初の1回分が乾燥機に移った瞬間、洗濯機は空きます。次の分を始めましょう。これで4回分すべてが、6時間で終わります。同じ機械で、時間は半分。今日は、これと同じ工夫を、CPUの中で見ていきます。</p>
+        <p>前回のCPUは、命令を1つずつ処理していました。フェッチ、デコード、実行、そして次の命令。実行しているあいだ、フェッチの部分はただ待っています。では、重ねてみましょう。最初の命令が実行されているあいだに、2つめがデコードされ、3つめがフェッチされます。各ステージは、クロックが1拍進むたびに、自分の仕事を次のステージへ渡します。間にある小さなレジスタを通して。これがパイプラインです。1つの命令にかかる時間は、最初から最後まで、やはり3拍です。でも、パイプラインがいっぱいになると、1拍ごとに1つの命令が完了します。実際のプロセッサーは、仕事をもっと多くのステージに分けます。教科書の定番の設計では5つ、現代の多くのチップでは12を超えます。</p>
+        <p>ただ、重ねるとトラブルも起きます。この2つの命令を見てください。ADD R1, R2、そしてSUB R3, R1です。引き算には、新しいR1が必要です。でも、デコードステージでレジスタを読むとき、足し算はまだ終わっていません。古い値を受け取ってしまいます。これを、データハザードといいます。</p>
+        <p>対策の1つは、ストールです。2つめの命令を1拍待たせて、代わりにバブル、つまり空の枠をパイプラインに流します。正しくなりますが、遅くなります。</p>
+        <p>もっと良い対策は、フォワーディングです。答えは、ALUの出力にすでにあります。それをALUの入力へ直接つなぎ戻せば、次の命令がすぐに使えます。待つ必要はありません。ほとんどのプロセッサーが、いつもこれを行っています。</p>
+        <p>もう1つの大きなハザードは、ジャンプが起こします。ジャンプが決まるころには、パイプラインはその後ろの命令をすでにフェッチしています。ジャンプが成立すると、それらの命令は間違いです。捨てられて、パイプラインは新しいアドレスから詰め直されます。パイプラインが深いと、予想が外れるたびに何拍も無駄になります。そこで現代のCPUは、各ジャンプの行き先を予想しようとします。それは次回です。</p>
+        <p>まとめです。パイプラインは命令を重ねるので、1拍ごとに1つが完了します。ハザードが邪魔をしますが、ストールとフォワーディングが答えを正しく保ちます。次回は、現代のCPUを速くする工夫です。ジャンプを予想すること、命令を順番とは違う順序で実行すること、たくさんのコアを同時に使うことです。また会いましょう。</p>
+        </div>
+        <p class="ep-close">次回：現代のCPUを速くする工夫です。分岐予測、アウトオブオーダー実行、そしてマルチコアのお話です。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../11/ja/"><span>前の回 · 第11話</span><b>CPUに指示を出すのは誰？制御装置：ハードワイヤードとマイクロコード</b></a><div class="ep-pg next soon"><span>次の回</span><b>第13話は <time datetime="2026-11-06T21:00:00+08:00" data-at="2026-11-06T21:00:00+08:00" data-fmt="when">11-06 21:00 (UTC+8)</time> に公開</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

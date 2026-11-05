@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPU 파이프라인: 프로세서는 명령어를 어떻게 겹칠까 — 스위치 하나에서 CPU까지 #12</title>
+<meta name="description" content="빨래 네 번 분량을 한 번씩 하면 12시간이 걸리지만, 겹쳐서 하면 6시간이면 돼요. 프로세서도 같은 요령을 써요. 인출, 해독, 실행을 겹쳐서 똑딱할 때마다 명령어가 하나씩 끝나게 하고, 그러면서 생기는 문제도 살펴봐요. 데이터 해저드, 스톨, ALU에서 나온 답을 곧바로 되돌려 보내는 포워딩, 그리고 파이프라인에 이미 들어온 명령어를 버리게 만드는 점프예요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/12/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/12/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/12/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/12/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/12/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/12/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/12/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/12/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/12/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="CPU 파이프라인: 프로세서는 명령어를 어떻게 겹칠까 — 스위치 하나에서 CPU까지 #12">
+<meta property="og:description" content="빨래 네 번 분량을 한 번씩 하면 12시간이 걸리지만, 겹쳐서 하면 6시간이면 돼요. 프로세서도 같은 요령을 써요. 인출, 해독, 실행을 겹쳐서 똑딱할 때마다 명령어가 하나씩 끝나게 하고, 그러면서 생기는 문제도 살펴봐요. 데이터 해저드, 스톨, ALU에서 나온 답을 곧바로 되돌려 보내는 포워딩, 그리고 파이프라인에 이미 들어온 명령어를 버리게 만드는 점프예요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-12.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/12/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "CPU 파이프라인: 프로세서는 명령어를 어떻게 겹칠까", "description": "빨래 네 번 분량을 한 번씩 하면 12시간이 걸리지만, 겹쳐서 하면 6시간이면 돼요. 프로세서도 같은 요령을 써요. 인출, 해독, 실행을 겹쳐서 똑딱할 때마다 명령어가 하나씩 끝나게 하고, 그러면서 생기는 문제도 살펴봐요. 데이터 해저드, 스톨, ALU에서 나온 답을 곧바로 되돌려 보내는 포워딩, 그리고 파이프라인에 이미 들어온 명령어를 버리게 만드는 점프예요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-12.webp"], "uploadDate": "2026-11-05T21:00:00+08:00", "duration": "PT3M32S", "embedUrl": "https://www.youtube.com/embed/OZ79gkAKfaY", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 12편</p>
+      <h1 class="ep-title">CPU 파이프라인: 프로세서는 명령어를 어떻게 겹칠까</h1>
+      <div class="vplayer" data-yt="OZ79gkAKfaY" data-title="CPU 파이프라인: 프로세서는 명령어를 어떻게 겹칠까">
+        <button type="button" class="vplay" aria-label="재생: CPU 파이프라인: 프로세서는 명령어를 어떻게 겹칠까">
+          <img src="../../../../assets/img/videos/cpu-12.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/OZ79gkAKfaY" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">빨래 네 번 분량을 한 번씩 하면 12시간이 걸리지만, 겹쳐서 하면 6시간이면 돼요. 프로세서도 같은 요령을 써요.<br>인출, 해독, 실행을 겹쳐서 똑딱할 때마다 명령어가 하나씩 끝나게 하고, 그러면서 생기는 문제도 살펴봐요. 데이터 해저드, 스톨, ALU에서 나온 답을 곧바로 되돌려 보내는 포워딩, 그리고 파이프라인에 이미 들어온 명령어를 버리게 만드는 점프예요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>빨래 네 번 분량</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=34" data-t="34" rel="noopener"><span class="t">0:34</span>명령어 겹치기</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=92" data-t="92" rel="noopener"><span class="t">1:32</span>데이터 해저드, 스톨, 포워딩</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=153" data-t="153" rel="noopener"><span class="t">2:33</span>점프와 버려지는 명령어</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=186" data-t="186" rel="noopener"><span class="t">3:06</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>빨래 네 번 분량이 있어요. 한 번 분량마다 빨고, 말리고, 개야 하고, 각 단계에 한 시간씩 걸려요. 한 번 분량씩 처음부터 끝까지 하면 12시간이 걸려요. 하지만 첫 번째 빨래가 건조기로 넘어가는 순간, 세탁기는 비어요. 다음 빨래를 시작해요. 그러면 네 번 분량이 모두 6시간 만에 끝나요. 같은 기계로, 절반의 시간. 오늘은 CPU 안에서 같은 요령을 살펴봐요.</p>
+        <p>지난 편에서 우리 CPU는 명령어를 한 번에 하나씩 처리했어요. 인출, 해독, 실행, 그다음 명령어. 실행하는 동안 인출 부분은 그냥 기다려요. 그럼 겹쳐 봐요. 첫 번째 명령어가 실행되는 동안 두 번째는 해독되고, 세 번째는 인출돼요. 각 단계는 클럭이 한 번 똑딱일 때마다 하던 일을 다음 단계로 넘겨요. 그 사이에는 작은 레지스터가 있어요. 이것이 파이프라인이에요. 명령어 하나는 처음부터 끝까지 여전히 똑딱 세 번이 걸려요. 하지만 파이프라인이 가득 차면, 똑딱할 때마다 명령어가 하나씩 끝나요. 실제 프로세서는 일을 더 많은 단계로 나눠요. 교과서의 고전적인 설계는 다섯 단계이고, 요즘 칩 중에는 열두 단계가 넘는 것도 많아요.</p>
+        <p>하지만 겹치면 문제가 생겨요. 이 두 명령어를 보세요. ADD R1, R2 다음에 SUB R3, R1이에요. 뺄셈은 새 R1이 필요해요. 그런데 해독 단계에서 레지스터를 읽을 때, 덧셈은 아직 끝나지 않았어요. 그러면 옛 값을 받게 돼요. 이것을 데이터 해저드라고 해요.</p>
+        <p>한 가지 해결책은 스톨(stall)이에요. 두 번째 명령어를 한 번 똑딱하는 동안 붙잡아 두고, 그 자리에 버블, 즉 빈 칸을 파이프라인으로 흘려보내요. 정확하지만 더 느려요.</p>
+        <p>더 좋은 해결책은 포워딩(forwarding)이에요. 답은 이미 ALU의 출력에 있어요. 그것을 ALU의 입력으로 곧바로 되돌려 연결하면, 다음 명령어가 바로 쓸 수 있어요. 기다릴 필요가 없어요. 대부분의 프로세서가 늘 이렇게 해요.</p>
+        <p>점프는 또 다른 큰 해저드를 일으켜요. 점프가 정해질 때쯤이면, 파이프라인은 그 뒤에 오는 명령어를 이미 인출해 버렸어요. 점프가 실제로 일어나면 그 명령어들은 틀린 거예요. 버려지고, 파이프라인은 새 주소에서부터 다시 채워져요. 파이프라인이 깊으면 잘못 추측할 때마다 똑딱을 여러 번 낭비해요. 그래서 요즘 CPU는 점프가 어디로 갈지 추측해 봐요. 그건 다음 편에서 알아봐요.</p>
+        <p>정리하면, 파이프라인은 명령어를 겹치기 때문에 똑딱할 때마다 하나씩 끝나요. 해저드가 방해하지만, 스톨과 포워딩이 답을 정확하게 지켜 줘요. 다음 편에서는 요즘 CPU를 빠르게 만드는 요령을 알아봐요. 점프 추측하기, 명령어를 순서 없이 실행하기, 여러 코어를 한꺼번에 쓰기예요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 요즘 CPU를 빠르게 만드는 요령이에요. 분기 예측, 비순차 실행, 여러 코어를 알아봐요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../11/ko/"><span>이전 편 · 11편</span><b>CPU에게 일을 시키는 건 누구일까: 제어 장치, 하드와이어드와 마이크로코드</b></a><div class="ep-pg next soon"><span>다음 편</span><b>13편은 <time datetime="2026-11-06T21:00:00+08:00" data-at="2026-11-06T21:00:00+08:00" data-fmt="when">11-06 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pipeline de CPU: cómo superponen instrucciones los procesadores — De un interruptor a una CPU #12</title>
+<meta name="description" content="Cuatro cargas de ropa tardan doce horas si las haces una por una, pero solo seis si las superpones. Los procesadores usan el mismo truco. Superponemos la búsqueda, la decodificación y la ejecución para que una instrucción termine en cada tic, y luego vemos qué sale mal: un riesgo de datos, una detención (stall), el adelantamiento (forwarding) de la respuesta directamente desde la salida de la ALU, y los saltos que descartan instrucciones que ya están en el pipeline.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/12/es/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/12/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/12/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/12/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/12/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/12/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/12/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/12/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/12/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Pipeline de CPU: cómo superponen instrucciones los procesadores — De un interruptor a una CPU #12">
+<meta property="og:description" content="Cuatro cargas de ropa tardan doce horas si las haces una por una, pero solo seis si las superpones. Los procesadores usan el mismo truco. Superponemos la búsqueda, la decodificación y la ejecución para que una instrucción termine en cada tic, y luego vemos qué sale mal: un riesgo de datos, una detención (stall), el adelantamiento (forwarding) de la respuesta directamente desde la salida de la ALU, y los saltos que descartan instrucciones que ya están en el pipeline.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-12.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/12/es/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Pipeline de CPU: cómo superponen instrucciones los procesadores", "description": "Cuatro cargas de ropa tardan doce horas si las haces una por una, pero solo seis si las superpones. Los procesadores usan el mismo truco. Superponemos la búsqueda, la decodificación y la ejecución para que una instrucción termine en cada tic, y luego vemos qué sale mal: un riesgo de datos, una detención (stall), el adelantamiento (forwarding) de la respuesta directamente desde la salida de la ALU, y los saltos que descartan instrucciones que ya están en el pipeline.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-12.webp"], "uploadDate": "2026-11-05T21:00:00+08:00", "duration": "PT3M32S", "embedUrl": "https://www.youtube.com/embed/OZ79gkAKfaY", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="es">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Todos los episodios</a> · De un interruptor a una CPU · Episodio 12</p>
+      <h1 class="ep-title">Pipeline de CPU: cómo superponen instrucciones los procesadores</h1>
+      <div class="vplayer" data-yt="OZ79gkAKfaY" data-title="Pipeline de CPU: cómo superponen instrucciones los procesadores">
+        <button type="button" class="vplay" aria-label="Reproducir: Pipeline de CPU: cómo superponen instrucciones los procesadores">
+          <img src="../../../../assets/img/videos/cpu-12.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Al pulsar reproducir, el video se carga desde YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/OZ79gkAKfaY" rel="noopener">Ver en YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">Suscribirse en YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Cuatro cargas de ropa tardan doce horas si las haces una por una, pero solo seis si las superpones. Los procesadores usan el mismo truco.<br>Superponemos la búsqueda, la decodificación y la ejecución para que una instrucción termine en cada tic, y luego vemos qué sale mal: un riesgo de datos, una detención (stall), el adelantamiento (forwarding) de la respuesta directamente desde la salida de la ALU, y los saltos que descartan instrucciones que ya están en el pipeline.</p>
+      <p class="ep-ai">Todas las animaciones de este video están dibujadas con código y la narración es una voz de IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Capítulos</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Cuatro cargas de ropa</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=34" data-t="34" rel="noopener"><span class="t">0:34</span>Superponer instrucciones</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=92" data-t="92" rel="noopener"><span class="t">1:32</span>Riesgos de datos, detenciones, adelantamiento</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=153" data-t="153" rel="noopener"><span class="t">2:33</span>Saltos e instrucciones descartadas</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=186" data-t="186" rel="noopener"><span class="t">3:06</span>Qué sigue</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcripción</h2>
+        <div class="ep-text">
+        <p>Cuatro cargas de ropa. Cada una hay que lavarla, secarla y doblarla: una hora por paso. Hacerlas una por una, de principio a fin, toma doce horas. Pero en cuanto la primera carga pasa a la secadora, la lavadora queda libre. Empieza la siguiente. Ahora las cuatro terminan en seis horas. Las mismas máquinas, la mitad del tiempo. Hoy: el mismo truco, dentro de una CPU.</p>
+        <p>La vez pasada, nuestra CPU hacía una instrucción a la vez: búsqueda, decodificación, ejecución, y luego la siguiente. Mientras ejecuta, la parte de búsqueda solo espera. Así que vamos a superponerlas. Mientras la primera instrucción se ejecuta, la segunda se decodifica y la tercera se busca. En cada tic del reloj, cada etapa pasa su trabajo a la siguiente, a través de pequeños registros intermedios. Eso es la segmentación (pipeline). Una instrucción sigue tardando tres tics de principio a fin. Pero cuando el pipeline está lleno, termina una instrucción en cada tic. Los procesadores reales dividen el trabajo en más etapas: cinco en el diseño clásico de los libros de texto, y más de una docena en muchos chips modernos.</p>
+        <p>Pero superponer causa problemas. Mira estas dos instrucciones: ADD R1, R2 y luego SUB R3, R1. La resta necesita el nuevo R1. Pero cuando lee sus registros en la etapa de decodificación, la suma aún no ha terminado. Obtendría el valor anterior. Esto se llama riesgo de datos (data hazard).</p>
+        <p>Una solución: la detención (stall). Retén la segunda instrucción un tic, y deja que una burbuja, un espacio vacío, fluya por el pipeline en su lugar. Es correcto, pero más lento.</p>
+        <p>Una solución mejor: el adelantamiento (forwarding). La respuesta ya existe en la salida de la ALU. Conéctala directamente de vuelta a la entrada de la ALU, y la siguiente instrucción podrá usarla de inmediato. Sin esperas. La mayoría de los procesadores hacen esto todo el tiempo.</p>
+        <p>Los saltos causan el otro gran riesgo. Cuando se decide un salto, el pipeline ya ha buscado las instrucciones que van después. Si el salto se realiza, esas instrucciones son incorrectas. Se descartan, y el pipeline se vuelve a llenar desde la nueva dirección. Con pipelines profundos, cada suposición errónea desperdicia muchos tics. Por eso las CPU modernas intentan adivinar adónde irá cada salto. Eso es para la próxima vez.</p>
+        <p>En resumen: un pipeline superpone instrucciones, así que termina una en cada tic. Los riesgos estorban, y las detenciones y el adelantamiento mantienen correctas las respuestas. La próxima vez: los trucos que hacen rápidas a las CPU modernas: adivinar saltos, ejecutar instrucciones fuera de orden y usar muchos núcleos a la vez. Nos vemos allí.</p>
+        </div>
+        <p class="ep-close">Próximo episodio: los trucos que hacen rápidas a las CPU modernas. Predicción de saltos, ejecución fuera de orden y muchos núcleos.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../11/es/"><span>Anterior · Episodio 11</span><b>¿Quién dirige la CPU? Unidad de control: cableada o microcódigo</b></a><div class="ep-pg next soon"><span>Siguiente</span><b>El episodio 13 sale el <time datetime="2026-11-06T21:00:00+08:00" data-at="2026-11-06T21:00:00+08:00" data-fmt="when">11-06 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

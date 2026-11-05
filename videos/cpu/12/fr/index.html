@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pipeline de CPU : comment les instructions se chevauchent — D&#x27;un interrupteur à un processeur #12</title>
+<meta name="description" content="Quatre lessives prennent douze heures si on les fait une par une, mais seulement six si on les chevauche. Les processeurs utilisent la même astuce. Nous faisons se chevaucher la lecture, le décodage et l&#x27;exécution pour qu&#x27;une instruction se termine à chaque tic, puis nous voyons ce qui peut mal tourner : un aléa de données, une suspension (stall), le transfert anticipé (forwarding) de la réponse directement depuis la sortie de l&#x27;ALU, et les sauts qui jettent des instructions déjà entrées dans le pipeline.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/12/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/12/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/12/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/12/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/12/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/12/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/12/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/12/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/12/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Pipeline de CPU : comment les instructions se chevauchent — D&#x27;un interrupteur à un processeur #12">
+<meta property="og:description" content="Quatre lessives prennent douze heures si on les fait une par une, mais seulement six si on les chevauche. Les processeurs utilisent la même astuce. Nous faisons se chevaucher la lecture, le décodage et l&#x27;exécution pour qu&#x27;une instruction se termine à chaque tic, puis nous voyons ce qui peut mal tourner : un aléa de données, une suspension (stall), le transfert anticipé (forwarding) de la réponse directement depuis la sortie de l&#x27;ALU, et les sauts qui jettent des instructions déjà entrées dans le pipeline.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-12.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/12/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Pipeline de CPU : comment les instructions se chevauchent", "description": "Quatre lessives prennent douze heures si on les fait une par une, mais seulement six si on les chevauche. Les processeurs utilisent la même astuce. Nous faisons se chevaucher la lecture, le décodage et l'exécution pour qu'une instruction se termine à chaque tic, puis nous voyons ce qui peut mal tourner : un aléa de données, une suspension (stall), le transfert anticipé (forwarding) de la réponse directement depuis la sortie de l'ALU, et les sauts qui jettent des instructions déjà entrées dans le pipeline.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-12.webp"], "uploadDate": "2026-11-05T21:00:00+08:00", "duration": "PT3M32S", "embedUrl": "https://www.youtube.com/embed/OZ79gkAKfaY", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;un interrupteur à un processeur · Épisode 12</p>
+      <h1 class="ep-title">Pipeline de CPU : comment les instructions se chevauchent</h1>
+      <div class="vplayer" data-yt="OZ79gkAKfaY" data-title="Pipeline de CPU : comment les instructions se chevauchent">
+        <button type="button" class="vplay" aria-label="Lire: Pipeline de CPU : comment les instructions se chevauchent">
+          <img src="../../../../assets/img/videos/cpu-12.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/OZ79gkAKfaY" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Quatre lessives prennent douze heures si on les fait une par une, mais seulement six si on les chevauche. Les processeurs utilisent la même astuce.<br>Nous faisons se chevaucher la lecture, le décodage et l&#x27;exécution pour qu&#x27;une instruction se termine à chaque tic, puis nous voyons ce qui peut mal tourner : un aléa de données, une suspension (stall), le transfert anticipé (forwarding) de la réponse directement depuis la sortie de l&#x27;ALU, et les sauts qui jettent des instructions déjà entrées dans le pipeline.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Quatre lessives</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=34" data-t="34" rel="noopener"><span class="t">0:34</span>Faire chevaucher les instructions</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=92" data-t="92" rel="noopener"><span class="t">1:32</span>Aléas de données, suspensions, transfert anticipé</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=153" data-t="153" rel="noopener"><span class="t">2:33</span>Sauts et instructions jetées</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=186" data-t="186" rel="noopener"><span class="t">3:06</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Quatre lessives. Chacune demande un lavage, un séchage et un pliage : une heure par étape. Une lessive à la fois, du début à la fin, prend douze heures. Mais dès que la première lessive passe au sèche-linge, le lave-linge se libère. On lance la suivante. Maintenant, les quatre sont terminées en six heures. Les mêmes machines, deux fois moins de temps. Aujourd&#x27;hui : la même astuce, à l&#x27;intérieur d&#x27;un CPU.</p>
+        <p>La dernière fois, notre CPU traitait une instruction à la fois : lecture, décodage, exécution, puis la suivante. Pendant qu&#x27;il exécute, la partie lecture ne fait qu&#x27;attendre. Alors faisons-les se chevaucher. Pendant que la première instruction s&#x27;exécute, la deuxième est décodée, et la troisième est lue. À chaque tic d&#x27;horloge, chaque étage passe son travail au suivant, par de petits registres placés entre eux. C&#x27;est un pipeline. Une instruction met toujours trois tics du début à la fin. Mais une fois le pipeline plein, une instruction se termine à chaque tic. Les vrais processeurs découpent le travail en davantage d&#x27;étages : cinq dans la conception classique des manuels, et plus d&#x27;une douzaine dans de nombreuses puces modernes.</p>
+        <p>Mais le chevauchement pose problème. Regardez ces deux instructions : ADD R1, R2, puis SUB R3, R1. La soustraction a besoin du nouveau R1. Mais quand elle lit ses registres à l&#x27;étage de décodage, l&#x27;addition n&#x27;est pas encore terminée. Elle obtiendrait l&#x27;ancienne valeur. C&#x27;est ce qu&#x27;on appelle un aléa de données (data hazard).</p>
+        <p>Une solution : la suspension (stall). Retenez la deuxième instruction pendant un tic, et laissez à la place une bulle, un emplacement vide, descendre le long du pipeline. C&#x27;est correct, mais plus lent.</p>
+        <p>Une meilleure solution : le transfert anticipé (forwarding). La réponse existe déjà à la sortie de l&#x27;ALU. Reliez-la directement à l&#x27;entrée de l&#x27;ALU, et l&#x27;instruction suivante pourra l&#x27;utiliser tout de suite. Plus d&#x27;attente. La plupart des processeurs font cela en permanence.</p>
+        <p>Les sauts causent l&#x27;autre grand aléa. Quand un saut est décidé, le pipeline a déjà lu les instructions qui le suivent. Si le saut est pris, ces instructions sont fausses. Elles sont jetées, et le pipeline se remplit de nouveau à partir de la nouvelle adresse. Avec des pipelines profonds, chaque mauvaise supposition fait perdre de nombreux tics. Alors les CPU modernes essaient de deviner où ira chaque saut. Ce sera pour la prochaine fois.</p>
+        <p>Donc : un pipeline fait chevaucher les instructions, si bien qu&#x27;une se termine à chaque tic. Les aléas gênent, et les suspensions et le transfert anticipé gardent les réponses justes. La prochaine fois : les astuces qui rendent les CPU modernes rapides : deviner les sauts, exécuter les instructions dans le désordre, et utiliser plusieurs cœurs à la fois. À bientôt.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : les astuces qui rendent les processeurs modernes rapides. La prédiction de branchement, l&#x27;exécution dans le désordre et les nombreux cœurs.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../11/fr/"><span>Précédent · Épisode 11</span><b>Qui dirige le CPU ? Unité de commande, câblée ou microcode</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 13 sort le <time datetime="2026-11-06T21:00:00+08:00" data-at="2026-11-06T21:00:00+08:00" data-fmt="when">11-06 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

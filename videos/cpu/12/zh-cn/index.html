@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPU 流水线：处理器怎么把指令叠起来做 — 从一个开关到 CPU #12</title>
+<meta name="description" content="四筐衣服，一筐做完再做下一筐，要十二个小时；叠着做，只要六个小时。处理器用的是同一招。 我们把取指、译码和执行叠起来做，让每一拍都有一条指令做完；然后再看会出什么问题：数据冲突、停顿、把答案直接从 ALU 里转发出来，还有跳转会把已经在流水线里的指令白白扔掉。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/12/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/12/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/12/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/12/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/12/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/12/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/12/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/12/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/12/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="CPU 流水线：处理器怎么把指令叠起来做 — 从一个开关到 CPU #12">
+<meta property="og:description" content="四筐衣服，一筐做完再做下一筐，要十二个小时；叠着做，只要六个小时。处理器用的是同一招。 我们把取指、译码和执行叠起来做，让每一拍都有一条指令做完；然后再看会出什么问题：数据冲突、停顿、把答案直接从 ALU 里转发出来，还有跳转会把已经在流水线里的指令白白扔掉。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-12.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/12/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "CPU 流水线：处理器怎么把指令叠起来做", "description": "四筐衣服，一筐做完再做下一筐，要十二个小时；叠着做，只要六个小时。处理器用的是同一招。 我们把取指、译码和执行叠起来做，让每一拍都有一条指令做完；然后再看会出什么问题：数据冲突、停顿、把答案直接从 ALU 里转发出来，还有跳转会把已经在流水线里的指令白白扔掉。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-12.webp"], "uploadDate": "2026-11-05T21:00:00+08:00", "duration": "PT3M32S", "embedUrl": "https://www.youtube.com/embed/OZ79gkAKfaY", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一个开关到 CPU · 第 12 集</p>
+      <h1 class="ep-title">CPU 流水线：处理器怎么把指令叠起来做</h1>
+      <div class="vplayer" data-yt="OZ79gkAKfaY" data-title="CPU 流水线：处理器怎么把指令叠起来做">
+        <button type="button" class="vplay" aria-label="播放: CPU 流水线：处理器怎么把指令叠起来做">
+          <img src="../../../../assets/img/videos/cpu-12.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/OZ79gkAKfaY" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">四筐衣服，一筐做完再做下一筐，要十二个小时；叠着做，只要六个小时。处理器用的是同一招。<br>我们把取指、译码和执行叠起来做，让每一拍都有一条指令做完；然后再看会出什么问题：数据冲突、停顿、把答案直接从 ALU 里转发出来，还有跳转会把已经在流水线里的指令白白扔掉。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>四筐衣服</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=34" data-t="34" rel="noopener"><span class="t">0:34</span>把指令叠起来做</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=92" data-t="92" rel="noopener"><span class="t">1:32</span>数据冲突、停顿、转发</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=153" data-t="153" rel="noopener"><span class="t">2:33</span>跳转与被扔掉的指令</a></li>
+        <li><a href="https://youtu.be/OZ79gkAKfaY?t=186" data-t="186" rel="noopener"><span class="t">3:06</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>四筐衣服，每筐都要洗、烘、叠，每一步一小时。一筐做完再做下一筐，从头到尾要十二个小时。可第一筐一进烘干机，洗衣机就空出来了，马上洗下一筐。这样四筐六个小时就全做完。同样的机器，一半的时间。今天就讲 CPU 里的同一招。</p>
+        <p>上一集我们的 CPU 一次只做一条指令：取指、译码、执行，再下一条。执行的时候，取指那部分就干等着。那就叠起来做：第一条在执行，第二条就在译码，第三条已经在取指。每一拍，每一段把手上的活交给下一段，中间隔着小寄存器。这就是流水线。一条指令从头到尾还是要三拍，可流水线装满以后，每一拍都有一条指令做完。真正的处理器分得更细：教材里的经典设计是五段，现在很多芯片有十几段以上。</p>
+        <p>可是叠着做也会出问题。看这两条：先 ADD R1, R2，再 SUB R3, R1。减法要用新的 R1，可它在译码那段读寄存器的时候，加法还没做完，它拿到的是旧值。这叫数据冲突。</p>
+        <p>一个办法是停一下：让第二条晚一拍，中间放一个空格子——气泡——顺着流水线流下去。答案对了，可是慢了。</p>
+        <p>更好的办法是转发：答案其实已经在 ALU 的输出端了，直接接回 ALU 的输入，下一条指令马上就能用。不用等。大多数处理器时时刻刻都在这么做。</p>
+        <p>跳转带来另一个大麻烦：等跳转定下来的时候，流水线早把它后面的指令取进来了。要是真跳了，这两条就是错的，只好扔掉，从新的地址重新装流水线。流水线越深，每猜错一次浪费的拍子就越多，所以现在的 CPU 会提前猜每次跳转往哪儿去。这是下一集的内容。</p>
+        <p>总结一下：流水线把指令叠起来做，每一拍做完一条；冲突会捣乱，停顿和转发保证答案对。下一集：让现在的 CPU 飞快的几招——猜跳转、不按顺序执行，还有好几个核一起干。下集见。</p>
+        </div>
+        <p class="ep-close">下一集：让现代 CPU 变快的几招。分支预测、乱序执行和多核。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../11/zh-cn/"><span>上一集 · 第 11 集</span><b>谁来告诉 CPU 该做什么？控制器、硬布线与微码</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 13 集 <time datetime="2026-11-06T21:00:00+08:00" data-at="2026-11-06T21:00:00+08:00" data-fmt="when">11-06 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
