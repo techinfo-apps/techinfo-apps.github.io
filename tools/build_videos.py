@@ -35,7 +35,7 @@ UI = {
 "en": {
  "title": "Free tutorials — Technology Information", "h": "Free tutorials.",
  "lead": "How computers really work, built up one step at a time. Every picture is computed by code; the narration is an AI voice.",
- "desc": "Free video tutorials from Technology Information: how computers really work, from a single switch to a whole CPU.",
+ "desc": "Free video tutorials from Technology Information: how computers work, data structures and algorithms, AI and deep learning.",
  "season": "Season {n}", "progress": "{n} of {total} episodes out", "daily": "A new episode every day at {time}.",
  "done": "All {total} episodes are out.", "next": "Episode {n} comes out {time}", "soon": "Episode {n} is coming soon",
  "ep": "Episode {n}", "min": "{m} min", "new": "New", "watch": "Watch on YouTube", "sub": "Subscribe on YouTube",
@@ -45,7 +45,7 @@ UI = {
 "zh-CN": {
  "title": "免费教程 — Technology Information", "h": "免费教程。",
  "lead": "电脑到底是怎么工作的，一步一步搭起来讲。每个画面都是代码算出来的，旁白是 AI 配音。",
- "desc": "Technology Information 的免费视频教程：电脑到底是怎么工作的，从一个开关讲到整颗 CPU。",
+ "desc": "Technology Information 的免费视频教程：计算机组成、数据结构与算法、AI 与深度学习。",
  "season": "第{zh}季", "progress": "已更新 {n} / {total} 集", "daily": "每天 {time} 更新一集。",
  "done": "全部 {total} 集已经出齐。", "next": "第 {n} 集 {time} 上线", "soon": "第 {n} 集很快上线",
  "ep": "第 {n} 集", "min": "{m} 分钟", "new": "新", "watch": "在 YouTube 上看", "sub": "在 YouTube 上订阅",
@@ -55,7 +55,7 @@ UI = {
 "zh-TW": {
  "title": "免費教學 — Technology Information", "h": "免費教學。",
  "lead": "電腦到底是怎麼運作的，一步一步搭起來講。每個畫面都是程式算出來的，旁白是 AI 配音。",
- "desc": "Technology Information 的免費影片教學：電腦到底是怎麼運作的，從一個開關講到整顆 CPU。",
+ "desc": "Technology Information 的免費影片教學：計算機組成、資料結構與演算法、AI 與深度學習。",
  "season": "第{zh}季", "progress": "已更新 {n} / {total} 集", "daily": "每天 {time} 更新一集。",
  "done": "全部 {total} 集已經出齊。", "next": "第 {n} 集 {time} 上線", "soon": "第 {n} 集很快上線",
  "ep": "第 {n} 集", "min": "{m} 分鐘", "new": "新", "watch": "在 YouTube 上看", "sub": "在 YouTube 上訂閱",
@@ -65,7 +65,7 @@ UI = {
 "ja": {
  "title": "無料チュートリアル — Technology Information", "h": "無料チュートリアル。",
  "lead": "コンピューターが本当はどう動いているのかを、一歩ずつ組み立てながら解説します。画面はすべてコードで計算して描き、ナレーションはAI音声です。",
- "desc": "Technology Informationの無料動画チュートリアル。スイッチ1つからCPUまで、コンピューターが本当はどう動いているのかを解説します。",
+ "desc": "Technology Informationの無料動画チュートリアル。コンピューターの仕組み、データ構造とアルゴリズム、AIとディープラーニング。",
  "season": "シーズン{n}", "progress": "全{total}話のうち{n}話を公開中", "daily": "毎日 {time} に新しい回を公開します。",
  "done": "全{total}話、公開しました。", "next": "第{n}話は {time} に公開", "soon": "第{n}話はまもなく公開",
  "ep": "第{n}話", "min": "{m}分", "new": "新着", "watch": "YouTubeで見る", "sub": "YouTubeでチャンネル登録",
@@ -75,7 +75,7 @@ UI = {
 "ko": {
  "title": "무료 강좌 — Technology Information", "h": "무료 강좌.",
  "lead": "컴퓨터가 실제로 어떻게 동작하는지, 한 단계씩 쌓아 올리며 설명합니다. 모든 화면은 코드로 계산해 그렸고, 내레이션은 AI 음성입니다.",
- "desc": "Technology Information의 무료 영상 강좌: 스위치 하나에서 CPU까지, 컴퓨터가 실제로 어떻게 동작하는지 설명합니다.",
+ "desc": "Technology Information의 무료 영상 강좌: 컴퓨터 구조, 자료구조와 알고리즘, AI와 딥러닝.",
  "season": "시즌 {n}", "progress": "전체 {total}편 중 {n}편 공개", "daily": "매일 {time}에 새 편이 올라옵니다.",
  "done": "{total}편이 모두 공개되었습니다.", "next": "{n}편은 {time}에 공개", "soon": "{n}편이 곧 공개됩니다",
  "ep": "{n}편", "min": "{m}분", "new": "새 편", "watch": "YouTube에서 보기", "sub": "YouTube에서 구독",
@@ -85,7 +85,7 @@ UI = {
 "es": {
  "title": "Tutoriales gratis — Technology Information", "h": "Tutoriales gratis.",
  "lead": "Cómo funcionan de verdad las computadoras, paso a paso. Cada imagen la calcula el código; la narración es una voz de IA.",
- "desc": "Tutoriales en video gratis de Technology Information: cómo funcionan de verdad las computadoras, de un interruptor a una CPU.",
+ "desc": "Tutoriales en video gratis de Technology Information: organización de computadoras, estructuras de datos y algoritmos, IA y aprendizaje profundo.",
  "season": "Temporada {n}", "progress": "{n} de {total} episodios publicados", "daily": "Un episodio nuevo cada día a las {time}.",
  "done": "Ya están los {total} episodios.", "next": "El episodio {n} sale el {time}", "soon": "El episodio {n} sale pronto",
  "ep": "Episodio {n}", "min": "{m} min", "new": "Nuevo", "watch": "Ver en YouTube", "sub": "Suscribirse en YouTube",
@@ -95,7 +95,7 @@ UI = {
 "fr": {
  "title": "Tutoriels gratuits — Technology Information", "h": "Tutoriels gratuits.",
  "lead": "Comment un ordinateur fonctionne vraiment, construit pas à pas. Chaque image est calculée par le code ; la narration est une voix d'IA.",
- "desc": "Tutoriels vidéo gratuits de Technology Information : comment un ordinateur fonctionne vraiment, d'un interrupteur à un processeur.",
+ "desc": "Tutoriels vidéo gratuits de Technology Information : architecture des ordinateurs, structures de données et algorithmes, IA et apprentissage profond.",
  "season": "Saison {n}", "progress": "{n} épisodes sur {total} en ligne", "daily": "Un nouvel épisode chaque jour à {time}.",
  "done": "Les {total} épisodes sont en ligne.", "next": "L'épisode {n} sort le {time}", "soon": "L'épisode {n} arrive bientôt",
  "ep": "Épisode {n}", "min": "{m} min", "new": "Nouveau", "watch": "Regarder sur YouTube", "sub": "S'abonner sur YouTube",

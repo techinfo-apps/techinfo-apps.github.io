@@ -4,7 +4,7 @@ window.TI_STRINGS = {
   "en": {
     "nav.videos": "Tutorials",
     "home.vid.h": "Free tutorials.",
-    "home.vid.p": "Season one: how a computer really works, from a single switch to a whole CPU. Every picture is computed by code.",
+    "home.vid.p": "Computer organization, data structures and algorithms, AI and deep learning: one topic per season, one episode a day. Every picture is computed by code.",
     "home.vid.btn": "Start watching",
     "nav.aiban": "AI Ban Simulator",
     "games.h": "Games",
@@ -234,7 +234,7 @@ window.TI_STRINGS = {
   "zh-CN": {
     "nav.videos": "教程",
     "home.vid.h": "免费教程。",
-    "home.vid.p": "第一季：电脑到底是怎么工作的，从一个开关讲到整颗 CPU。每个画面都是代码算出来的。",
+    "home.vid.p": "计算机组成、数据结构与算法、AI 与深度学习，一季一个主题，每季每天一集。每个画面都是代码算出来的。",
     "home.vid.btn": "开始看",
     "nav.aiban": "AI 封号模拟器",
     "games.h": "游戏",
@@ -464,7 +464,7 @@ window.TI_STRINGS = {
   "zh-TW": {
     "nav.videos": "教學",
     "home.vid.h": "免費教學。",
-    "home.vid.p": "第一季：電腦到底是怎麼運作的，從一個開關講到整顆 CPU。每個畫面都是程式算出來的。",
+    "home.vid.p": "計算機組成、資料結構與演算法、AI 與深度學習，一季一個主題，每季每天一集。每個畫面都是程式算出來的。",
     "home.vid.btn": "開始看",
     "nav.aiban": "AI 封號模擬器",
     "games.h": "遊戲",
@@ -694,7 +694,7 @@ window.TI_STRINGS = {
   "ja": {
     "nav.videos": "チュートリアル",
     "home.vid.h": "無料チュートリアル。",
-    "home.vid.p": "シーズン1：スイッチ1つからCPUまるごと1つまで、コンピューターが本当はどう動いているのかを解説します。画面はすべてコードで計算して描いています。",
+    "home.vid.p": "コンピューターの仕組み、データ構造とアルゴリズム、AIとディープラーニング。1シーズンに1テーマ、毎日1話ずつ公開します。画面はすべてコードで計算して描いています。",
     "home.vid.btn": "見てみる",
     "nav.aiban": "AI 垢BANシミュレーター",
     "games.h": "ゲーム",
@@ -924,7 +924,7 @@ window.TI_STRINGS = {
   "ko": {
     "nav.videos": "강좌",
     "home.vid.h": "무료 강좌.",
-    "home.vid.p": "시즌 1: 스위치 하나에서 CPU 전체까지, 컴퓨터가 실제로 어떻게 동작하는지 설명합니다. 모든 화면은 코드로 계산해 그렸습니다.",
+    "home.vid.p": "컴퓨터 구조, 자료구조와 알고리즘, AI와 딥러닝. 시즌마다 주제 하나, 매일 한 편씩 올라옵니다. 모든 화면은 코드로 계산해 그렸습니다.",
     "home.vid.btn": "보러 가기",
     "nav.aiban": "AI Ban Simulator",
     "games.h": "게임",
@@ -1086,7 +1086,7 @@ window.TI_STRINGS = {
   "es": {
     "nav.videos": "Tutoriales",
     "home.vid.h": "Tutoriales gratis.",
-    "home.vid.p": "Temporada 1: cómo funciona de verdad una computadora, de un solo interruptor a una CPU entera. Cada imagen la calcula el código.",
+    "home.vid.p": "Organización de computadoras, estructuras de datos y algoritmos, IA y aprendizaje profundo: un tema por temporada, un episodio al día. Cada imagen la calcula el código.",
     "home.vid.btn": "Empezar a ver",
     "nav.aiban": "AI Ban Simulator",
     "games.h": "Juegos",
@@ -1248,7 +1248,7 @@ window.TI_STRINGS = {
   "fr": {
     "nav.videos": "Tutoriels",
     "home.vid.h": "Tutoriels gratuits.",
-    "home.vid.p": "Saison 1 : comment un ordinateur fonctionne vraiment, d'un simple interrupteur à un processeur entier. Chaque image est calculée par le code.",
+    "home.vid.p": "Architecture des ordinateurs, structures de données et algorithmes, IA et apprentissage profond : un thème par saison, un épisode par jour. Chaque image est calculée par le code.",
     "home.vid.btn": "Commencer",
     "nav.aiban": "AI Ban Simulator",
     "games.h": "Jeux",
