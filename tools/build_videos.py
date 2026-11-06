@@ -55,7 +55,7 @@ UI = {
 "zh-TW": {
  "title": "免費教學 — Technology Information", "h": "免費教學。",
  "lead": "電腦到底是怎麼運作的，一步一步搭起來講。每個畫面都是程式算出來的，旁白是 AI 配音。",
- "desc": "Technology Information 的免費影片教學：計算機組成、資料結構與演算法、AI 與深度學習。",
+ "desc": "Technology Information 的免費影片教學：電腦的運作原理、資料結構與演算法、AI 與深度學習。",
  "season": "第{zh}季", "progress": "已更新 {n} / {total} 集", "daily": "每天 {time} 更新一集。",
  "done": "全部 {total} 集已經出齊。", "next": "第 {n} 集 {time} 上線", "soon": "第 {n} 集很快上線",
  "ep": "第 {n} 集", "min": "{m} 分鐘", "new": "新", "watch": "在 YouTube 上看", "sub": "在 YouTube 上訂閱",
