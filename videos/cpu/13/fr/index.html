@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPU modernes : prédiction, exécution dans le désordre, cœurs — D&#x27;un interrupteur à un processeur #13</title>
+<meta name="description" content="Les premiers processeurs monopuce exécutaient environ cent mille instructions par seconde. Aujourd&#x27;hui, un seul cœur en exécute des milliards. Une fréquence d&#x27;horloge plus élevée n&#x27;explique qu&#x27;une partie de l&#x27;histoire. Nous voyons comment un processeur devine la direction que prendra un saut (et pourquoi il a généralement raison), comment il exécute des instructions indépendantes dans le désordre tout en rendant les résultats dans l&#x27;ordre, et pourquoi les fréquences d&#x27;horloge ont cessé de grimper alors que les puces se sont mises à avoir de nombreux cœurs.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/13/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/13/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/13/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/13/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/13/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/13/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/13/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/13/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/13/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="CPU modernes : prédiction, exécution dans le désordre, cœurs — D&#x27;un interrupteur à un processeur #13">
+<meta property="og:description" content="Les premiers processeurs monopuce exécutaient environ cent mille instructions par seconde. Aujourd&#x27;hui, un seul cœur en exécute des milliards. Une fréquence d&#x27;horloge plus élevée n&#x27;explique qu&#x27;une partie de l&#x27;histoire. Nous voyons comment un processeur devine la direction que prendra un saut (et pourquoi il a généralement raison), comment il exécute des instructions indépendantes dans le désordre tout en rendant les résultats dans l&#x27;ordre, et pourquoi les fréquences d&#x27;horloge ont cessé de grimper alors que les puces se sont mises à avoir de nombreux cœurs.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-13.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/13/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "CPU modernes : prédiction, exécution dans le désordre, cœurs", "description": "Les premiers processeurs monopuce exécutaient environ cent mille instructions par seconde. Aujourd'hui, un seul cœur en exécute des milliards. Une fréquence d'horloge plus élevée n'explique qu'une partie de l'histoire. Nous voyons comment un processeur devine la direction que prendra un saut (et pourquoi il a généralement raison), comment il exécute des instructions indépendantes dans le désordre tout en rendant les résultats dans l'ordre, et pourquoi les fréquences d'horloge ont cessé de grimper alors que les puces se sont mises à avoir de nombreux cœurs.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-13.webp"], "uploadDate": "2026-11-06T21:00:00+08:00", "duration": "PT2M52S", "embedUrl": "https://www.youtube.com/embed/jTQrvEdz4Xk", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;un interrupteur à un processeur · Épisode 13</p>
+      <h1 class="ep-title">CPU modernes : prédiction, exécution dans le désordre, cœurs</h1>
+      <div class="vplayer" data-yt="jTQrvEdz4Xk" data-title="CPU modernes : prédiction, exécution dans le désordre, cœurs">
+        <button type="button" class="vplay" aria-label="Lire: CPU modernes : prédiction, exécution dans le désordre, cœurs">
+          <img src="../../../../assets/img/videos/cpu-13.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/jTQrvEdz4Xk" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Les premiers processeurs monopuce exécutaient environ cent mille instructions par seconde. Aujourd&#x27;hui, un seul cœur en exécute des milliards. Une fréquence d&#x27;horloge plus élevée n&#x27;explique qu&#x27;une partie de l&#x27;histoire.<br>Nous voyons comment un processeur devine la direction que prendra un saut (et pourquoi il a généralement raison), comment il exécute des instructions indépendantes dans le désordre tout en rendant les résultats dans l&#x27;ordre, et pourquoi les fréquences d&#x27;horloge ont cessé de grimper alors que les puces se sont mises à avoir de nombreux cœurs.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/jTQrvEdz4Xk?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>De cent mille à des milliards</a></li>
+        <li><a href="https://youtu.be/jTQrvEdz4Xk?t=31" data-t="31" rel="noopener"><span class="t">0:31</span>Prédiction de branchement</a></li>
+        <li><a href="https://youtu.be/jTQrvEdz4Xk?t=77" data-t="77" rel="noopener"><span class="t">1:17</span>Exécution dans le désordre</a></li>
+        <li><a href="https://youtu.be/jTQrvEdz4Xk?t=113" data-t="113" rel="noopener"><span class="t">1:53</span>De nombreux cœurs</a></li>
+        <li><a href="https://youtu.be/jTQrvEdz4Xk?t=153" data-t="153" rel="noopener"><span class="t">2:33</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Les premiers processeurs monopuce, au début des années 1970, exécutaient environ cent mille instructions par seconde. Un cœur de processeur moderne en exécute des milliards par seconde. L&#x27;augmentation de la fréquence d&#x27;horloge n&#x27;en explique qu&#x27;une partie. Le reste vient d&#x27;astuces. Aujourd&#x27;hui : trois des plus importantes. Deviner les sauts, exécuter les instructions dans le désordre, et utiliser de nombreux cœurs.</p>
+        <p>La dernière fois, un saut a laissé le pipeline avec des instructions qu&#x27;il a fallu jeter. Alors le processeur devine. Une petite table se souvient de ce que chaque saut a fait les dernières fois, et parie qu&#x27;il fera pareil de nouveau. Prenons notre boucle de compte à rebours. À chaque tour, le saut vers la fin n&#x27;est pas pris, donc la supposition est : non pris. Elle est juste à chaque tour, jusqu&#x27;au tout dernier, quand la boucle se termine. Sept sur huit sont justes. Les vraies boucles tournent des milliers de fois, et les vrais prédicteurs sont malins. Ils ont raison dans bien plus de 90 % des cas.</p>
+        <p>La deuxième astuce. Certaines instructions sont lentes. Charger depuis la mémoire peut prendre des centaines de tics. L&#x27;instruction suivante a besoin de cette valeur, alors elle doit attendre. Mais les deux d&#x27;après n&#x27;en ont pas du tout besoin. Alors le processeur les exécute en premier, pendant que le chargement attend encore. C&#x27;est l&#x27;exécution dans le désordre (out-of-order execution). Les résultats sont quand même remis dans l&#x27;ordre d&#x27;origine, si bien que le programme ne s&#x27;en aperçoit jamais. Et un cœur moderne peut démarrer plusieurs instructions au même tic.</p>
+        <p>La troisième astuce. Vers 2005, la fréquence d&#x27;horloge a cessé de grimper. Une fréquence plus élevée voulait dire trop de chaleur. Alors les fabricants de puces ont placé plusieurs processeurs complets, appelés cœurs, sur une seule puce. Chaque cœur exécute son propre flux d&#x27;instructions. Les téléphones ont souvent six ou huit cœurs. Les puces de bureau en ont souvent huit, seize ou plus. Mais plus de cœurs n&#x27;aident que si le travail peut être découpé. Un programme doit être écrit pour répartir son travail entre eux.</p>
+        <p>Donc : deviner les sauts, exécuter ce qui est prêt, et répartir le travail entre les cœurs. Mais chacune de ces astuces se bloque si les données arrivent lentement de la mémoire. La prochaine fois : les petites mémoires rapides qui cachent l&#x27;attente. Les caches. À bientôt.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : les caches, ces petites mémoires rapides qui cachent l&#x27;attente.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../12/fr/"><span>Précédent · Épisode 12</span><b>Pipeline de CPU : comment les instructions se chevauchent</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 14 sort le <time datetime="2026-11-07T21:00:00+08:00" data-at="2026-11-07T21:00:00+08:00" data-fmt="when">11-07 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

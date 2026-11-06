@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>요즘 CPU는 왜 빠를까: 분기 예측, 비순차 실행, 여러 코어 — 스위치 하나에서 CPU까지 #13</title>
+<meta name="description" content="최초의 싱글 칩 프로세서는 1초에 명령어를 약 10만 개 실행했어요. 요즘 코어 하나는 수십억 개를 실행해요. 클럭이 빨라진 것은 이유의 일부일 뿐이에요. 프로세서가 점프가 어느 쪽으로 갈지 추측하는 방법(그리고 대체로 맞는 이유), 서로 관계없는 명령어를 순서 없이 실행하면서도 결과는 순서대로 돌려주는 방법, 그리고 클럭 속도가 더 오르지 않게 되자 칩에 코어가 여러 개 들어가게 된 이유를 알아봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/13/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/13/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/13/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/13/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/13/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/13/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/13/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/13/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/13/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="요즘 CPU는 왜 빠를까: 분기 예측, 비순차 실행, 여러 코어 — 스위치 하나에서 CPU까지 #13">
+<meta property="og:description" content="최초의 싱글 칩 프로세서는 1초에 명령어를 약 10만 개 실행했어요. 요즘 코어 하나는 수십억 개를 실행해요. 클럭이 빨라진 것은 이유의 일부일 뿐이에요. 프로세서가 점프가 어느 쪽으로 갈지 추측하는 방법(그리고 대체로 맞는 이유), 서로 관계없는 명령어를 순서 없이 실행하면서도 결과는 순서대로 돌려주는 방법, 그리고 클럭 속도가 더 오르지 않게 되자 칩에 코어가 여러 개 들어가게 된 이유를 알아봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-13.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/13/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "요즘 CPU는 왜 빠를까: 분기 예측, 비순차 실행, 여러 코어", "description": "최초의 싱글 칩 프로세서는 1초에 명령어를 약 10만 개 실행했어요. 요즘 코어 하나는 수십억 개를 실행해요. 클럭이 빨라진 것은 이유의 일부일 뿐이에요. 프로세서가 점프가 어느 쪽으로 갈지 추측하는 방법(그리고 대체로 맞는 이유), 서로 관계없는 명령어를 순서 없이 실행하면서도 결과는 순서대로 돌려주는 방법, 그리고 클럭 속도가 더 오르지 않게 되자 칩에 코어가 여러 개 들어가게 된 이유를 알아봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-13.webp"], "uploadDate": "2026-11-06T21:00:00+08:00", "duration": "PT2M52S", "embedUrl": "https://www.youtube.com/embed/jTQrvEdz4Xk", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 13편</p>
+      <h1 class="ep-title">요즘 CPU는 왜 빠를까: 분기 예측, 비순차 실행, 여러 코어</h1>
+      <div class="vplayer" data-yt="jTQrvEdz4Xk" data-title="요즘 CPU는 왜 빠를까: 분기 예측, 비순차 실행, 여러 코어">
+        <button type="button" class="vplay" aria-label="재생: 요즘 CPU는 왜 빠를까: 분기 예측, 비순차 실행, 여러 코어">
+          <img src="../../../../assets/img/videos/cpu-13.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/jTQrvEdz4Xk" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">최초의 싱글 칩 프로세서는 1초에 명령어를 약 10만 개 실행했어요. 요즘 코어 하나는 수십억 개를 실행해요. 클럭이 빨라진 것은 이유의 일부일 뿐이에요.<br>프로세서가 점프가 어느 쪽으로 갈지 추측하는 방법(그리고 대체로 맞는 이유), 서로 관계없는 명령어를 순서 없이 실행하면서도 결과는 순서대로 돌려주는 방법, 그리고 클럭 속도가 더 오르지 않게 되자 칩에 코어가 여러 개 들어가게 된 이유를 알아봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/jTQrvEdz4Xk?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>10만 개에서 수십억 개로</a></li>
+        <li><a href="https://youtu.be/jTQrvEdz4Xk?t=31" data-t="31" rel="noopener"><span class="t">0:31</span>분기 예측</a></li>
+        <li><a href="https://youtu.be/jTQrvEdz4Xk?t=77" data-t="77" rel="noopener"><span class="t">1:17</span>비순차 실행</a></li>
+        <li><a href="https://youtu.be/jTQrvEdz4Xk?t=113" data-t="113" rel="noopener"><span class="t">1:53</span>여러 코어</a></li>
+        <li><a href="https://youtu.be/jTQrvEdz4Xk?t=153" data-t="153" rel="noopener"><span class="t">2:33</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>1970년대 초에 나온 최초의 싱글 칩 프로세서는 1초에 명령어를 약 10만 개 실행했어요. 요즘 프로세서의 코어 하나는 1초에 수십억 개를 실행해요. 클럭이 빨라진 것은 그중 일부만 설명해 줘요. 나머지는 요령에서 나와요. 오늘은 그중 가장 큰 세 가지를 알아봐요. 점프 추측하기, 명령어를 순서 없이 실행하기, 여러 코어 쓰기예요.</p>
+        <p>지난 편에서는 점프 때문에 파이프라인에 버려야 하는 명령어가 남았어요. 그래서 프로세서는 추측해요. 작은 표가 각 점프가 최근 몇 번 어떻게 움직였는지 기억해 두고, 이번에도 똑같이 움직인다는 쪽에 걸어요. 카운트다운 반복문을 볼게요. 한 바퀴 돌 때마다 끝으로 가는 점프는 일어나지 않아요. 그래서 추측은 &#x27;안 함&#x27;이에요. 반복문이 끝나는 맨 마지막 전까지는 매번 맞아요. 여덟 번 중 일곱 번이 정답이에요. 실제 반복문은 수천 번 돌고, 실제 예측기는 훨씬 똑똑해요. 90%를 훨씬 넘는 확률로 맞혀요.</p>
+        <p>두 번째 요령이에요. 어떤 명령어는 느려요. 메모리에서 값을 불러오는 데 똑딱이 수백 번 걸릴 수 있어요. 다음 명령어는 그 값이 필요해서 기다려야 해요. 하지만 그 뒤의 두 개는 그 값이 전혀 필요 없어요. 그래서 프로세서는 불러오기가 아직 기다리는 동안, 이 두 개를 먼저 실행해요. 이것이 비순차 실행(out-of-order execution)이에요. 결과는 여전히 원래 순서대로 돌려놓기 때문에, 프로그램은 전혀 눈치채지 못해요. 그리고 요즘 코어는 한 번 똑딱하는 동안 명령어 여러 개를 시작할 수 있어요.</p>
+        <p>세 번째 요령이에요. 2005년 무렵, 클럭 속도가 더 이상 오르지 않았어요. 클럭을 더 빠르게 하면 열이 너무 많이 났거든요. 그래서 칩 제조사들은 코어라고 부르는 완전한 프로세서 여러 개를 칩 하나에 넣었어요. 각 코어는 자신만의 명령어 흐름을 실행해요. 스마트폰에는 코어가 6개나 8개 있는 경우가 많고, 데스크톱 칩에는 8개, 16개, 또는 그 이상 있는 경우가 많아요. 하지만 코어가 많아도 일을 나눌 수 있을 때만 도움이 돼요. 프로그램이 코어들 사이에 일을 나누도록 작성되어 있어야 해요.</p>
+        <p>정리하면, 점프를 추측하고, 준비된 것부터 실행하고, 코어끼리 일을 나눠요. 하지만 메모리에서 데이터가 느리게 도착하면, 이 요령들은 모두 스톨돼요. 다음 편에서는 기다림을 감춰 주는 작고 빠른 메모리, 캐시를 알아봐요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 기다림을 감춰 주는 작고 빠른 메모리, 캐시예요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../12/ko/"><span>이전 편 · 12편</span><b>CPU 파이프라인: 프로세서는 명령어를 어떻게 겹칠까</b></a><div class="ep-pg next soon"><span>다음 편</span><b>14편은 <time datetime="2026-11-07T21:00:00+08:00" data-at="2026-11-07T21:00:00+08:00" data-fmt="when">11-07 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
