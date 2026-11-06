@@ -68,7 +68,12 @@
 "vid.ep.23": "Episode 23",
 "vid.ep.24": "Episode 24",
 "vid.ep.25": "Episode 25",
-"vid.dsa.next": "Episode 1 comes out <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>"
+"vid.dsa.next": "Episode 1 comes out <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>",
+"vid.ai.name": "From a Straight Line to a Language Model",
+"vid.ai.season": "Season 3",
+"vid.ai.progress": "0 of 19 episodes out",
+"vid.ai.when": "A new episode every day at <time datetime=\"2026-11-06T21:00:00+08:00\" data-at=\"2026-11-06T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.ai.next": "Episode 1 comes out <time datetime=\"2026-12-07T21:00:00+08:00\" data-at=\"2026-12-07T21:00:00+08:00\" data-fmt=\"when\">12-07 21:00 (UTC+8)</time>"
 },
 "zh-CN": {
 "vid.title": "免费教程 — Technology Information",
@@ -136,7 +141,12 @@
 "vid.ep.23": "第 23 集",
 "vid.ep.24": "第 24 集",
 "vid.ep.25": "第 25 集",
-"vid.dsa.next": "第 1 集 <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time> 上线"
+"vid.dsa.next": "第 1 集 <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time> 上线",
+"vid.ai.name": "从一条直线到大语言模型",
+"vid.ai.season": "第三季",
+"vid.ai.progress": "已更新 0 / 19 集",
+"vid.ai.when": "每天 <time datetime=\"2026-11-06T21:00:00+08:00\" data-at=\"2026-11-06T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
+"vid.ai.next": "第 1 集 <time datetime=\"2026-12-07T21:00:00+08:00\" data-at=\"2026-12-07T21:00:00+08:00\" data-fmt=\"when\">12-07 21:00 (UTC+8)</time> 上线"
 },
 "zh-TW": {
 "vid.title": "免費教學 — Technology Information",
@@ -204,7 +214,12 @@
 "vid.ep.23": "第 23 集",
 "vid.ep.24": "第 24 集",
 "vid.ep.25": "第 25 集",
-"vid.dsa.next": "第 1 集 <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time> 上線"
+"vid.dsa.next": "第 1 集 <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time> 上線",
+"vid.ai.name": "從一條直線到大型語言模型",
+"vid.ai.season": "第三季",
+"vid.ai.progress": "已更新 0 / 19 集",
+"vid.ai.when": "每天 <time datetime=\"2026-11-06T21:00:00+08:00\" data-at=\"2026-11-06T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
+"vid.ai.next": "第 1 集 <time datetime=\"2026-12-07T21:00:00+08:00\" data-at=\"2026-12-07T21:00:00+08:00\" data-fmt=\"when\">12-07 21:00 (UTC+8)</time> 上線"
 },
 "ja": {
 "vid.title": "無料チュートリアル — Technology Information",
@@ -272,7 +287,12 @@
 "vid.ep.23": "第23話",
 "vid.ep.24": "第24話",
 "vid.ep.25": "第25話",
-"vid.dsa.next": "第1話は <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time> に公開"
+"vid.dsa.next": "第1話は <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time> に公開",
+"vid.ai.name": "一本の直線から言語モデルまで",
+"vid.ai.season": "シーズン3",
+"vid.ai.progress": "全19話のうち0話を公開中",
+"vid.ai.when": "毎日 <time datetime=\"2026-11-06T21:00:00+08:00\" data-at=\"2026-11-06T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> に新しい回を公開します。",
+"vid.ai.next": "第1話は <time datetime=\"2026-12-07T21:00:00+08:00\" data-at=\"2026-12-07T21:00:00+08:00\" data-fmt=\"when\">12-07 21:00 (UTC+8)</time> に公開"
 },
 "ko": {
 "vid.title": "무료 강좌 — Technology Information",
@@ -340,7 +360,12 @@
 "vid.ep.23": "23편",
 "vid.ep.24": "24편",
 "vid.ep.25": "25편",
-"vid.dsa.next": "1편은 <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>에 공개"
+"vid.dsa.next": "1편은 <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>에 공개",
+"vid.ai.name": "직선 하나에서 언어 모델까지",
+"vid.ai.season": "시즌 3",
+"vid.ai.progress": "전체 19편 중 0편 공개",
+"vid.ai.when": "매일 <time datetime=\"2026-11-06T21:00:00+08:00\" data-at=\"2026-11-06T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>에 새 편이 올라옵니다.",
+"vid.ai.next": "1편은 <time datetime=\"2026-12-07T21:00:00+08:00\" data-at=\"2026-12-07T21:00:00+08:00\" data-fmt=\"when\">12-07 21:00 (UTC+8)</time>에 공개"
 },
 "es": {
 "vid.title": "Tutoriales gratis — Technology Information",
@@ -408,7 +433,12 @@
 "vid.ep.23": "Episodio 23",
 "vid.ep.24": "Episodio 24",
 "vid.ep.25": "Episodio 25",
-"vid.dsa.next": "El episodio 1 sale el <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>"
+"vid.dsa.next": "El episodio 1 sale el <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>",
+"vid.ai.name": "De una línea recta a un modelo de lenguaje",
+"vid.ai.season": "Temporada 3",
+"vid.ai.progress": "0 de 19 episodios publicados",
+"vid.ai.when": "Un episodio nuevo cada día a las <time datetime=\"2026-11-06T21:00:00+08:00\" data-at=\"2026-11-06T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.ai.next": "El episodio 1 sale el <time datetime=\"2026-12-07T21:00:00+08:00\" data-at=\"2026-12-07T21:00:00+08:00\" data-fmt=\"when\">12-07 21:00 (UTC+8)</time>"
 },
 "fr": {
 "vid.title": "Tutoriels gratuits — Technology Information",
@@ -476,6 +506,11 @@
 "vid.ep.23": "Épisode 23",
 "vid.ep.24": "Épisode 24",
 "vid.ep.25": "Épisode 25",
-"vid.dsa.next": "L'épisode 1 sort le <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>"
+"vid.dsa.next": "L'épisode 1 sort le <time datetime=\"2026-11-12T21:00:00+08:00\" data-at=\"2026-11-12T21:00:00+08:00\" data-fmt=\"when\">11-12 21:00 (UTC+8)</time>",
+"vid.ai.name": "D'une ligne droite à un modèle de langage",
+"vid.ai.season": "Saison 3",
+"vid.ai.progress": "0 épisodes sur 19 en ligne",
+"vid.ai.when": "Un nouvel épisode chaque jour à <time datetime=\"2026-11-06T21:00:00+08:00\" data-at=\"2026-11-06T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.ai.next": "L'épisode 1 sort le <time datetime=\"2026-12-07T21:00:00+08:00\" data-at=\"2026-12-07T21:00:00+08:00\" data-fmt=\"when\">12-07 21:00 (UTC+8)</time>"
 }
 });

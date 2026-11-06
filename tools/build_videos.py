@@ -258,6 +258,10 @@ def series_block(series, up, strings, root):
       </div>""")
     cards = "\n".join(cards)
 
+    # A season whose playlist id is not known yet has no "whole season" button.
+    season_btn = (f"""          <a class="btn ghost" href="https://www.youtube.com/playlist?list={series['playlist']}" rel="noopener" data-i18n="vid.season_yt">{E(en["vid.season_yt"])}</a>\n"""
+                  if series["playlist"] else "")
+
     return f"""  <section class="vid-series dark">
     <div class="wrap">
       <div class="series-head">
@@ -267,8 +271,7 @@ def series_block(series, up, strings, root):
           <p class="series-meta"><span data-i18n="vid.{sid}.progress">{E(en[f"vid.{sid}.progress"])}</span> · <span data-i18n="vid.{sid}.when">{en[f"vid.{sid}.when"]}</span></p>
         </div>
         <div class="btns">
-          <a class="btn ghost" href="https://www.youtube.com/playlist?list={series['playlist']}" rel="noopener" data-i18n="vid.season_yt">{E(en["vid.season_yt"])}</a>
-          <a class="btn ghost" href="{CHANNEL}?sub_confirmation=1" rel="noopener" data-i18n="vid.sub">{E(en["vid.sub"])}</a>
+{season_btn}          <a class="btn ghost" href="{CHANNEL}?sub_confirmation=1" rel="noopener" data-i18n="vid.sub">{E(en["vid.sub"])}</a>
         </div>
       </div>
       <div class="ep-cards">
