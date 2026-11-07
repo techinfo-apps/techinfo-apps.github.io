@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPU 缓存是干什么的：命中、不命中和缓存行 — 从一个开关到 CPU #14</title>
+<meta name="description" content="处理器做一次加法，用不了一纳秒；从主存拿一个数，却要大约一百纳秒。缓存就是用来藏起这段等待的。 我们来模拟一个小缓存：命中和不命中；为什么一次取一整个 64 字节的缓存行很划算（局部性）；直接映射（13 mod 8 = 5）和冲突；两路组相联；最近最少使用（LRU）替换；写回；还有真实芯片里的一级、二级、三级缓存。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/14/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/14/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/14/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/14/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/14/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/14/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/14/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/14/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/14/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="CPU 缓存是干什么的：命中、不命中和缓存行 — 从一个开关到 CPU #14">
+<meta property="og:description" content="处理器做一次加法，用不了一纳秒；从主存拿一个数，却要大约一百纳秒。缓存就是用来藏起这段等待的。 我们来模拟一个小缓存：命中和不命中；为什么一次取一整个 64 字节的缓存行很划算（局部性）；直接映射（13 mod 8 = 5）和冲突；两路组相联；最近最少使用（LRU）替换；写回；还有真实芯片里的一级、二级、三级缓存。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-14.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/14/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "CPU 缓存是干什么的：命中、不命中和缓存行", "description": "处理器做一次加法，用不了一纳秒；从主存拿一个数，却要大约一百纳秒。缓存就是用来藏起这段等待的。 我们来模拟一个小缓存：命中和不命中；为什么一次取一整个 64 字节的缓存行很划算（局部性）；直接映射（13 mod 8 = 5）和冲突；两路组相联；最近最少使用（LRU）替换；写回；还有真实芯片里的一级、二级、三级缓存。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-14.webp"], "uploadDate": "2026-11-07T21:00:00+08:00", "duration": "PT4M4S", "embedUrl": "https://www.youtube.com/embed/XPlmQ7JhGPU", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一个开关到 CPU · 第 14 集</p>
+      <h1 class="ep-title">CPU 缓存是干什么的：命中、不命中和缓存行</h1>
+      <div class="vplayer" data-yt="XPlmQ7JhGPU" data-title="CPU 缓存是干什么的：命中、不命中和缓存行">
+        <button type="button" class="vplay" aria-label="播放: CPU 缓存是干什么的：命中、不命中和缓存行">
+          <img src="../../../../assets/img/videos/cpu-14.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/XPlmQ7JhGPU" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">处理器做一次加法，用不了一纳秒；从主存拿一个数，却要大约一百纳秒。缓存就是用来藏起这段等待的。<br>我们来模拟一个小缓存：命中和不命中；为什么一次取一整个 64 字节的缓存行很划算（局部性）；直接映射（13 mod 8 = 5）和冲突；两路组相联；最近最少使用（LRU）替换；写回；还有真实芯片里的一级、二级、三级缓存。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>一百纳秒</a></li>
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=30" data-t="30" rel="noopener"><span class="t">0:30</span>命中和不命中</a></li>
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=65" data-t="65" rel="noopener"><span class="t">1:05</span>局部性和缓存行</a></li>
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=117" data-t="117" rel="noopener"><span class="t">1:57</span>映射、替换、写回</a></li>
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=192" data-t="192" rel="noopener"><span class="t">3:12</span>一级、二级、三级缓存</a></li>
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=220" data-t="220" rel="noopener"><span class="t">3:40</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>处理器做一次加法，远远不到一纳秒；从主存拿一个数，要大约一百纳秒。每拿一个数，都要白等几百拍。可你的电脑并没有慢几百倍，原因就是缓存。今天来看它怎么干活。</p>
+        <p>缓存是处理器里面一块又小又快的内存，用的就是第 8 集讲过的 SRAM。它存着处理器最近用过的数据的副本。处理器要一个地址时，先问缓存：有，就叫命中，几拍就拿到。没有，就叫不命中：数据得慢慢从主存拿来，缓存顺手留一份，下次用。</p>
+        <p>为什么同样的数据还会再用？因为程序很好猜：一个循环来来回回用的就是那几个变量。而且程序读了一个地址，往往马上就读它后面的几个，像一个一个走过一张清单。所以不命中的时候，缓存不只拿一个数，而是拿一整块，常见是六十四字节，叫一个缓存行。看一个循环把十六个数加起来：四个一块，每块第一次读不命中，后面三次都命中。十六次里命中十二次。再跑一遍，数据全都已经在缓存里了：十六次全中。</p>
+        <p>可缓存很小，每一块放哪儿？最简单的规矩：块号除以行数，余数就是放的那一行。第十三块放进第五行，因为十三除以八余五。简单是简单，可两块都常用、又抢同一行，就会你踢我、我踢你。所以大多数缓存让每一块能放进几行里的任意一行：两行、四行，或者更多，叫组相联。</p>
+        <p>这几行都满了，谁走？一般是最久没用过的那个，叫最近最少使用。</p>
+        <p>那写呢？不用每次都去改慢吞吞的主存，缓存只要在自己那份上做个“改过了”的记号，叫脏。等这一行被挤走时，才把它写回主存。这叫写回，省下很多趟慢路。</p>
+        <p>真的处理器叠了好几层缓存：每个核一个很小的一级缓存，更大的二级，还有大家共用的大三级。一级比一级大、一级比一级慢，可都比主存快得多。大多数时候，在一级缓存里就找到了。所以内存感觉很快，虽然它其实不快。</p>
+        <p>总结一下：最近用的放身边，一次拿一整行，按地址挑行，挤走最久没用的，晚点再写回。可内存耍的把戏不止缓存：每个程序都以为整个内存是它一个人的。下一集：虚拟内存。下集见。</p>
+        </div>
+        <p class="ep-close">下一集：虚拟内存。为什么每个程序都以为整块内存只属于它自己。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../13/zh-cn/"><span>上一集 · 第 13 集</span><b>现代 CPU 为什么这么快：分支预测、乱序执行、多核</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 15 集 <time datetime="2026-11-08T21:00:00+08:00" data-at="2026-11-08T21:00:00+08:00" data-fmt="when">11-08 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

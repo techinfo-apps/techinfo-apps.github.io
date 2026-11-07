@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPU 快取在做什麼：命中、未命中與快取列 — 從一個開關到 CPU #14</title>
+<meta name="description" content="處理器做一次加法，只要不到 1 奈秒；從主記憶體取得一個數，卻要大約 100 奈秒。快取就是用來把這段等待藏起來的。 我們來模擬一個小小的快取：命中與未命中、為什麼一次取整個 64 位元組的快取列很划算（區域性）、直接對映（13 mod 8 = 5）與衝突、二路集合關聯、LRU 替換、寫回，以及真實晶片裡的一級、二級、三級快取。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/14/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/14/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/14/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/14/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/14/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/14/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/14/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/14/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/14/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="CPU 快取在做什麼：命中、未命中與快取列 — 從一個開關到 CPU #14">
+<meta property="og:description" content="處理器做一次加法，只要不到 1 奈秒；從主記憶體取得一個數，卻要大約 100 奈秒。快取就是用來把這段等待藏起來的。 我們來模擬一個小小的快取：命中與未命中、為什麼一次取整個 64 位元組的快取列很划算（區域性）、直接對映（13 mod 8 = 5）與衝突、二路集合關聯、LRU 替換、寫回，以及真實晶片裡的一級、二級、三級快取。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-14.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/14/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "CPU 快取在做什麼：命中、未命中與快取列", "description": "處理器做一次加法，只要不到 1 奈秒；從主記憶體取得一個數，卻要大約 100 奈秒。快取就是用來把這段等待藏起來的。 我們來模擬一個小小的快取：命中與未命中、為什麼一次取整個 64 位元組的快取列很划算（區域性）、直接對映（13 mod 8 = 5）與衝突、二路集合關聯、LRU 替換、寫回，以及真實晶片裡的一級、二級、三級快取。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-14.webp"], "uploadDate": "2026-11-07T21:00:00+08:00", "duration": "PT4M4S", "embedUrl": "https://www.youtube.com/embed/XPlmQ7JhGPU", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一個開關到 CPU · 第 14 集</p>
+      <h1 class="ep-title">CPU 快取在做什麼：命中、未命中與快取列</h1>
+      <div class="vplayer" data-yt="XPlmQ7JhGPU" data-title="CPU 快取在做什麼：命中、未命中與快取列">
+        <button type="button" class="vplay" aria-label="播放: CPU 快取在做什麼：命中、未命中與快取列">
+          <img src="../../../../assets/img/videos/cpu-14.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/XPlmQ7JhGPU" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">處理器做一次加法，只要不到 1 奈秒；從主記憶體取得一個數，卻要大約 100 奈秒。快取就是用來把這段等待藏起來的。<br>我們來模擬一個小小的快取：命中與未命中、為什麼一次取整個 64 位元組的快取列很划算（區域性）、直接對映（13 mod 8 = 5）與衝突、二路集合關聯、LRU 替換、寫回，以及真實晶片裡的一級、二級、三級快取。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>一百奈秒</a></li>
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=30" data-t="30" rel="noopener"><span class="t">0:30</span>命中與未命中</a></li>
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=65" data-t="65" rel="noopener"><span class="t">1:05</span>區域性與快取列</a></li>
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=117" data-t="117" rel="noopener"><span class="t">1:57</span>對映、替換、寫回</a></li>
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=192" data-t="192" rel="noopener"><span class="t">3:12</span>一級、二級、三級快取</a></li>
+        <li><a href="https://youtu.be/XPlmQ7JhGPU?t=220" data-t="220" rel="noopener"><span class="t">3:40</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>你的處理器把兩個數相加，只需要不到 1 奈秒。從主記憶體取得一個數，卻要大約 100 奈秒。每取一個數，就要白白等上好幾百個週期。可是你的電腦並沒有慢上好幾百倍。原因就是快取（cache）。今天，我們來看它是怎麼運作的。</p>
+        <p>快取是處理器裡面一塊小而快的記憶體，用的是我們在第 8 集看過的 SRAM 儲存格。它存著處理器最近用過的資料的複本。處理器要某個位址的資料時，快取會先檢查。如果在裡面，就是命中（hit）：只要幾個週期就能拿到答案。如果不在，就是未命中（miss）。資料得慢慢從主記憶體送來，快取也會留一份複本，給下次使用。</p>
+        <p>為什麼同樣的資料會再次用到？因為程式很好預測。迴圈會一遍又一遍地用同樣的那幾個變數。而且程式讀了一個位址之後，通常很快就會接著讀它後面的幾個，就像一路走過一張清單。所以發生未命中時，快取不會只取一個數，而是取一整個區塊，通常是 64 位元組，稱為快取列（cache line）。來看一個迴圈把 16 個數加起來。每 4 個數為一個區塊：每個區塊的第一次讀取未命中，接下來的 3 次都命中。16 次裡命中 12 次。再跑一次迴圈，所有資料都已經在裡面了。16 次中命中 16 次。</p>
+        <p>可是快取非常小。每個區塊該放去哪裡？最簡單的規則是：把區塊編號除以列數，餘數就決定放在哪一列。區塊 13 放進第 5 列，因為 13 除以 8，餘數是 5。規則很簡單，但兩個都很常用的區塊可能搶同一列，不斷把對方擠出去。所以大多數快取讓每個區塊可以放在幾列當中的任何一列：2 列、4 列，或更多。這叫做集合關聯（set-associative）。</p>
+        <p>這幾列都滿了，該讓哪一列離開？通常是最久沒有被用到的那一列：最近最少使用（LRU）。</p>
+        <p>那寫入呢？快取不必每次都去更新慢吞吞的記憶體，只要把自己那份複本標記為已修改，也就是「髒」（dirty）。只有在那一列被擠出去的時候，才會寫回記憶體。這叫做寫回（write-back），能省下很多趟緩慢的往返。</p>
+        <p>真正的處理器會疊起好幾層快取：每個核心有一個很小的一級快取，一個比較大的二級快取，還有一個大型、共用的三級快取。每一級都比上一級更大、更慢，但全都比主記憶體快得多。大多數時候，資料在一級快取就找得到。所以記憶體感覺很快，雖然它其實並不快。</p>
+        <p>總結一下：把最近用過的資料放在近處，一次取整列，依位址挑選列，擠掉最近最少使用的那一列，晚點再寫回。不過，記憶體用的訣竅不只快取。每個程式都以為整個記憶體只屬於它自己。下一集：虛擬記憶體（virtual memory）。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：虛擬記憶體（virtual memory）。為什麼每個程式都以為整個記憶體是自己的。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../13/zh-tw/"><span>上一集 · 第 13 集</span><b>現代 CPU 為什麼這麼快：分支預測、亂序執行、多核心</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 15 集 <time datetime="2026-11-08T21:00:00+08:00" data-at="2026-11-08T21:00:00+08:00" data-fmt="when">11-08 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
