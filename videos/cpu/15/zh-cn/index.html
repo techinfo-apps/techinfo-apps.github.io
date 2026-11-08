@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>虚拟内存：页、页表、TLB 和缺页 — 从一个开关到 CPU #15</title>
+<meta name="description" content="两个程序都用地址 1000，可各自在那里找到的是自己的数。这是怎么做到的？ 每个程序拿到的都是虚拟地址。我们把内存切成一页一页，把地址 8200 经过页表翻译（第 2 页、偏移 8、第 5 帧：地址 20,488），看看这样怎么把程序彼此隔开，再用 TLB 把翻译加快，最后弄清缺页的时候会发生什么。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/15/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/15/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/15/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/15/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/15/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/15/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/15/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/15/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/15/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="虚拟内存：页、页表、TLB 和缺页 — 从一个开关到 CPU #15">
+<meta property="og:description" content="两个程序都用地址 1000，可各自在那里找到的是自己的数。这是怎么做到的？ 每个程序拿到的都是虚拟地址。我们把内存切成一页一页，把地址 8200 经过页表翻译（第 2 页、偏移 8、第 5 帧：地址 20,488），看看这样怎么把程序彼此隔开，再用 TLB 把翻译加快，最后弄清缺页的时候会发生什么。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-15.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/15/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "虚拟内存：页、页表、TLB 和缺页", "description": "两个程序都用地址 1000，可各自在那里找到的是自己的数。这是怎么做到的？ 每个程序拿到的都是虚拟地址。我们把内存切成一页一页，把地址 8200 经过页表翻译（第 2 页、偏移 8、第 5 帧：地址 20,488），看看这样怎么把程序彼此隔开，再用 TLB 把翻译加快，最后弄清缺页的时候会发生什么。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-15.webp"], "uploadDate": "2026-11-08T21:00:00+08:00", "duration": "PT3M18S", "embedUrl": "https://www.youtube.com/embed/HeoX081lFuI", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一个开关到 CPU · 第 15 集</p>
+      <h1 class="ep-title">虚拟内存：页、页表、TLB 和缺页</h1>
+      <div class="vplayer" data-yt="HeoX081lFuI" data-title="虚拟内存：页、页表、TLB 和缺页">
+        <button type="button" class="vplay" aria-label="播放: 虚拟内存：页、页表、TLB 和缺页">
+          <img src="../../../../assets/img/videos/cpu-15.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/HeoX081lFuI" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">两个程序都用地址 1000，可各自在那里找到的是自己的数。这是怎么做到的？<br>每个程序拿到的都是虚拟地址。我们把内存切成一页一页，把地址 8200 经过页表翻译（第 2 页、偏移 8、第 5 帧：地址 20,488），看看这样怎么把程序彼此隔开，再用 TLB 把翻译加快，最后弄清缺页的时候会发生什么。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/HeoX081lFuI?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>同一个地址，不同的数</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=25" data-t="25" rel="noopener"><span class="t">0:25</span>虚拟地址</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=53" data-t="53" rel="noopener"><span class="t">0:53</span>页和页表</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=104" data-t="104" rel="noopener"><span class="t">1:44</span>把程序隔开</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=122" data-t="122" rel="noopener"><span class="t">2:02</span>TLB</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=143" data-t="143" rel="noopener"><span class="t">2:23</span>缺页</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=177" data-t="177" rel="noopener"><span class="t">2:57</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>两个程序同时在跑，都往地址一千存了一个数。一个存的是七，另一个存的是四十二，谁也没把谁盖掉。同一个地址，两个不同的数。今天讲每个程序怎么拿到一份自己的内存。</p>
+        <p>窍门是：程序用的地址不是真的，叫虚拟地址。每个程序看到的都是自己的一份内存，从零开始，好像整台机器都归它一个人。每访问一次，处理器都悄悄把虚拟地址翻译成物理地址，也就是内存芯片里真正的位置。</p>
+        <p>一个字节一个字节地翻，表就大得没边了。所以内存切成一页一页，常见每页四 KB。一个虚拟地址分成两段：页号，和在这一页里的偏移。拿地址八千二百来说：每页四千零九十六字节，所以它在第二页、往里八个字节。每个程序都有一张页表，由操作系统管着。表上写着：你的第二页，其实在第五帧。所以真地址是第五帧、往里八个字节。程序自己一点也不知道。</p>
+        <p>这样一来，程序之间也隔开了：不在你表里的页，对你来说根本不存在。硬要去碰，处理器就会拦下来、叫来操作系统。一个程序没法偷看或弄坏另一个程序的内存。</p>
+        <p>可这是有代价的：页表本身也放在内存里，每访问一次，都得先多跑一趟内存。所以处理器留了一小块缓存，专门记最近的翻译，叫 TLB。大多数时候，翻译早就在里面了。</p>
+        <p>要是某一页根本不在内存里呢？这次访问就会引发缺页。操作系统去磁盘上找到这一页，搬进一个空的帧，改好页表，让程序接着跑，就像什么都没发生。磁盘比内存慢几千倍，所以缺页很费时；可有了它，程序能用的内存比机器真有的还多。</p>
+        <p>总结一下：程序用虚拟地址，页表把它们对到真的帧上，TLB 让它变快，缺页时从磁盘把缺的搬来。下一集：磁盘里面是什么。转动的盘片、闪存芯片，还有整个存储的层次。下集见。</p>
+        </div>
+        <p class="ep-close">下一集：断电以后，你的文件放在哪里。机械硬盘和固态硬盘。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../14/zh-cn/"><span>上一集 · 第 14 集</span><b>CPU 缓存是干什么的：命中、不命中和缓存行</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 16 集 <time datetime="2026-11-09T21:00:00+08:00" data-at="2026-11-09T21:00:00+08:00" data-fmt="when">11-09 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

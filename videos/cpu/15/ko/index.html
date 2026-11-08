@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>가상 메모리: 페이지, 페이지 테이블, TLB, 페이지 폴트 — 스위치 하나에서 CPU까지 #15</title>
+<meta name="description" content="프로그램 두 개가 모두 주소 1000을 쓰는데, 각자 그곳에서 자기 수를 찾아요. 어떻게 그럴 수 있을까요? 모든 프로그램은 가상 주소를 받아요. 메모리를 페이지로 자르고, 주소 8200을 페이지 테이블로 변환하고(페이지 2, 오프셋 8, 프레임 5: 주소 20,488), 이것이 프로그램들을 어떻게 서로 떼어 놓는지 보고, TLB로 속도를 높이고, 페이지 폴트가 났을 때 무슨 일이 일어나는지 알아봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/15/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/15/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/15/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/15/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/15/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/15/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/15/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/15/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/15/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="가상 메모리: 페이지, 페이지 테이블, TLB, 페이지 폴트 — 스위치 하나에서 CPU까지 #15">
+<meta property="og:description" content="프로그램 두 개가 모두 주소 1000을 쓰는데, 각자 그곳에서 자기 수를 찾아요. 어떻게 그럴 수 있을까요? 모든 프로그램은 가상 주소를 받아요. 메모리를 페이지로 자르고, 주소 8200을 페이지 테이블로 변환하고(페이지 2, 오프셋 8, 프레임 5: 주소 20,488), 이것이 프로그램들을 어떻게 서로 떼어 놓는지 보고, TLB로 속도를 높이고, 페이지 폴트가 났을 때 무슨 일이 일어나는지 알아봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-15.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/15/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "가상 메모리: 페이지, 페이지 테이블, TLB, 페이지 폴트", "description": "프로그램 두 개가 모두 주소 1000을 쓰는데, 각자 그곳에서 자기 수를 찾아요. 어떻게 그럴 수 있을까요? 모든 프로그램은 가상 주소를 받아요. 메모리를 페이지로 자르고, 주소 8200을 페이지 테이블로 변환하고(페이지 2, 오프셋 8, 프레임 5: 주소 20,488), 이것이 프로그램들을 어떻게 서로 떼어 놓는지 보고, TLB로 속도를 높이고, 페이지 폴트가 났을 때 무슨 일이 일어나는지 알아봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-15.webp"], "uploadDate": "2026-11-08T21:00:00+08:00", "duration": "PT3M18S", "embedUrl": "https://www.youtube.com/embed/HeoX081lFuI", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 15편</p>
+      <h1 class="ep-title">가상 메모리: 페이지, 페이지 테이블, TLB, 페이지 폴트</h1>
+      <div class="vplayer" data-yt="HeoX081lFuI" data-title="가상 메모리: 페이지, 페이지 테이블, TLB, 페이지 폴트">
+        <button type="button" class="vplay" aria-label="재생: 가상 메모리: 페이지, 페이지 테이블, TLB, 페이지 폴트">
+          <img src="../../../../assets/img/videos/cpu-15.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/HeoX081lFuI" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">프로그램 두 개가 모두 주소 1000을 쓰는데, 각자 그곳에서 자기 수를 찾아요. 어떻게 그럴 수 있을까요?<br>모든 프로그램은 가상 주소를 받아요. 메모리를 페이지로 자르고, 주소 8200을 페이지 테이블로 변환하고(페이지 2, 오프셋 8, 프레임 5: 주소 20,488), 이것이 프로그램들을 어떻게 서로 떼어 놓는지 보고, TLB로 속도를 높이고, 페이지 폴트가 났을 때 무슨 일이 일어나는지 알아봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/HeoX081lFuI?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>같은 주소, 다른 수</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=25" data-t="25" rel="noopener"><span class="t">0:25</span>가상 주소</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=53" data-t="53" rel="noopener"><span class="t">0:53</span>페이지와 페이지 테이블</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=104" data-t="104" rel="noopener"><span class="t">1:44</span>프로그램 떼어 놓기</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=122" data-t="122" rel="noopener"><span class="t">2:02</span>TLB</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=143" data-t="143" rel="noopener"><span class="t">2:23</span>페이지 폴트</a></li>
+        <li><a href="https://youtu.be/HeoX081lFuI?t=177" data-t="177" rel="noopener"><span class="t">2:57</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>프로그램 두 개가 동시에 실행되고 있어요. 둘 다 주소 1000에 수를 하나 저장해요. 하나는 7을 저장하고, 다른 하나는 42를 저장해요. 어느 쪽도 상대를 덮어쓰지 않아요. 같은 주소인데 서로 다른 수예요. 오늘은 모든 프로그램이 어떻게 자기만의 메모리를 갖는지 알아봐요.</p>
+        <p>비결은 이거예요. 프로그램이 쓰는 주소는 진짜가 아니에요. 가상 주소예요. 프로그램마다 0부터 시작하는 자기만의 메모리가 보여요. 마치 컴퓨터 전체를 혼자 쓰는 것처럼요. 접근할 때마다, 프로세서는 몰래 가상 주소를 물리 주소로 바꿔요. 메모리 칩 안의 진짜 위치예요.</p>
+        <p>바이트 하나하나를 따로 변환하려면 어마어마하게 큰 표가 필요해요. 그래서 메모리를 페이지로 잘라요. 보통 한 페이지가 4KB예요. 가상 주소는 두 부분으로 나뉘어요. 페이지 번호, 그리고 그 페이지 안에서의 오프셋이에요. 주소 8200을 예로 들어 봐요. 페이지는 4096바이트이니까, 이 주소는 페이지 2에서 8바이트 들어간 곳이에요. 프로그램마다 페이지 테이블이 있고, 운영체제가 관리해요. 표에는 이렇게 적혀 있어요. 이 프로그램의 페이지 2는 사실 프레임 5에 있다고요. 그래서 진짜 주소는 프레임 5에서 8바이트 들어간 곳이에요. 프로그램은 이 사실을 전혀 몰라요.</p>
+        <p>이 방식은 프로그램들을 서로 떼어 놓는 일도 해요. 내 표에 없는 페이지는 나에게 아예 존재하지 않아요. 건드리려고 하면 프로세서가 막고 운영체제를 불러요. 한 프로그램이 다른 프로그램의 메모리를 읽거나 망가뜨릴 수는 없어요.</p>
+        <p>하지만 대가가 있어요. 페이지 테이블은 메모리에 있어서, 접근할 때마다 먼저 메모리에 한 번 더 다녀와야 해요. 그래서 프로세서는 최근의 변환 결과를 기억하는 작은 캐시를 가지고 있어요. TLB라고 해요. 대부분은 변환 결과가 이미 거기에 있어요.</p>
+        <p>그런데 페이지가 아예 메모리에 없다면 어떻게 될까요? 그러면 그 접근은 페이지 폴트를 일으켜요. 운영체제는 디스크에서 그 페이지를 찾아 빈 프레임에 불러오고, 표를 고친 다음, 프로그램이 아무 일도 없었던 것처럼 계속 실행되게 해요. 디스크는 메모리보다 수천 배 느려서, 페이지 폴트는 비싼 일이에요. 하지만 덕분에 프로그램은 컴퓨터가 실제로 가진 것보다 더 많은 메모리를 쓸 수 있어요.</p>
+        <p>정리하면, 프로그램은 가상 주소를 쓰고, 페이지 테이블이 그 주소를 진짜 프레임에 이어 주고, TLB가 그 과정을 빠르게 해 주고, 페이지 폴트가 모자란 것을 디스크에서 가져와요. 다음 편은 그 디스크 안에 무엇이 있는지예요. 돌아가는 원판, 플래시 칩, 그리고 메모리 계층 전체를 살펴봐요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 전원이 꺼져도 파일은 어디에 있을까요? 하드 디스크와 SSD 이야기예요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../14/ko/"><span>이전 편 · 14편</span><b>CPU 캐시는 무슨 일을 할까: 히트, 미스, 캐시 라인</b></a><div class="ep-pg next soon"><span>다음 편</span><b>16편은 <time datetime="2026-11-09T21:00:00+08:00" data-at="2026-11-09T21:00:00+08:00" data-fmt="when">11-09 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
