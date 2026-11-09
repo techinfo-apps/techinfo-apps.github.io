@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>傳統硬碟與 SSD 是怎麼保存檔案的 — 從一個開關到 CPU #16</title>
+<meta name="description" content="一斷電，記憶體就把一切都忘光了，可是你的檔案還在。它們到底在哪裡？ 我們先看傳統硬碟的內部（旋轉的碟片、移動的讀寫頭、幾毫秒的等待），再看用快閃記憶體做的 SSD：為什麼一個分頁不能原地覆寫、為什麼要整個區塊一起抹除，還有控制器怎麼把寫入平均分散開來。最後再看整個記憶體階層，從暫存器一路到磁碟。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/16/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/16/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/16/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/16/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/16/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/16/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/16/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/16/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/16/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="傳統硬碟與 SSD 是怎麼保存檔案的 — 從一個開關到 CPU #16">
+<meta property="og:description" content="一斷電，記憶體就把一切都忘光了，可是你的檔案還在。它們到底在哪裡？ 我們先看傳統硬碟的內部（旋轉的碟片、移動的讀寫頭、幾毫秒的等待），再看用快閃記憶體做的 SSD：為什麼一個分頁不能原地覆寫、為什麼要整個區塊一起抹除，還有控制器怎麼把寫入平均分散開來。最後再看整個記憶體階層，從暫存器一路到磁碟。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-16.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/16/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "傳統硬碟與 SSD 是怎麼保存檔案的", "description": "一斷電，記憶體就把一切都忘光了，可是你的檔案還在。它們到底在哪裡？ 我們先看傳統硬碟的內部（旋轉的碟片、移動的讀寫頭、幾毫秒的等待），再看用快閃記憶體做的 SSD：為什麼一個分頁不能原地覆寫、為什麼要整個區塊一起抹除，還有控制器怎麼把寫入平均分散開來。最後再看整個記憶體階層，從暫存器一路到磁碟。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-16.webp"], "uploadDate": "2026-11-09T21:00:00+08:00", "duration": "PT2M57S", "embedUrl": "https://www.youtube.com/embed/sLQbISq0Uog", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一個開關到 CPU · 第 16 集</p>
+      <h1 class="ep-title">傳統硬碟與 SSD 是怎麼保存檔案的</h1>
+      <div class="vplayer" data-yt="sLQbISq0Uog" data-title="傳統硬碟與 SSD 是怎麼保存檔案的">
+        <button type="button" class="vplay" aria-label="播放: 傳統硬碟與 SSD 是怎麼保存檔案的">
+          <img src="../../../../assets/img/videos/cpu-16.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/sLQbISq0Uog" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">一斷電，記憶體就把一切都忘光了，可是你的檔案還在。它們到底在哪裡？<br>我們先看傳統硬碟的內部（旋轉的碟片、移動的讀寫頭、幾毫秒的等待），再看用快閃記憶體做的 SSD：為什麼一個分頁不能原地覆寫、為什麼要整個區塊一起抹除，還有控制器怎麼把寫入平均分散開來。最後再看整個記憶體階層，從暫存器一路到磁碟。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/sLQbISq0Uog?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>檔案去了哪裡？</a></li>
+        <li><a href="https://youtu.be/sLQbISq0Uog?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>傳統硬碟</a></li>
+        <li><a href="https://youtu.be/sLQbISq0Uog?t=71" data-t="71" rel="noopener"><span class="t">1:11</span>SSD 與快閃記憶體</a></li>
+        <li><a href="https://youtu.be/sLQbISq0Uog?t=129" data-t="129" rel="noopener"><span class="t">2:09</span>記憶體階層</a></li>
+        <li><a href="https://youtu.be/sLQbISq0Uog?t=155" data-t="155" rel="noopener"><span class="t">2:35</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>關掉電腦，記憶體裡的一切就都消失了。再開機，你的檔案卻還在。那它們剛才在哪裡？在斷電後仍能保存資料的儲存裝置裡。今天要講的是：傳統硬碟、SSD，還有各種記憶體怎麼組合在一起。</p>
+        <p>傳統硬碟把位元存在旋轉的碟片上，碟片表面塗著一層磁性材料。每個位元都是一小塊被磁化成某個方向或另一個方向的區域。裝在可移動讀寫臂上的讀寫頭負責讀寫這些位元，懸浮在碟片表面上方一點點。碟片的轉速大約是每分鐘 7000 轉。要讀取資料時，讀寫臂會先擺到正確的磁軌，再等資料轉到讀寫頭下面。這要花上幾毫秒，比快取慢了好幾百萬倍。不過，一旦讀寫頭就定位，一長串連續的資料就能很快地讀出來。</p>
+        <p>SSD 沒有任何會動的零件。它由快閃記憶體儲存格組成：也就是我們在第 8 集看過、被困住的電子。讀取只需要幾十微秒：比旋轉的硬碟快得多，但仍然比記憶體慢上許多。快閃記憶體有一條奇怪的規則：分頁不能直接覆寫。你必須先把它抹除，而抹除只能一次針對整個區塊的分頁進行。所以 SSD 裡的小控制器會把新資料寫進全新的分頁，並記錄一張表，標明每份資料真正放在哪裡。聽起來很耳熟吧？這就像上一集的分頁表。而且每個區塊只能抹除幾千次，所以控制器會把寫入平均分散開來，避免任何一個區塊太早磨損。</p>
+        <p>現在，把這一季出現過的各種記憶體放在一起。最上面是暫存器，最快，也最小。接著是快取，再來是主記憶體，最底下是 SSD 和傳統硬碟。每往下一層，容量就更大、每位元組的價格也更便宜，但速度更慢。整個訣竅，就是把你現在需要的資料留在靠近頂端的地方。</p>
+        <p>總結一下：傳統硬碟靠旋轉和尋軌，SSD 靠困住電子、重新對應分頁，而記憶體階層則把對的資料放在對的位置。可是，CPU 究竟是怎麼跟硬碟、鍵盤或螢幕溝通的？下一集：匯流排（bus）與中斷（interrupt）。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：CPU 怎麼發現你按了一個鍵。匯流排、輪詢、中斷與 DMA。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../15/zh-tw/"><span>上一集 · 第 15 集</span><b>虛擬記憶體：分頁、分頁表、TLB 與分頁錯誤</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 17 集 <time datetime="2026-11-10T21:00:00+08:00" data-at="2026-11-10T21:00:00+08:00" data-fmt="when">11-10 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

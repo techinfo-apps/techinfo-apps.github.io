@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>하드 디스크와 SSD는 파일을 어떻게 보관할까 — 스위치 하나에서 CPU까지 #16</title>
+<meta name="description" content="전원을 끄면 메모리는 모든 것을 잊어버리지만, 파일은 그대로 남아 있어요. 어디에 있는 걸까요? 먼저 하드 디스크 안을 들여다봐요(돌아가는 플래터, 움직이는 헤드, 몇 밀리초의 기다림). 그다음 플래시 SSD를 살펴봐요. 페이지를 그 자리에서 덮어쓸 수 없는 이유, 블록 전체를 지우는 이유, 그리고 컨트롤러가 쓰기를 고르게 분산시키는 방법이에요. 마지막으로 레지스터부터 디스크까지, 메모리 계층 전체를 살펴봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/16/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/16/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/16/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/16/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/16/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/16/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/16/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/16/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/16/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="하드 디스크와 SSD는 파일을 어떻게 보관할까 — 스위치 하나에서 CPU까지 #16">
+<meta property="og:description" content="전원을 끄면 메모리는 모든 것을 잊어버리지만, 파일은 그대로 남아 있어요. 어디에 있는 걸까요? 먼저 하드 디스크 안을 들여다봐요(돌아가는 플래터, 움직이는 헤드, 몇 밀리초의 기다림). 그다음 플래시 SSD를 살펴봐요. 페이지를 그 자리에서 덮어쓸 수 없는 이유, 블록 전체를 지우는 이유, 그리고 컨트롤러가 쓰기를 고르게 분산시키는 방법이에요. 마지막으로 레지스터부터 디스크까지, 메모리 계층 전체를 살펴봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-16.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/16/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "하드 디스크와 SSD는 파일을 어떻게 보관할까", "description": "전원을 끄면 메모리는 모든 것을 잊어버리지만, 파일은 그대로 남아 있어요. 어디에 있는 걸까요? 먼저 하드 디스크 안을 들여다봐요(돌아가는 플래터, 움직이는 헤드, 몇 밀리초의 기다림). 그다음 플래시 SSD를 살펴봐요. 페이지를 그 자리에서 덮어쓸 수 없는 이유, 블록 전체를 지우는 이유, 그리고 컨트롤러가 쓰기를 고르게 분산시키는 방법이에요. 마지막으로 레지스터부터 디스크까지, 메모리 계층 전체를 살펴봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-16.webp"], "uploadDate": "2026-11-09T21:00:00+08:00", "duration": "PT2M57S", "embedUrl": "https://www.youtube.com/embed/sLQbISq0Uog", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 16편</p>
+      <h1 class="ep-title">하드 디스크와 SSD는 파일을 어떻게 보관할까</h1>
+      <div class="vplayer" data-yt="sLQbISq0Uog" data-title="하드 디스크와 SSD는 파일을 어떻게 보관할까">
+        <button type="button" class="vplay" aria-label="재생: 하드 디스크와 SSD는 파일을 어떻게 보관할까">
+          <img src="../../../../assets/img/videos/cpu-16.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/sLQbISq0Uog" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">전원을 끄면 메모리는 모든 것을 잊어버리지만, 파일은 그대로 남아 있어요. 어디에 있는 걸까요?<br>먼저 하드 디스크 안을 들여다봐요(돌아가는 플래터, 움직이는 헤드, 몇 밀리초의 기다림). 그다음 플래시 SSD를 살펴봐요. 페이지를 그 자리에서 덮어쓸 수 없는 이유, 블록 전체를 지우는 이유, 그리고 컨트롤러가 쓰기를 고르게 분산시키는 방법이에요. 마지막으로 레지스터부터 디스크까지, 메모리 계층 전체를 살펴봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/sLQbISq0Uog?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>파일은 어디로 갈까?</a></li>
+        <li><a href="https://youtu.be/sLQbISq0Uog?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>하드 디스크</a></li>
+        <li><a href="https://youtu.be/sLQbISq0Uog?t=71" data-t="71" rel="noopener"><span class="t">1:11</span>SSD와 플래시</a></li>
+        <li><a href="https://youtu.be/sLQbISq0Uog?t=129" data-t="129" rel="noopener"><span class="t">2:09</span>메모리 계층</a></li>
+        <li><a href="https://youtu.be/sLQbISq0Uog?t=155" data-t="155" rel="noopener"><span class="t">2:35</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>컴퓨터를 끄면, 메모리 안에 있던 것은 모두 사라져요. 다시 켜면, 파일은 그대로 남아 있어요. 그럼 그것들은 어디에 있었을까요? 전원이 없어도 데이터를 간직하는 저장 장치 안에 있었어요. 오늘은 하드 디스크와 SSD, 그리고 모든 메모리가 어떻게 하나로 맞물리는지 알아봐요.</p>
+        <p>하드 디스크는 회전하는 플래터에 비트를 저장해요. 플래터 표면에는 자성층이 입혀져 있어요. 비트 하나하나는 작은 영역이고, 한쪽 방향이나 반대쪽 방향으로 자화되어 있어요. 움직이는 암에 달린 헤드가 이것을 읽고 쓰는데, 표면 바로 위에 떠 있어요. 플래터는 1분에 약 7,000번 돌아요. 무언가를 읽으려면, 암이 알맞은 트랙으로 움직이고, 데이터가 돌아서 올 때까지 기다려요. 이 과정에 몇 밀리초가 걸리는데, 캐시보다 수백만 배 더 오래 걸려요. 하지만 헤드가 제자리에 오면, 길게 이어진 데이터는 빠르게 흘러나와요.</p>
+        <p>SSD에는 움직이는 부품이 없어요. 플래시 칸으로 만들어져 있는데, 8편에서 본 그 갇힌 전자예요. 읽는 데는 수십 마이크로초가 걸려요. 돌아가는 디스크보다는 훨씬 빠르지만, 메모리보다는 여전히 훨씬 느려요. 플래시에는 이상한 규칙이 있어요. 페이지를 덮어쓸 수 없다는 거예요. 먼저 지워야 하는데, 지우기는 페이지가 모인 블록 전체에 대해서만 한꺼번에 할 수 있어요. 그래서 SSD의 작은 컨트롤러는 새 데이터를 빈 페이지에 쓰고, 모든 것이 실제로 어디에 있는지 적은 표를 관리해요. 낯익지 않나요? 지난 편의 페이지 테이블과 비슷해요. 그리고 블록마다 지울 수 있는 횟수가 수천 번뿐이라서, 컨트롤러는 쓰기를 고르게 분산시켜요. 그러면 어느 블록도 일찍 마모되지 않아요.</p>
+        <p>이제 이번 시즌에 나온 모든 종류의 메모리를 한데 모아 봐요. 맨 위에는 레지스터가 있어요. 가장 빠르고 가장 작아요. 그다음이 캐시, 그다음이 메인 메모리예요. 맨 아래에 SSD와 하드 디스크가 있어요. 한 단계 내려갈 때마다 더 커지고 바이트당 값도 더 싸지지만, 더 느려져요. 핵심 요령은 지금 필요한 것을 위쪽 가까이에 두는 거예요.</p>
+        <p>정리하면, 하드 디스크는 돌면서 탐색하고, SSD는 전자를 가두고 페이지를 다시 연결하고, 메모리 계층은 알맞은 데이터를 알맞은 곳에 둬요. 그런데 CPU는 디스크나 키보드, 화면과 도대체 어떻게 대화할까요? 다음 편은 버스와 인터럽트예요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: CPU는 키를 눌렀다는 것을 어떻게 알아챌까요? 버스, 폴링, 인터럽트, DMA를 알아봐요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../15/ko/"><span>이전 편 · 15편</span><b>가상 메모리: 페이지, 페이지 테이블, TLB, 페이지 폴트</b></a><div class="ep-pg next soon"><span>다음 편</span><b>17편은 <time datetime="2026-11-10T21:00:00+08:00" data-at="2026-11-10T21:00:00+08:00" data-fmt="when">11-10 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
