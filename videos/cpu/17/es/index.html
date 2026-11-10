@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cómo nota tu CPU una tecla: bus, sondeo, interrupciones y DMA — De un interruptor a una CPU #17</title>
+<meta name="description" content="Pulsas una tecla y, unos milisegundos después, la letra está en la pantalla. Pero el procesador estaba ocupado, ejecutando miles de millones de instrucciones para otras cosas. ¿Cómo se dio cuenta? Conectamos la CPU, la memoria y los dispositivos con un bus, probamos el sondeo (polling: preguntar una y otra vez), pasamos a las interrupciones (el dispositivo avisa por sí mismo, la CPU guarda en qué punto estaba y salta a un manejador) y dejamos las copias grandes en manos de un controlador DMA.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/17/es/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/17/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/17/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/17/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/17/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/17/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/17/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/17/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/17/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Cómo nota tu CPU una tecla: bus, sondeo, interrupciones y DMA — De un interruptor a una CPU #17">
+<meta property="og:description" content="Pulsas una tecla y, unos milisegundos después, la letra está en la pantalla. Pero el procesador estaba ocupado, ejecutando miles de millones de instrucciones para otras cosas. ¿Cómo se dio cuenta? Conectamos la CPU, la memoria y los dispositivos con un bus, probamos el sondeo (polling: preguntar una y otra vez), pasamos a las interrupciones (el dispositivo avisa por sí mismo, la CPU guarda en qué punto estaba y salta a un manejador) y dejamos las copias grandes en manos de un controlador DMA.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-17.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/17/es/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Cómo nota tu CPU una tecla: bus, sondeo, interrupciones y DMA", "description": "Pulsas una tecla y, unos milisegundos después, la letra está en la pantalla. Pero el procesador estaba ocupado, ejecutando miles de millones de instrucciones para otras cosas. ¿Cómo se dio cuenta? Conectamos la CPU, la memoria y los dispositivos con un bus, probamos el sondeo (polling: preguntar una y otra vez), pasamos a las interrupciones (el dispositivo avisa por sí mismo, la CPU guarda en qué punto estaba y salta a un manejador) y dejamos las copias grandes en manos de un controlador DMA.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-17.webp"], "uploadDate": "2026-11-10T21:00:00+08:00", "duration": "PT2M59S", "embedUrl": "https://www.youtube.com/embed/uI4BZfA3NE0", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="es">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Todos los episodios</a> · De un interruptor a una CPU · Episodio 17</p>
+      <h1 class="ep-title">Cómo nota tu CPU una tecla: bus, sondeo, interrupciones y DMA</h1>
+      <div class="vplayer" data-yt="uI4BZfA3NE0" data-title="Cómo nota tu CPU una tecla: bus, sondeo, interrupciones y DMA">
+        <button type="button" class="vplay" aria-label="Reproducir: Cómo nota tu CPU una tecla: bus, sondeo, interrupciones y DMA">
+          <img src="../../../../assets/img/videos/cpu-17.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Al pulsar reproducir, el video se carga desde YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/uI4BZfA3NE0" rel="noopener">Ver en YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">Suscribirse en YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Pulsas una tecla y, unos milisegundos después, la letra está en la pantalla. Pero el procesador estaba ocupado, ejecutando miles de millones de instrucciones para otras cosas. ¿Cómo se dio cuenta?<br>Conectamos la CPU, la memoria y los dispositivos con un bus, probamos el sondeo (polling: preguntar una y otra vez), pasamos a las interrupciones (el dispositivo avisa por sí mismo, la CPU guarda en qué punto estaba y salta a un manejador) y dejamos las copias grandes en manos de un controlador DMA.</p>
+      <p class="ep-ai">Todas las animaciones de este video están dibujadas con código y la narración es una voz de IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Capítulos</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>¿Cómo se dio cuenta?</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=28" data-t="28" rel="noopener"><span class="t">0:28</span>El bus</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=61" data-t="61" rel="noopener"><span class="t">1:01</span>El sondeo</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=85" data-t="85" rel="noopener"><span class="t">1:25</span>Las interrupciones</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=126" data-t="126" rel="noopener"><span class="t">2:06</span>DMA</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=155" data-t="155" rel="noopener"><span class="t">2:35</span>Qué sigue</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcripción</h2>
+        <div class="ep-text">
+        <p>Pulsas una tecla. Unos milisegundos después, la letra aparece en la pantalla. Pero el procesador estaba ocupado, ejecutando miles de millones de instrucciones para otras cosas. Entonces, ¿cómo se dio cuenta? Hoy: cómo habla la CPU con los teclados, las pantallas y los discos. Buses, sondeo (polling), interrupciones y DMA.</p>
+        <p>La CPU, la memoria y los dispositivos están conectados por cables compartidos llamados bus. Las líneas de dirección llevan una dirección, que dice con quién se está hablando. Las líneas de datos llevan los datos en sí. Y las líneas de control indican si es leer o escribir. Cada dispositivo tiene unos pocos registros propios: uno que dice si tiene novedades y otro que guarda la novedad en sí. La CPU los lee igual que las direcciones de memoria.</p>
+        <p>Así que lo más sencillo: preguntar una y otra vez. ¿Se pulsó una tecla? No. ¿Y ahora? No. ¿Y ahora? A eso se le llama sondeo (polling). Funciona, pero desperdicia tiempo. El procesador revisa miles de veces, y casi todas las respuestas son «no».</p>
+        <p>Una forma mejor: que el dispositivo hable por sí mismo. Cuando se pulsa una tecla, el teclado, o el chip que se ocupa de él, envía una señal por una línea de interrupción. La CPU termina la instrucción que está ejecutando, guarda en qué punto estaba (su contador de programa y sus registros) y salta a un pequeño programa llamado manejador de interrupciones. El manejador lee la tecla, se la entrega al sistema operativo, y entonces la CPU retoma exactamente donde se había quedado, como si no hubiera pasado nada. No se pierde tiempo preguntando. La CPU solo se detiene cuando de verdad hay algo que hacer.</p>
+        <p>¿Y si queremos pasar un archivo entero del disco a la memoria? Copiar cada byte a través de la CPU la tendría ocupada muchísimo tiempo. Así que un ayudante llamado controlador DMA hace la copia por su cuenta, directamente del dispositivo a la memoria, mientras la CPU sigue con otro trabajo. Cuando termina la transferencia, envía una sola interrupción: tus datos están listos.</p>
+        <p>En resumen: los dispositivos están conectados al bus, el sondeo pregunta una y otra vez, las interrupciones dejan que los dispositivos hablen por sí mismos, y el DMA mueve datos grandes sin la CPU. Ya hemos conocido todas las partes de una computadora. La próxima vez, el final de temporada: una pulsación de tecla, seguida de principio a fin por toda la máquina. Nos vemos allí.</p>
+        </div>
+        <p class="ep-close">Próximo episodio, el final de temporada: una sola pulsación de tecla, seguida de principio a fin por toda la máquina.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../16/es/"><span>Anterior · Episodio 16</span><b>Cómo guardan tus archivos los discos duros y los SSD</b></a><div class="ep-pg next soon"><span>Siguiente</span><b>El episodio 18 sale el <time datetime="2026-11-11T21:00:00+08:00" data-at="2026-11-11T21:00:00+08:00" data-fmt="when">11-11 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

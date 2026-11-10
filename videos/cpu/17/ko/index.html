@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPU는 키 입력을 어떻게 알아챌까: 버스, 폴링, 인터럽트, DMA — 스위치 하나에서 CPU까지 #17</title>
+<meta name="description" content="키를 누르면 몇 밀리초 뒤에 그 글자가 화면에 나타나요. 그런데 프로세서는 그때 다른 일을 하느라 수십억 개의 명령어를 실행하고 있었어요. 그럼 어떻게 알아챘을까요? CPU와 메모리, 장치를 버스로 연결하고, 폴링(계속 되풀이해서 묻기)을 해 보고, 인터럽트(장치가 먼저 말하고, CPU는 하던 곳을 저장한 뒤 핸들러로 건너뛰어요)로 바꾸고, 큰 복사는 DMA 컨트롤러에 맡겨 봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/17/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/17/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/17/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/17/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/17/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/17/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/17/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/17/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/17/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="CPU는 키 입력을 어떻게 알아챌까: 버스, 폴링, 인터럽트, DMA — 스위치 하나에서 CPU까지 #17">
+<meta property="og:description" content="키를 누르면 몇 밀리초 뒤에 그 글자가 화면에 나타나요. 그런데 프로세서는 그때 다른 일을 하느라 수십억 개의 명령어를 실행하고 있었어요. 그럼 어떻게 알아챘을까요? CPU와 메모리, 장치를 버스로 연결하고, 폴링(계속 되풀이해서 묻기)을 해 보고, 인터럽트(장치가 먼저 말하고, CPU는 하던 곳을 저장한 뒤 핸들러로 건너뛰어요)로 바꾸고, 큰 복사는 DMA 컨트롤러에 맡겨 봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-17.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/17/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "CPU는 키 입력을 어떻게 알아챌까: 버스, 폴링, 인터럽트, DMA", "description": "키를 누르면 몇 밀리초 뒤에 그 글자가 화면에 나타나요. 그런데 프로세서는 그때 다른 일을 하느라 수십억 개의 명령어를 실행하고 있었어요. 그럼 어떻게 알아챘을까요? CPU와 메모리, 장치를 버스로 연결하고, 폴링(계속 되풀이해서 묻기)을 해 보고, 인터럽트(장치가 먼저 말하고, CPU는 하던 곳을 저장한 뒤 핸들러로 건너뛰어요)로 바꾸고, 큰 복사는 DMA 컨트롤러에 맡겨 봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-17.webp"], "uploadDate": "2026-11-10T21:00:00+08:00", "duration": "PT2M59S", "embedUrl": "https://www.youtube.com/embed/uI4BZfA3NE0", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 17편</p>
+      <h1 class="ep-title">CPU는 키 입력을 어떻게 알아챌까: 버스, 폴링, 인터럽트, DMA</h1>
+      <div class="vplayer" data-yt="uI4BZfA3NE0" data-title="CPU는 키 입력을 어떻게 알아챌까: 버스, 폴링, 인터럽트, DMA">
+        <button type="button" class="vplay" aria-label="재생: CPU는 키 입력을 어떻게 알아챌까: 버스, 폴링, 인터럽트, DMA">
+          <img src="../../../../assets/img/videos/cpu-17.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/uI4BZfA3NE0" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">키를 누르면 몇 밀리초 뒤에 그 글자가 화면에 나타나요. 그런데 프로세서는 그때 다른 일을 하느라 수십억 개의 명령어를 실행하고 있었어요. 그럼 어떻게 알아챘을까요?<br>CPU와 메모리, 장치를 버스로 연결하고, 폴링(계속 되풀이해서 묻기)을 해 보고, 인터럽트(장치가 먼저 말하고, CPU는 하던 곳을 저장한 뒤 핸들러로 건너뛰어요)로 바꾸고, 큰 복사는 DMA 컨트롤러에 맡겨 봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>어떻게 알아챘을까?</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=28" data-t="28" rel="noopener"><span class="t">0:28</span>버스</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=61" data-t="61" rel="noopener"><span class="t">1:01</span>폴링</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=85" data-t="85" rel="noopener"><span class="t">1:25</span>인터럽트</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=126" data-t="126" rel="noopener"><span class="t">2:06</span>DMA</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=155" data-t="155" rel="noopener"><span class="t">2:35</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>키를 눌러요. 몇 밀리초 뒤에, 그 글자가 화면에 나타나요. 그런데 프로세서는 그때 바빴어요. 다른 일을 하느라 수십억 개의 명령어를 실행하고 있었거든요. 그럼 어떻게 알아챘을까요? 오늘은 CPU가 키보드, 화면, 디스크와 어떻게 대화하는지 알아봐요. 버스, 폴링, 인터럽트, 그리고 DMA예요.</p>
+        <p>CPU와 메모리, 그리고 장치들은 버스라고 하는 공용 배선으로 이어져 있어요. 주소선은 주소를 실어 나르며, 누구에게 말하고 있는지를 알려 줘요. 데이터선은 데이터 자체를 실어 나르고요. 그리고 제어선은 읽기인지 쓰기인지를 알려 줘요. 장치마다 자기만의 레지스터가 몇 개 있어요. 하나는 새 소식이 있는지를 알려 주고, 다른 하나는 그 소식 자체를 담고 있어요. CPU는 이것들을 메모리 주소와 똑같이 읽어요.</p>
+        <p>그래서 가장 간단한 방법은 계속 물어보는 거예요. 키가 눌렸나요? 아니요. 지금은요? 아니요. 지금은요? 이걸 폴링이라고 해요. 이 방법도 되기는 하지만, 시간이 낭비돼요. 프로세서는 수천 번이나 확인하는데, 거의 모든 대답이 &#x27;아니요&#x27;예요.</p>
+        <p>더 나은 방법은 장치가 먼저 말하게 하는 거예요. 키를 누르면, 키보드나 그것을 맡고 있는 칩이 인터럽트 선에 신호를 보내요. CPU는 하던 명령어를 끝내고, 어디까지 했는지, 즉 프로그램 카운터와 레지스터를 저장한 다음, 인터럽트 핸들러라는 작은 프로그램으로 건너뛰어요. 핸들러는 키를 읽어서 운영체제에 넘겨주고, 그러면 CPU는 멈췄던 바로 그 자리에서 다시 이어 가요. 아무 일도 없었던 것처럼요. 물어보느라 시간을 낭비하지 않아요. CPU는 정말 할 일이 있을 때만 멈춰요.</p>
+        <p>그런데 파일 하나를 통째로 디스크에서 메모리로 옮길 때는 어떨까요? 바이트를 하나하나 CPU를 거쳐 복사하면, CPU는 오랫동안 바쁠 거예요. 그래서 DMA 컨트롤러라는 도우미가 직접 복사를 맡아, 장치에서 메모리로 곧장 옮겨요. 그동안 CPU는 다른 일을 해요. 전송이 끝나면, 인터럽트를 딱 한 번 보내요. 데이터가 준비됐다고요.</p>
+        <p>정리하면, 장치는 버스에 연결되어 있고, 폴링은 계속 되풀이해서 묻고, 인터럽트는 장치가 먼저 말하게 하고, DMA는 CPU 없이 큰 데이터를 옮겨요. 이제 컴퓨터의 모든 부분을 만나 봤어요. 다음 편은 시즌 마지막 편이에요. 키를 한 번 누른 순간부터 컴퓨터 전체를 끝까지 따라가 봐요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편은 시즌 마지막 편이에요. 키를 한 번 누른 순간부터 컴퓨터 전체를 따라가 봐요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../16/ko/"><span>이전 편 · 16편</span><b>하드 디스크와 SSD는 파일을 어떻게 보관할까</b></a><div class="ep-pg next soon"><span>다음 편</span><b>18편은 <time datetime="2026-11-11T21:00:00+08:00" data-at="2026-11-11T21:00:00+08:00" data-fmt="when">11-11 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CPUはキー入力にどう気づく？バス、ポーリング、割り込み、DMA — スイッチ1つからCPUまで #17</title>
+<meta name="description" content="キーを押すと、数ミリ秒後に、その文字が画面に現れます。でも、プロセッサーはそのとき、ほかの用事のために何十億もの命令を実行している最中でした。では、どうやって気づいたのでしょうか。 CPUとメモリーとデバイスをバスでつなぎ、まずポーリング（何度も聞きつづける方法）を試し、次に割り込み（デバイスのほうから知らせ、CPUはどこまで進んでいたかを保存してハンドラへジャンプする方法）に切り替え、最後に大きなコピーをDMAコントローラーに任せます。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/17/ja/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/17/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/17/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/17/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/17/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/17/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/17/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/17/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/17/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="CPUはキー入力にどう気づく？バス、ポーリング、割り込み、DMA — スイッチ1つからCPUまで #17">
+<meta property="og:description" content="キーを押すと、数ミリ秒後に、その文字が画面に現れます。でも、プロセッサーはそのとき、ほかの用事のために何十億もの命令を実行している最中でした。では、どうやって気づいたのでしょうか。 CPUとメモリーとデバイスをバスでつなぎ、まずポーリング（何度も聞きつづける方法）を試し、次に割り込み（デバイスのほうから知らせ、CPUはどこまで進んでいたかを保存してハンドラへジャンプする方法）に切り替え、最後に大きなコピーをDMAコントローラーに任せます。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-17.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/17/ja/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "CPUはキー入力にどう気づく？バス、ポーリング、割り込み、DMA", "description": "キーを押すと、数ミリ秒後に、その文字が画面に現れます。でも、プロセッサーはそのとき、ほかの用事のために何十億もの命令を実行している最中でした。では、どうやって気づいたのでしょうか。 CPUとメモリーとデバイスをバスでつなぎ、まずポーリング（何度も聞きつづける方法）を試し、次に割り込み（デバイスのほうから知らせ、CPUはどこまで進んでいたかを保存してハンドラへジャンプする方法）に切り替え、最後に大きなコピーをDMAコントローラーに任せます。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-17.webp"], "uploadDate": "2026-11-10T21:00:00+08:00", "duration": "PT2M59S", "embedUrl": "https://www.youtube.com/embed/uI4BZfA3NE0", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ja">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">すべての回</a> · スイッチ1つからCPUまで · 第17話</p>
+      <h1 class="ep-title">CPUはキー入力にどう気づく？バス、ポーリング、割り込み、DMA</h1>
+      <div class="vplayer" data-yt="uI4BZfA3NE0" data-title="CPUはキー入力にどう気づく？バス、ポーリング、割り込み、DMA">
+        <button type="button" class="vplay" aria-label="再生: CPUはキー入力にどう気づく？バス、ポーリング、割り込み、DMA">
+          <img src="../../../../assets/img/videos/cpu-17.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">再生を押すと、動画をYouTubeから読み込みます。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/uI4BZfA3NE0" rel="noopener">YouTubeで見る</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTubeでチャンネル登録</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">キーを押すと、数ミリ秒後に、その文字が画面に現れます。でも、プロセッサーはそのとき、ほかの用事のために何十億もの命令を実行している最中でした。では、どうやって気づいたのでしょうか。<br>CPUとメモリーとデバイスをバスでつなぎ、まずポーリング（何度も聞きつづける方法）を試し、次に割り込み（デバイスのほうから知らせ、CPUはどこまで進んでいたかを保存してハンドラへジャンプする方法）に切り替え、最後に大きなコピーをDMAコントローラーに任せます。</p>
+      <p class="ep-ai">この動画のアニメーションは、すべてコードで描いています。ナレーションはAI音声です。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">チャプター</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>どうやって気づいた？</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=28" data-t="28" rel="noopener"><span class="t">0:28</span>バス</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=61" data-t="61" rel="noopener"><span class="t">1:01</span>ポーリング</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=85" data-t="85" rel="noopener"><span class="t">1:25</span>割り込み</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=126" data-t="126" rel="noopener"><span class="t">2:06</span>DMA</a></li>
+        <li><a href="https://youtu.be/uI4BZfA3NE0?t=155" data-t="155" rel="noopener"><span class="t">2:35</span>次回予告</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">ナレーション全文</h2>
+        <div class="ep-text">
+        <p>キーを押します。数ミリ秒後、その文字が画面に現れます。でも、プロセッサーはそのとき忙しく、ほかの用事のために何十億もの命令を実行していました。では、どうやって気づいたのでしょうか。今日は、CPUがキーボードや画面やディスクとどう話をしているかを見ていきます。バス、ポーリング、割り込み、そしてDMAです。</p>
+        <p>CPUとメモリーとデバイスは、バスと呼ばれる共有の配線でつながっています。アドレス線は、アドレスを運んで、誰に話しかけているかを示します。データ線は、データそのものを運びます。そして制御線が、読み出しか書き込みかを伝えます。それぞれのデバイスには、専用のレジスタがいくつかあります。1つは知らせがあるかどうかを示し、もう1つは知らせそのものを保持します。CPUは、メモリーのアドレスと同じように、これらを読みます。</p>
+        <p>そこで、いちばん簡単な方法は、聞きつづけることです。キーは押されましたか。いいえ。今は？いいえ。今は？これをポーリングといいます。これでも動きますが、時間のむだです。プロセッサーは何千回も確かめ、ほとんどの答えは「いいえ」です。</p>
+        <p>もっとよい方法は、デバイスのほうから知らせてもらうことです。キーが押されると、キーボード、またはそれを担当するチップが、割り込み線に信号を送ります。CPUは、実行中の命令を終えると、どこまで進んでいたか、つまりプログラムカウンターとレジスタを保存して、割り込みハンドラという小さなプログラムへジャンプします。ハンドラはキーを読み取ってオペレーティングシステムに渡し、そのあとCPUは、中断したところからそのまま再開します。何事もなかったかのように。聞いて時間をむだにすることはありません。CPUが手を止めるのは、本当にやることがあるときだけです。</p>
+        <p>では、ファイルを丸ごとディスクからメモリーへ移すときはどうでしょう。1バイトずつCPUを通してコピーしていたら、CPUは長いあいだ手がふさがってしまいます。そこで、DMAコントローラーという助け役が、デバイスからメモリーへ直接、コピーを自分で行います。そのあいだ、CPUはほかの仕事を進められます。転送が終わると、割り込みをたった1回だけ送ります。データの準備ができました、と。</p>
+        <p>まとめです。デバイスはバスにつながり、ポーリングは何度も聞き、割り込みはデバイスのほうから知らせ、DMAはCPUを通さずに大きなデータを動かします。これでコンピューターのすべての部品が出そろいました。次回はシーズン最終回です。キーを1回押したところから、マシン全体を端から端までたどります。また会いましょう。</p>
+        </div>
+        <p class="ep-close">次回はシーズン最終回です。キーを1回押したところから、マシン全体をたどります。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../16/ja/"><span>前の回 · 第16話</span><b>ハードディスクとSSDがファイルを保存するしくみ</b></a><div class="ep-pg next soon"><span>次の回</span><b>第18話は <time datetime="2026-11-11T21:00:00+08:00" data-at="2026-11-11T21:00:00+08:00" data-fmt="when">11-11 21:00 (UTC+8)</time> に公開</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
