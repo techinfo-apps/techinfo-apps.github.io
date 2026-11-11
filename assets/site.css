@@ -330,6 +330,27 @@ a:hover { text-decoration: underline; }
 /* Desktop Mode: phone apps in windows of their own (Mac 1.3) */
 .uc-desktop { padding: 120px 0; }
 .uc-desktop .chips { justify-content: center; margin-top: 30px; }
+/* the chips above only animate in the scrolling "ask" scene; here they are just there */
+.uc-desktop .chip, .uc-space .chip { opacity: 1; transform: none; }
+/* Spaces (Android 1.15, Mac 1.4): two groups on one Wi-Fi, yours bright, the other faint */
+.uc-space { padding: 130px 0; background: var(--bg-2); }
+.sp-grid { display: grid; grid-template-columns: 1.15fr 1fr; gap: 6vw; align-items: center; }
+.sp-copy .lead { margin: 18px 0 0; }
+.sp-copy .chips { margin-top: 28px; }
+.uc-space .chip { background: var(--card); color: var(--fg); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.sp-note { margin: 18px 0 0; font-size: 15px; }
+.sp-map { display: grid; gap: 16px; }
+.sp-room { border-radius: var(--radius); padding: 22px 26px 26px; }
+.sp-room.mine { border: 2px solid transparent; background: linear-gradient(var(--card), var(--card)) padding-box, var(--grad) border-box; }
+.sp-room.other { border: 2px dashed var(--line); opacity: .5; }
+.sp-tag { font-size: 14px; font-weight: 600; color: var(--fg-2); }
+.sp-devs { display: flex; align-items: flex-end; gap: 22px; margin-top: 16px; }
+.sp-devs svg, .sp-wifi svg { height: 52px; width: auto; fill: none; stroke: var(--fg-2); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.sp-devs svg.lap { height: 60px; }
+.mine .sp-devs svg { stroke: var(--accent); }
+.sp-wifi { display: flex; align-items: center; justify-content: center; gap: 8px; padding-top: 4px; font-size: 14px; color: var(--fg-2); }
+.sp-wifi svg { height: 22px; }
+@media (max-width: 860px) { .sp-grid { grid-template-columns: 1fr; gap: 40px; } }
 .uc-feat { padding: 130px 0; }
 .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; margin-top: 50px; }
 .tile { background: var(--bg-2); border-radius: var(--radius); padding: 30px 28px; }
