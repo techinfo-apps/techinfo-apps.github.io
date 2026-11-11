@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Une touche à travers tout l&#x27;ordinateur (final de saison) — D&#x27;un interrupteur à un processeur #18</title>
+<meta name="description" content="Cette saison, nous avons construit un ordinateur en partant d&#x27;un seul interrupteur. Dans ce dernier épisode, nous regardons toutes les parties fonctionner ensemble. Nous suivons une seule pression sur la touche A : une interruption, des instructions en mémoire, le TLB et le cache, le pipeline et l&#x27;unité de commande, 65 = A dans un registre, l&#x27;ALU jusqu&#x27;à ses portes et ses interrupteurs, les pixels de l&#x27;écran, et les cellules flash d&#x27;un SSD. Puis comment mesurer la vitesse : instructions × tics par instruction × durée d&#x27;un tic.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/18/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/18/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/18/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/18/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/18/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/18/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/18/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/18/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/18/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Une touche à travers tout l&#x27;ordinateur (final de saison) — D&#x27;un interrupteur à un processeur #18">
+<meta property="og:description" content="Cette saison, nous avons construit un ordinateur en partant d&#x27;un seul interrupteur. Dans ce dernier épisode, nous regardons toutes les parties fonctionner ensemble. Nous suivons une seule pression sur la touche A : une interruption, des instructions en mémoire, le TLB et le cache, le pipeline et l&#x27;unité de commande, 65 = A dans un registre, l&#x27;ALU jusqu&#x27;à ses portes et ses interrupteurs, les pixels de l&#x27;écran, et les cellules flash d&#x27;un SSD. Puis comment mesurer la vitesse : instructions × tics par instruction × durée d&#x27;un tic.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-18.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/18/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Une touche à travers tout l'ordinateur (final de saison)", "description": "Cette saison, nous avons construit un ordinateur en partant d'un seul interrupteur. Dans ce dernier épisode, nous regardons toutes les parties fonctionner ensemble. Nous suivons une seule pression sur la touche A : une interruption, des instructions en mémoire, le TLB et le cache, le pipeline et l'unité de commande, 65 = A dans un registre, l'ALU jusqu'à ses portes et ses interrupteurs, les pixels de l'écran, et les cellules flash d'un SSD. Puis comment mesurer la vitesse : instructions × tics par instruction × durée d'un tic.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-18.webp"], "uploadDate": "2026-11-11T21:00:00+08:00", "duration": "PT2M53S", "embedUrl": "https://www.youtube.com/embed/cokK70wBors", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;un interrupteur à un processeur · Épisode 18</p>
+      <h1 class="ep-title">Une touche à travers tout l&#x27;ordinateur (final de saison)</h1>
+      <div class="vplayer" data-yt="cokK70wBors" data-title="Une touche à travers tout l&#x27;ordinateur (final de saison)">
+        <button type="button" class="vplay" aria-label="Lire: Une touche à travers tout l&#x27;ordinateur (final de saison)">
+          <img src="../../../../assets/img/videos/cpu-18.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/cokK70wBors" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Cette saison, nous avons construit un ordinateur en partant d&#x27;un seul interrupteur. Dans ce dernier épisode, nous regardons toutes les parties fonctionner ensemble.<br>Nous suivons une seule pression sur la touche A : une interruption, des instructions en mémoire, le TLB et le cache, le pipeline et l&#x27;unité de commande, 65 = A dans un registre, l&#x27;ALU jusqu&#x27;à ses portes et ses interrupteurs, les pixels de l&#x27;écran, et les cellules flash d&#x27;un SSD. Puis comment mesurer la vitesse : instructions × tics par instruction × durée d&#x27;un tic.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/cokK70wBors?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Une pression de touche</a></li>
+        <li><a href="https://youtu.be/cokK70wBors?t=21" data-t="21" rel="noopener"><span class="t">0:21</span>À travers toute la machine</a></li>
+        <li><a href="https://youtu.be/cokK70wBors?t=114" data-t="114" rel="noopener"><span class="t">1:54</span>Quelle est sa vitesse ?</a></li>
+        <li><a href="https://youtu.be/cokK70wBors?t=160" data-t="160" rel="noopener"><span class="t">2:40</span>Fin de la première saison</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Cette saison, nous avons construit un ordinateur en partant d&#x27;un seul interrupteur. Aujourd&#x27;hui, regardons tout cela fonctionner ensemble, en suivant une seule pression de touche de bout en bout. Appuyez sur A. Voici ce qui se passe dans la petite fraction de seconde qui suit.</p>
+        <p>La puce du clavier déclenche une interruption. Le processeur sauvegarde où il en était, et saute vers le gestionnaire d&#x27;interruption. Le gestionnaire n&#x27;est fait que de nombres : des instructions stockées en mémoire, chacune composée d&#x27;un code opération et de quelques champs. Pour les lire, le CPU traduit les adresses virtuelles en adresses physiques grâce au TLB, et trouve la plupart des instructions déjà en attente dans le cache. Dans le pipeline, les instructions sont lues, décodées et exécutées, dans le désordre quand c&#x27;est possible, avec les sauts devinés à l&#x27;avance, tandis que l&#x27;unité de commande actionne les bons interrupteurs à chaque tic. La touche arrive sous la forme du nombre 65, la lettre A, et se range dans un registre fait de bascules. L&#x27;ALU compare et additionne, avec les nombres négatifs en complément à deux, grâce à des additionneurs faits de portes, et des portes faites d&#x27;interrupteurs. Ensuite, la lettre est dessinée : des milliers de pixels, chacun de trois nombres pour le rouge, le vert et le bleu, calculés avec des multiplications et des calculs en virgule flottante. Et quand vous enregistrez votre travail, il est écrit dans des cellules flash d&#x27;un SSD, où il reste même sans courant. Tout cela se passe en une petite fraction de seconde.</p>
+        <p>Alors comment mesurer la rapidité de tout cela ? Le temps que met un programme, c&#x27;est trois nombres multipliés entre eux. Combien d&#x27;instructions il exécute, combien de tics prend chaque instruction en moyenne, et combien de temps dure un tic. Un milliard d&#x27;instructions, un demi-tic chacune, à quatre milliards de tics par seconde : un huitième de seconde. Cela donne trois façons d&#x27;aller plus vite : moins d&#x27;instructions, moins de tics par instruction, ou des tics plus courts. Chaque astuce de cette saison était l&#x27;une d&#x27;elles.</p>
+        <p>Des milliards d&#x27;étapes chaque seconde, et chacune se résume à des interrupteurs qui s&#x27;activent et se désactivent. Voilà, c&#x27;est la fin de la première saison. Merci d&#x27;avoir construit un ordinateur avec nous.</p>
+        </div>
+        <p class="ep-close">Voilà, c&#x27;est la fin de la première saison. Merci d&#x27;avoir construit un ordinateur avec nous.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../17/fr/"><span>Précédent · Épisode 17</span><b>Comment le CPU remarque une touche : bus, interruptions, DMA</b></a></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>키 한 번이 컴퓨터 전체를 지나가는 길 (시즌 마지막 편) — 스위치 하나에서 CPU까지 #18</title>
+<meta name="description" content="이번 시즌에는 스위치 하나에서 시작해 컴퓨터를 만들었어요. 마지막 편에서는 모든 부분이 함께 일하는 모습을 지켜봐요. A 키를 한 번 누르는 순간을 따라가요. 인터럽트, 메모리 안의 명령어, TLB와 캐시, 파이프라인과 제어 장치, 레지스터 안의 65 = A, 게이트와 스위치까지 내려가는 ALU, 화면의 픽셀, 그리고 SSD의 플래시 칸이에요. 마지막으로 속도를 재는 방법도 알아봐요. 명령어 수 × 명령어당 똑딱 수 × 똑딱 한 번의 시간이에요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/cpu/18/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/cpu/18/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/cpu/18/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/cpu/18/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/cpu/18/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/cpu/18/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/cpu/18/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/cpu/18/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/cpu/18/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="키 한 번이 컴퓨터 전체를 지나가는 길 (시즌 마지막 편) — 스위치 하나에서 CPU까지 #18">
+<meta property="og:description" content="이번 시즌에는 스위치 하나에서 시작해 컴퓨터를 만들었어요. 마지막 편에서는 모든 부분이 함께 일하는 모습을 지켜봐요. A 키를 한 번 누르는 순간을 따라가요. 인터럽트, 메모리 안의 명령어, TLB와 캐시, 파이프라인과 제어 장치, 레지스터 안의 65 = A, 게이트와 스위치까지 내려가는 ALU, 화면의 픽셀, 그리고 SSD의 플래시 칸이에요. 마지막으로 속도를 재는 방법도 알아봐요. 명령어 수 × 명령어당 똑딱 수 × 똑딱 한 번의 시간이에요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/cpu-18.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/cpu/18/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "키 한 번이 컴퓨터 전체를 지나가는 길 (시즌 마지막 편)", "description": "이번 시즌에는 스위치 하나에서 시작해 컴퓨터를 만들었어요. 마지막 편에서는 모든 부분이 함께 일하는 모습을 지켜봐요. A 키를 한 번 누르는 순간을 따라가요. 인터럽트, 메모리 안의 명령어, TLB와 캐시, 파이프라인과 제어 장치, 레지스터 안의 65 = A, 게이트와 스위치까지 내려가는 ALU, 화면의 픽셀, 그리고 SSD의 플래시 칸이에요. 마지막으로 속도를 재는 방법도 알아봐요. 명령어 수 × 명령어당 똑딱 수 × 똑딱 한 번의 시간이에요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/cpu-18.webp"], "uploadDate": "2026-11-11T21:00:00+08:00", "duration": "PT2M53S", "embedUrl": "https://www.youtube.com/embed/cokK70wBors", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 스위치 하나에서 CPU까지 · 18편</p>
+      <h1 class="ep-title">키 한 번이 컴퓨터 전체를 지나가는 길 (시즌 마지막 편)</h1>
+      <div class="vplayer" data-yt="cokK70wBors" data-title="키 한 번이 컴퓨터 전체를 지나가는 길 (시즌 마지막 편)">
+        <button type="button" class="vplay" aria-label="재생: 키 한 번이 컴퓨터 전체를 지나가는 길 (시즌 마지막 편)">
+          <img src="../../../../assets/img/videos/cpu-18.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/cokK70wBors" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">이번 시즌에는 스위치 하나에서 시작해 컴퓨터를 만들었어요. 마지막 편에서는 모든 부분이 함께 일하는 모습을 지켜봐요.<br>A 키를 한 번 누르는 순간을 따라가요. 인터럽트, 메모리 안의 명령어, TLB와 캐시, 파이프라인과 제어 장치, 레지스터 안의 65 = A, 게이트와 스위치까지 내려가는 ALU, 화면의 픽셀, 그리고 SSD의 플래시 칸이에요. 마지막으로 속도를 재는 방법도 알아봐요. 명령어 수 × 명령어당 똑딱 수 × 똑딱 한 번의 시간이에요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 음성이에요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/cokK70wBors?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>키 한 번 누르기</a></li>
+        <li><a href="https://youtu.be/cokK70wBors?t=21" data-t="21" rel="noopener"><span class="t">0:21</span>컴퓨터 전체를 따라가기</a></li>
+        <li><a href="https://youtu.be/cokK70wBors?t=114" data-t="114" rel="noopener"><span class="t">1:54</span>얼마나 빠를까?</a></li>
+        <li><a href="https://youtu.be/cokK70wBors?t=160" data-t="160" rel="noopener"><span class="t">2:40</span>시즌 1의 끝</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>이번 시즌에는 스위치 하나에서 시작해 컴퓨터를 만들었어요. 오늘은 이 모든 것이 함께 일하는 모습을 볼 거예요. 키를 한 번 누른 순간부터 끝까지 따라가면서요. A를 눌러요. 이어지는 눈 깜짝할 사이에, 이런 일이 일어나요.</p>
+        <p>키보드의 칩이 인터럽트를 보내요. 프로세서는 어디까지 했는지 저장하고, 인터럽트 핸들러로 건너뛰어요. 핸들러는 그냥 수일 뿐이에요. 메모리에 저장된 명령어인데, 하나하나가 연산 코드와 몇 개의 필드로 이루어져 있어요. 명령어를 인출하기 위해, CPU는 TLB로 가상 주소를 물리 주소로 바꾸고, 대부분의 명령어가 이미 캐시에서 기다리고 있는 것을 찾아내요. 파이프라인에서는 명령어가 인출되고, 해독되고, 실행돼요. 가능하면 비순차로 실행하고, 점프는 미리 추측해 두고요. 그동안 제어 장치는 똑딱할 때마다 알맞은 스위치를 바꿔요. 키는 65라는 수, 곧 글자 A로 도착해서, 플립플롭으로 만든 레지스터에 자리 잡아요. ALU는 비교하고 더해요. 음수는 2의 보수로 나타내고, 가산기는 게이트로, 게이트는 스위치로 만들어져 있어요. 그다음 글자를 그려요. 수천 개의 픽셀, 각각 빨강, 초록, 파랑을 나타내는 수 세 개를 곱셈과 부동소수점 계산으로 구해요. 그리고 작업한 내용을 저장하면, SSD의 플래시 칸에 기록돼요. 전원이 꺼져도 거기에 그대로 남아요. 이 모든 일이 눈 깜짝할 사이에 일어나요.</p>
+        <p>그럼 이 모든 게 얼마나 빠른지는 어떻게 잴까요? 프로그램이 걸리는 시간은 수 세 개를 곱한 값이에요. 명령어를 몇 개 실행하는지, 명령어 하나에 똑딱이 평균 몇 번 걸리는지, 그리고 똑딱 한 번이 얼마나 오래 가는지예요. 명령어 10억 개, 하나당 똑딱 반 번, 1초에 똑딱 40억 번이면, 걸리는 시간은 8분의 1초예요. 그래서 빨라지는 길은 세 가지예요. 명령어를 줄이거나, 명령어당 똑딱 수를 줄이거나, 똑딱 한 번을 더 짧게 하는 거예요. 이번 시즌의 요령은 모두 이 셋 중 하나였어요.</p>
+        <p>1초에 수십억 단계, 그리고 그 하나하나가 결국 스위치가 켜지고 꺼지는 일이에요. 시즌 1은 여기까지예요. 우리와 함께 컴퓨터를 만들어 줘서 고마워요.</p>
+        </div>
+        <p class="ep-close">시즌 1은 여기까지예요. 우리와 함께 컴퓨터를 만들어 줘서 고마워요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../17/ko/"><span>이전 편 · 17편</span><b>CPU는 키 입력을 어떻게 알아챌까: 버스, 폴링, 인터럽트, DMA</b></a></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
