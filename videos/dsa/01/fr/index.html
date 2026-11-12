@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La même réponse, un million de fois plus vite : le grand O — D&#x27;une liste à l&#x27;appli de cartes #1</title>
+<meta name="description" content="Deux programmes cherchent dans la même liste d&#x27;un million de noms. L&#x27;un en regarde un million ; l&#x27;autre en regarde vingt. À la fin de cette vidéo, vous saurez comment les programmeurs mesurent la « rapidité » : en comptant les étapes, pas les secondes. Nous comparons la recherche un par un avec le fait de couper la liste en deux, nous regardons le nombre d&#x27;étapes grandir de mille noms à un milliard, nous découvrons la notation grand O (log n, n, n log n, n², 2ⁿ), et nous voyons pourquoi la mémoire est aussi un coût.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/01/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/01/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/01/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/01/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/01/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/01/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/01/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/01/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/01/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="La même réponse, un million de fois plus vite : le grand O — D&#x27;une liste à l&#x27;appli de cartes #1">
+<meta property="og:description" content="Deux programmes cherchent dans la même liste d&#x27;un million de noms. L&#x27;un en regarde un million ; l&#x27;autre en regarde vingt. À la fin de cette vidéo, vous saurez comment les programmeurs mesurent la « rapidité » : en comptant les étapes, pas les secondes. Nous comparons la recherche un par un avec le fait de couper la liste en deux, nous regardons le nombre d&#x27;étapes grandir de mille noms à un milliard, nous découvrons la notation grand O (log n, n, n log n, n², 2ⁿ), et nous voyons pourquoi la mémoire est aussi un coût.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-01.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/01/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "La même réponse, un million de fois plus vite : le grand O", "description": "Deux programmes cherchent dans la même liste d'un million de noms. L'un en regarde un million ; l'autre en regarde vingt. À la fin de cette vidéo, vous saurez comment les programmeurs mesurent la « rapidité » : en comptant les étapes, pas les secondes. Nous comparons la recherche un par un avec le fait de couper la liste en deux, nous regardons le nombre d'étapes grandir de mille noms à un milliard, nous découvrons la notation grand O (log n, n, n log n, n², 2ⁿ), et nous voyons pourquoi la mémoire est aussi un coût.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-01.webp"], "uploadDate": "2026-11-12T21:00:00+08:00", "duration": "PT3M48S", "embedUrl": "https://www.youtube.com/embed/asqA_GF_ASA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;une liste à l&#x27;appli de cartes · Épisode 1</p>
+      <h1 class="ep-title">La même réponse, un million de fois plus vite : le grand O</h1>
+      <div class="vplayer" data-yt="asqA_GF_ASA" data-title="La même réponse, un million de fois plus vite : le grand O">
+        <button type="button" class="vplay" aria-label="Lire: La même réponse, un million de fois plus vite : le grand O">
+          <img src="../../../../assets/img/videos/dsa-01.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/asqA_GF_ASA" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Deux programmes cherchent dans la même liste d&#x27;un million de noms. L&#x27;un en regarde un million ; l&#x27;autre en regarde vingt. À la fin de cette vidéo, vous saurez comment les programmeurs mesurent la « rapidité » : en comptant les étapes, pas les secondes.<br>Nous comparons la recherche un par un avec le fait de couper la liste en deux, nous regardons le nombre d&#x27;étapes grandir de mille noms à un milliard, nous découvrons la notation grand O (log n, n, n log n, n², 2ⁿ), et nous voyons pourquoi la mémoire est aussi un coût.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>La même réponse, une autre vitesse</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=26" data-t="26" rel="noopener"><span class="t">0:26</span>Deux façons de trouver un nom</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=65" data-t="65" rel="noopener"><span class="t">1:05</span>Compter les étapes, pas les secondes</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=129" data-t="129" rel="noopener"><span class="t">2:09</span>Le grand O</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=195" data-t="195" rel="noopener"><span class="t">3:15</span>La mémoire coûte aussi</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=211" data-t="211" rel="noopener"><span class="t">3:31</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Deux programmes cherchent dans la même liste triée d&#x27;un million de noms, sur le même ordinateur. Tous les deux trouvent la réponse. L&#x27;un a regardé un million de noms. L&#x27;autre en a regardé vingt. Allongez la liste jusqu&#x27;à un milliard de noms, et l&#x27;écart grandit jusqu&#x27;à plus de trente millions de fois. Aujourd&#x27;hui : comment les programmeurs mesurent la rapidité.</p>
+        <p>Un algorithme est une liste fixe d&#x27;étapes qui résout un problème, à chaque fois, pour n&#x27;importe quelle entrée. Voici le premier. On commence tout en haut, on regarde chaque nom, et on s&#x27;arrête quand on trouve le bon. Simple, et toujours correct. Le second a besoin que la liste soit triée. On regarde le nom du milieu. Si le vôtre vient après, on jette toute la première moitié. Puis on recommence avec ce qui reste : moitié, moitié, moitié, jusqu&#x27;à ce qu&#x27;il ne reste qu&#x27;un seul nom. Nous le décortiquerons à l&#x27;épisode 5.</p>
+        <p>Lequel est le plus rapide ? Un chronomètre n&#x27;est pas équitable. Un ordinateur plus récent, ou plus occupé, change le temps. Alors nous comptons plutôt les étapes. Appelons n le nombre de noms. Pour le premier programme, le pire cas est de vérifier tous les noms, un par un. n noms, n étapes. Pour le second, chaque étape coupe la liste en deux. Un million tombe à un seul en vingt étapes, car 2²⁰ vaut tout juste plus d&#x27;un million. Regardez maintenant ce qui se passe quand la liste s&#x27;allonge. Mille noms : mille étapes, ou dix. Un million : un million, ou vingt. Un milliard : un milliard, ou trente. Mille fois plus de noms ne coûtent au second programme que dix étapes de plus.</p>
+        <p>Les programmeurs écrivent cette croissance avec un O majuscule. Le premier programme est en O(n) : deux fois plus de noms, deux fois plus de travail. Le second est en O(log n) : deux fois plus de noms, et il ne faut qu&#x27;une étape de plus. La notation grand O ignore les petits détails. Un programme qui demande 3n + 5 étapes reste en O(n) : pour un grand n, le 5 ne compte presque pas, et le 3 non plus. Ce qui compte, c&#x27;est la forme de la courbe. n log n est aussi rapide qu&#x27;un bon tri peut l&#x27;être. Nous y arriverons à l&#x27;épisode 7. n² est ce qu&#x27;on obtient quand chaque élément est comparé à tous les autres. Pour un million d&#x27;éléments, cela fait mille milliards d&#x27;étapes : environ dix-sept minutes, même à un milliard d&#x27;étapes par seconde. Et 2ⁿ double à chaque élément que l&#x27;on ajoute. Avec seulement cent éléments, il faudrait environ quarante mille milliards d&#x27;années.</p>
+        <p>Le temps n&#x27;est pas le seul coût. La mémoire en est un autre. On peut souvent échanger l&#x27;un contre l&#x27;autre : gardez une table supplémentaire en mémoire, et trouver les choses devient plus rapide. Nous ferons exactement cela à l&#x27;épisode 10.</p>
+        <p>Donc, pour comparer des algorithmes : comptez les étapes, et regardez comment elles croissent. Ce qui nous amène à une première question pour tout algorithme : où vivent réellement les données ? La prochaine fois : les tableaux et les listes chaînées. À bientôt.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : les tableaux et les listes chaînées, les deux plus anciennes façons de garder des données en mémoire.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 2 sort le <time datetime="2026-11-13T21:00:00+08:00" data-at="2026-11-13T21:00:00+08:00" data-fmt="when">11-13 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>同一个答案，为什么能快一百万倍：大 O — 从一串数到地图导航 #1</title>
+<meta name="description" content="两个程序查同一份一百万个名字的名单：一个看了一百万个，另一个只看了二十个。看完这个视频，你就会知道程序员怎么衡量“快”：数步数，不看秒。 我们比较“一个个看”和“每次砍掉一半”两种找法，看名单从一千个涨到十亿个时步数怎么变，认识大 O（log n、n、n log n、n²、2ⁿ），再看看为什么内存也是一种代价。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/01/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/01/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/01/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/01/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/01/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/01/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/01/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/01/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/01/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="同一个答案，为什么能快一百万倍：大 O — 从一串数到地图导航 #1">
+<meta property="og:description" content="两个程序查同一份一百万个名字的名单：一个看了一百万个，另一个只看了二十个。看完这个视频，你就会知道程序员怎么衡量“快”：数步数，不看秒。 我们比较“一个个看”和“每次砍掉一半”两种找法，看名单从一千个涨到十亿个时步数怎么变，认识大 O（log n、n、n log n、n²、2ⁿ），再看看为什么内存也是一种代价。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-01.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/01/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "同一个答案，为什么能快一百万倍：大 O", "description": "两个程序查同一份一百万个名字的名单：一个看了一百万个，另一个只看了二十个。看完这个视频，你就会知道程序员怎么衡量“快”：数步数，不看秒。 我们比较“一个个看”和“每次砍掉一半”两种找法，看名单从一千个涨到十亿个时步数怎么变，认识大 O（log n、n、n log n、n²、2ⁿ），再看看为什么内存也是一种代价。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-01.webp"], "uploadDate": "2026-11-12T21:00:00+08:00", "duration": "PT3M48S", "embedUrl": "https://www.youtube.com/embed/asqA_GF_ASA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一串数到地图导航 · 第 1 集</p>
+      <h1 class="ep-title">同一个答案，为什么能快一百万倍：大 O</h1>
+      <div class="vplayer" data-yt="asqA_GF_ASA" data-title="同一个答案，为什么能快一百万倍：大 O">
+        <button type="button" class="vplay" aria-label="播放: 同一个答案，为什么能快一百万倍：大 O">
+          <img src="../../../../assets/img/videos/dsa-01.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/asqA_GF_ASA" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">两个程序查同一份一百万个名字的名单：一个看了一百万个，另一个只看了二十个。看完这个视频，你就会知道程序员怎么衡量“快”：数步数，不看秒。<br>我们比较“一个个看”和“每次砍掉一半”两种找法，看名单从一千个涨到十亿个时步数怎么变，认识大 O（log n、n、n log n、n²、2ⁿ），再看看为什么内存也是一种代价。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>同一个答案，不同的速度</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=26" data-t="26" rel="noopener"><span class="t">0:26</span>找名字的两种办法</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=65" data-t="65" rel="noopener"><span class="t">1:05</span>数步数，不看秒</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=129" data-t="129" rel="noopener"><span class="t">2:09</span>大 O</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=195" data-t="195" rel="noopener"><span class="t">3:15</span>内存也是代价</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=211" data-t="211" rel="noopener"><span class="t">3:31</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>两个程序，在同一台电脑上，查同一份排好序的一百万个名字的名单，都找到了答案。一个看了一百万个名字，另一个只看了二十个。名单加长到十亿个，差距就变成三千多万倍。今天讲：程序员怎么衡量“快”。</p>
+        <p>算法就是一串写死的步骤：不管给它什么数据，每次都能把问题解决。第一个办法：从头开始，一个个看，找到就停。简单，而且一定对。第二个办法要名单先排好序：看正中间那个名字，要找的排在它后面，就把前一半整个扔掉。剩下的再这样做：一半、一半、再一半，直到只剩一个。第 5 集会把它拆开细讲。</p>
+        <p>哪个快？拿秒表量不公平：换一台新电脑，或者电脑正忙，时间就变了。所以我们改成数步数。名字的个数叫 n。第一个办法，最坏要把每个名字都看一遍：n 个名字，n 步。第二个办法，每一步砍掉一半。一百万砍二十次就只剩一个，因为 2 的 20 次方刚好超过一百万。再看名单变长时会怎样。一千个名字：一千步，或者十步。一百万：一百万步，或者二十步。十亿：十亿步，或者三十步。名字多了一千倍，第二个办法只多走十步。</p>
+        <p>程序员用一个大写的 O 来写这种“涨法”。第一个办法是 O(n)：名字翻一倍，活也翻一倍。第二个是 O(log n)：名字翻一倍，只多一步。大 O 不管小处。一个程序要走 3n + 5 步，它还是 O(n)：n 一大，那个 5 几乎不算什么，3 倍也改变不了“直线”的样子。要紧的是曲线的形状。n log n 是好的排序能做到的速度，第 7 集会讲到。n² 是每一个都要和其他每一个比一次。一百万个就是一万亿步，就算每秒十亿步，也要十七分钟左右。2ⁿ 是每多一个就翻一倍。只要一百个，就得算大约四十万亿年。</p>
+        <p>时间不是唯一的代价，内存也是。很多时候可以拿一个换另一个：多占一张表的内存，找东西就快了。第 10 集就会这么做。</p>
+        <p>总结一下：比算法，就数步数，看它怎么涨。这就引出任何算法的第一个问题：数据到底放在哪？下一集：数组和链表。下集见。</p>
+        </div>
+        <p class="ep-close">下一集：数组和链表，在内存里放数据最老的两种办法。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><div class="ep-pg next soon"><span>下一集</span><b>第 2 集 <time datetime="2026-11-13T21:00:00+08:00" data-at="2026-11-13T21:00:00+08:00" data-fmt="when">11-13 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

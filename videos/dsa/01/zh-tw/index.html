@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>同一個答案，為什麼能快一百萬倍：大 O — 從一串數到地圖導航 #1</title>
+<meta name="description" content="兩個程式搜尋同一份有一百萬個名字的名單：一個看了一百萬個，另一個只看了二十個。看完這支影片，你就會知道程式設計師怎麼衡量「快」：數步數，不看秒數。 我們會比較「一個一個看」和「每次砍掉一半」兩種找法，看名單從一千個名字增加到十億個時，步數是怎麼成長的，認識大 O（log n、n、n log n、n²、2ⁿ），再看看為什麼記憶體也是一種代價。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/01/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/01/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/01/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/01/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/01/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/01/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/01/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/01/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/01/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="同一個答案，為什麼能快一百萬倍：大 O — 從一串數到地圖導航 #1">
+<meta property="og:description" content="兩個程式搜尋同一份有一百萬個名字的名單：一個看了一百萬個，另一個只看了二十個。看完這支影片，你就會知道程式設計師怎麼衡量「快」：數步數，不看秒數。 我們會比較「一個一個看」和「每次砍掉一半」兩種找法，看名單從一千個名字增加到十億個時，步數是怎麼成長的，認識大 O（log n、n、n log n、n²、2ⁿ），再看看為什麼記憶體也是一種代價。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-01.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/01/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "同一個答案，為什麼能快一百萬倍：大 O", "description": "兩個程式搜尋同一份有一百萬個名字的名單：一個看了一百萬個，另一個只看了二十個。看完這支影片，你就會知道程式設計師怎麼衡量「快」：數步數，不看秒數。 我們會比較「一個一個看」和「每次砍掉一半」兩種找法，看名單從一千個名字增加到十億個時，步數是怎麼成長的，認識大 O（log n、n、n log n、n²、2ⁿ），再看看為什麼記憶體也是一種代價。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-01.webp"], "uploadDate": "2026-11-12T21:00:00+08:00", "duration": "PT3M48S", "embedUrl": "https://www.youtube.com/embed/asqA_GF_ASA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一串數到地圖導航 · 第 1 集</p>
+      <h1 class="ep-title">同一個答案，為什麼能快一百萬倍：大 O</h1>
+      <div class="vplayer" data-yt="asqA_GF_ASA" data-title="同一個答案，為什麼能快一百萬倍：大 O">
+        <button type="button" class="vplay" aria-label="播放: 同一個答案，為什麼能快一百萬倍：大 O">
+          <img src="../../../../assets/img/videos/dsa-01.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/asqA_GF_ASA" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">兩個程式搜尋同一份有一百萬個名字的名單：一個看了一百萬個，另一個只看了二十個。看完這支影片，你就會知道程式設計師怎麼衡量「快」：數步數，不看秒數。<br>我們會比較「一個一個看」和「每次砍掉一半」兩種找法，看名單從一千個名字增加到十億個時，步數是怎麼成長的，認識大 O（log n、n、n log n、n²、2ⁿ），再看看為什麼記憶體也是一種代價。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的，旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>同一個答案，不同的速度</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=26" data-t="26" rel="noopener"><span class="t">0:26</span>找名字的兩種辦法</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=65" data-t="65" rel="noopener"><span class="t">1:05</span>數步數，不看秒數</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=129" data-t="129" rel="noopener"><span class="t">2:09</span>大 O</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=195" data-t="195" rel="noopener"><span class="t">3:15</span>記憶體也是代價</a></li>
+        <li><a href="https://youtu.be/asqA_GF_ASA?t=211" data-t="211" rel="noopener"><span class="t">3:31</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>兩個程式在同一台電腦上，搜尋同一份已排序、有一百萬個名字的名單，兩個都找到了答案。其中一個看了一百萬個名字，另一個只看了二十個。把名單加長到十億個名字，差距就會擴大成三千多萬倍。今天要講的是：程式設計師怎麼衡量「快」。</p>
+        <p>演算法就是一串固定的步驟：不管輸入什麼資料，每次都能把問題解決。先看第一個辦法。從頭開始，一個一個看名字，找到就停。簡單，而且一定正確。第二個辦法要求名單先排好順序。看正中間的那個名字。如果要找的名字排在它後面，就把前半整個丟掉。然後用剩下的部分再做一次：一半、一半、再一半，直到只剩下一個名字。我們會在第 5 集把這個辦法拆開來細講。</p>
+        <p>哪一個比較快？用碼錶來量並不公平。換一台比較新的電腦，或是電腦正忙著，時間就會不一樣。所以我們改成數步數。把名字的個數叫做 n。第一個程式，最壞的情況是把每一個名字都檢查一遍。n 個名字，就是 n 步。第二個程式，每一步都把名單砍掉一半。一百萬個名字，砍二十次就只剩一個，因為 2²⁰ 剛好比一百萬多一點。現在來看看，名單變長的時候會怎麼樣。一千個名字：一千步，或是十步。一百萬個：一百萬步，或是二十步。十億個：十億步，或是三十步。名字多了一千倍，第二個程式只多走了十步。</p>
+        <p>程式設計師用大寫的 O 來表示這種成長方式。第一個程式是 O(n)：名字變成兩倍，工作量也變成兩倍。第二個是 O(log n)：名字變成兩倍，只多一步。大 O 不管那些小細節。一個要走 3n + 5 步的程式，仍然是 O(n)：n 很大的時候，那個 5 幾乎不算什麼，那個 3 也一樣。重要的是曲線的形狀。n log n 是好的排序演算法能做到的速度。我們會在第 7 集講到。n² 是每一項都要和其他每一項比較一次時會得到的結果。一百萬項，就是一百萬乘以一百萬，也就是一兆步：就算每秒執行十億步，也要花大約十七分鐘。而 2ⁿ 的特色是，每多加一項，就會變成兩倍。只要一百項，就得花大約四十兆年。</p>
+        <p>時間不是唯一的代價，記憶體也是一種代價。很多時候，可以拿其中一個去換另一個：在記憶體裡多放一張表，找東西就會變快。我們會在第 10 集做的就是這件事。</p>
+        <p>所以，要比較演算法：數步數，並看它們怎麼成長。這就帶出了任何演算法的第一個問題：資料實際上放在哪裡？下一集：陣列和鏈結串列。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：陣列和鏈結串列，在記憶體裡存放資料最古老的兩種方式。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><div class="ep-pg next soon"><span>下一集</span><b>第 2 集 <time datetime="2026-11-13T21:00:00+08:00" data-at="2026-11-13T21:00:00+08:00" data-fmt="when">11-13 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
