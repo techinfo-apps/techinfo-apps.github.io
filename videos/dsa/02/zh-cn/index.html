@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>数组和链表：数据住在哪 — 从一串数到地图导航 #2</title>
+<meta name="description" content="在一百万个数的最前面插一个新的：数组要挪动一百万个数，链表只要改两根箭头。那为什么大多数时候还是数组赢？ 我们来看数组怎么一步找到任何一项（以及表格为什么一行接一行地放），插入到底要付出什么，链表怎么顺着箭头在内存里走，还有 CPU 的缓存为什么让“挨着放”变得很快。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/02/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/02/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/02/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/02/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/02/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/02/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/02/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/02/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/02/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="数组和链表：数据住在哪 — 从一串数到地图导航 #2">
+<meta property="og:description" content="在一百万个数的最前面插一个新的：数组要挪动一百万个数，链表只要改两根箭头。那为什么大多数时候还是数组赢？ 我们来看数组怎么一步找到任何一项（以及表格为什么一行接一行地放），插入到底要付出什么，链表怎么顺着箭头在内存里走，还有 CPU 的缓存为什么让“挨着放”变得很快。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-02.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/02/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "数组和链表：数据住在哪", "description": "在一百万个数的最前面插一个新的：数组要挪动一百万个数，链表只要改两根箭头。那为什么大多数时候还是数组赢？ 我们来看数组怎么一步找到任何一项（以及表格为什么一行接一行地放），插入到底要付出什么，链表怎么顺着箭头在内存里走，还有 CPU 的缓存为什么让“挨着放”变得很快。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-02.webp"], "uploadDate": "2026-11-13T21:00:00+08:00", "duration": "PT3M25S", "embedUrl": "https://www.youtube.com/embed/EDu2aC9zFaI", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一串数到地图导航 · 第 2 集</p>
+      <h1 class="ep-title">数组和链表：数据住在哪</h1>
+      <div class="vplayer" data-yt="EDu2aC9zFaI" data-title="数组和链表：数据住在哪">
+        <button type="button" class="vplay" aria-label="播放: 数组和链表：数据住在哪">
+          <img src="../../../../assets/img/videos/dsa-02.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/EDu2aC9zFaI" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">在一百万个数的最前面插一个新的：数组要挪动一百万个数，链表只要改两根箭头。那为什么大多数时候还是数组赢？<br>我们来看数组怎么一步找到任何一项（以及表格为什么一行接一行地放），插入到底要付出什么，链表怎么顺着箭头在内存里走，还有 CPU 的缓存为什么让“挨着放”变得很快。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>挪一百万次，还是改两根箭头</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>数组：一个挨一个</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=71" data-t="71" rel="noopener"><span class="t">1:11</span>插入的代价</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=100" data-t="100" rel="noopener"><span class="t">1:40</span>链表：顺着箭头走</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>实际用起来谁快</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=184" data-t="184" rel="noopener"><span class="t">3:04</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>在一百万个数的最前面插一个新的。一种表要挪动一百万个数。另一种表，只要改两根箭头。今天讲：在内存里放数据最老的两种办法，以及为什么没有哪一种永远更好。</p>
+        <p>内存就是一长排编了号的格子，第一季第 8 集我们亲手搭过。数组把数据一个挨一个放。假设它从地址 100 开始，每一项占 4 个字节。那么第 5 项（从 0 数）就在 100 加 5 乘 4，也就是 120。一次乘、一次加，就到了。不管第几项，一步就到。表格也一样：一张表按行一行接一行摊平，第 2 行第 3 列就是第 11 项，又是一个地址而已。</p>
+        <p>麻烦在插入。要在最前面放一个新数，后面每一项都得往后挪一格腾地方。八项，挪八次。一百万项，挪一百万次。数组满了还得在别处找一块更大的地方，把所有东西搬过去。所以很多语言每次都直接要两倍大的地方。</p>
+        <p>链表换了个办法：每一项随便放在哪个空着的地方，身上带一根箭头，写着下一项的地址。要在最前面插入：让新的一项指向原来的第一项，再让“开头”指向新的一项。改两根箭头，什么都不用挪。删掉一项也一样：箭头绕过它，它就不在链上了。可是要找第五个，就得从头顺着箭头走：一、二、三、四、五。一百万项，最多要跳一百万次。</p>
+        <p>那实际用起来谁快？还记得第一季第 14 集的缓存吗？CPU 读一个格子时，会把旁边一整段一起搬进缓存，叫一个缓存行。数组的各项本来就挨着，后面几项早就在缓存里了。链表的各项散在各处，每跳一次都可能要再跑一趟慢吞吞的内存。所以平常大多数活都是数组赢。链表的用武之地，是不停地加加减减、而且已经知道要动哪个位置的时候。</p>
+        <p>数组：哪一项都能一步跳到，插入却要挪。链表：哪里都能插，找东西却要一路走。下一集：建在它们上面的两条简单规矩，撤销键和排队都靠它们：栈和队列。下集见。</p>
+        </div>
+        <p class="ep-close">下一集：栈和队列，撤销键和排队背后的两条简单规矩。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../01/zh-cn/"><span>上一集 · 第 1 集</span><b>同一个答案，为什么能快一百万倍：大 O</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 3 集 <time datetime="2026-11-14T21:00:00+08:00" data-at="2026-11-14T21:00:00+08:00" data-fmt="when">11-14 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

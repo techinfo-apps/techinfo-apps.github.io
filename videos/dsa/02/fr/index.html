@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tableaux ou listes chaînées : où vivent les données — D&#x27;une liste à l&#x27;appli de cartes #2</title>
+<meta name="description" content="Placez un nouveau nombre au début d&#x27;une liste d&#x27;un million. Dans un tableau, un million de nombres doivent bouger. Dans une liste chaînée, on modifie deux flèches. Alors pourquoi les tableaux gagnent-ils quand même la plupart du temps ? Nous voyons comment un tableau trouve n&#x27;importe quel élément en une seule étape (et pourquoi une table est rangée ligne après ligne), ce que coûte vraiment une insertion, comment une liste chaînée suit des flèches dans la mémoire, et comment le cache du CPU rend les voisins rapides.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/02/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/02/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/02/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/02/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/02/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/02/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/02/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/02/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/02/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Tableaux ou listes chaînées : où vivent les données — D&#x27;une liste à l&#x27;appli de cartes #2">
+<meta property="og:description" content="Placez un nouveau nombre au début d&#x27;une liste d&#x27;un million. Dans un tableau, un million de nombres doivent bouger. Dans une liste chaînée, on modifie deux flèches. Alors pourquoi les tableaux gagnent-ils quand même la plupart du temps ? Nous voyons comment un tableau trouve n&#x27;importe quel élément en une seule étape (et pourquoi une table est rangée ligne après ligne), ce que coûte vraiment une insertion, comment une liste chaînée suit des flèches dans la mémoire, et comment le cache du CPU rend les voisins rapides.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-02.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/02/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Tableaux ou listes chaînées : où vivent les données", "description": "Placez un nouveau nombre au début d'une liste d'un million. Dans un tableau, un million de nombres doivent bouger. Dans une liste chaînée, on modifie deux flèches. Alors pourquoi les tableaux gagnent-ils quand même la plupart du temps ? Nous voyons comment un tableau trouve n'importe quel élément en une seule étape (et pourquoi une table est rangée ligne après ligne), ce que coûte vraiment une insertion, comment une liste chaînée suit des flèches dans la mémoire, et comment le cache du CPU rend les voisins rapides.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-02.webp"], "uploadDate": "2026-11-13T21:00:00+08:00", "duration": "PT3M25S", "embedUrl": "https://www.youtube.com/embed/EDu2aC9zFaI", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;une liste à l&#x27;appli de cartes · Épisode 2</p>
+      <h1 class="ep-title">Tableaux ou listes chaînées : où vivent les données</h1>
+      <div class="vplayer" data-yt="EDu2aC9zFaI" data-title="Tableaux ou listes chaînées : où vivent les données">
+        <button type="button" class="vplay" aria-label="Lire: Tableaux ou listes chaînées : où vivent les données">
+          <img src="../../../../assets/img/videos/dsa-02.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/EDu2aC9zFaI" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Placez un nouveau nombre au début d&#x27;une liste d&#x27;un million. Dans un tableau, un million de nombres doivent bouger. Dans une liste chaînée, on modifie deux flèches. Alors pourquoi les tableaux gagnent-ils quand même la plupart du temps ?<br>Nous voyons comment un tableau trouve n&#x27;importe quel élément en une seule étape (et pourquoi une table est rangée ligne après ligne), ce que coûte vraiment une insertion, comment une liste chaînée suit des flèches dans la mémoire, et comment le cache du CPU rend les voisins rapides.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Un million de déplacements, ou deux flèches</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>Tableaux : côte à côte</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=71" data-t="71" rel="noopener"><span class="t">1:11</span>Le coût d&#x27;une insertion</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=100" data-t="100" rel="noopener"><span class="t">1:40</span>Listes chaînées : suivre les flèches</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>Lequel est le plus rapide dans la vraie vie ?</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=184" data-t="184" rel="noopener"><span class="t">3:04</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Placez un nouveau nombre au début d&#x27;une liste d&#x27;un million de nombres. Dans un type de liste, un million de nombres doivent bouger. Dans l&#x27;autre type, vous modifiez deux flèches. Aujourd&#x27;hui : les deux plus anciennes façons de garder des données en mémoire, et pourquoi aucune des deux ne gagne toujours.</p>
+        <p>La mémoire est une longue rangée de cases numérotées. Nous l&#x27;avons construite à la saison 1, épisode 8. Un tableau (array) range les éléments côte à côte. Disons qu&#x27;il commence à l&#x27;adresse 100, et que chaque élément occupe 4 octets. Alors l&#x27;élément 5, en comptant à partir de zéro, se trouve à 100 plus 5 fois 4 : 120. Une multiplication, une addition, et vous y êtes. N&#x27;importe quel élément, en une seule étape. Les tables fonctionnent de la même façon. Une grille est rangée ligne après ligne, donc la ligne 2, colonne 3, c&#x27;est simplement l&#x27;élément 11 : une adresse de plus.</p>
+        <p>Le problème, c&#x27;est l&#x27;insertion. Pour mettre un nouveau nombre au début, chaque élément doit se décaler d&#x27;une place pour libérer de la place. Huit éléments, huit déplacements. Un million d&#x27;éléments, un million de déplacements. Et quand le tableau est plein, il faut un bloc plus grand ailleurs, et tout copier dedans. C&#x27;est pourquoi beaucoup de langages réservent le double d&#x27;espace à chaque fois.</p>
+        <p>Une liste chaînée (linked list) fonctionne autrement. Chaque élément se trouve là où il y a de la place, et porte une flèche : l&#x27;adresse de l&#x27;élément suivant. Pour insérer au début, on fait pointer le nouvel élément vers l&#x27;ancien premier, puis on fait pointer le début vers le nouveau. Deux flèches, et rien ne bouge. Supprimer fonctionne pareil : on contourne l&#x27;élément avec la flèche, et il a disparu. Mais trouver le cinquième élément oblige à partir du début et à suivre les flèches : un, deux, trois, quatre, cinq. Un million d&#x27;éléments, jusqu&#x27;à un million de sauts.</p>
+        <p>Alors, lequel est le plus rapide dans la vraie vie ? Vous vous souvenez du cache de la saison 1, épisode 14 ? Quand le CPU lit une case, il emporte tout le voisinage avec lui : une ligne de cache. Les éléments d&#x27;un tableau sont voisins, donc les suivants sont déjà là. Les éléments d&#x27;une liste chaînée sont éparpillés. Chaque saut peut être un nouveau et lent voyage jusqu&#x27;à la mémoire principale. C&#x27;est pourquoi les tableaux gagnent dans la plupart des tâches de tous les jours. Les listes chaînées méritent leur place quand on ajoute et retire sans cesse des éléments, et qu&#x27;on sait déjà où.</p>
+        <p>Tableaux : on saute à n&#x27;importe quel élément, mais insérer oblige à déplacer. Listes chaînées : on insère n&#x27;importe où, mais chercher oblige à parcourir. La prochaine fois : deux règles simples construites par-dessus, derrière chaque bouton « annuler » et chaque file d&#x27;attente. Les piles et les files. À bientôt.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : les piles et les files, les deux règles simples derrière chaque bouton « annuler » et chaque file d&#x27;attente.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../01/fr/"><span>Précédent · Épisode 1</span><b>La même réponse, un million de fois plus vite : le grand O</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 3 sort le <time datetime="2026-11-14T21:00:00+08:00" data-at="2026-11-14T21:00:00+08:00" data-fmt="when">11-14 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

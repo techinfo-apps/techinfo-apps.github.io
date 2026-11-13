@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>배열과 연결 리스트: 데이터는 어디에 저장될까 — 숫자 목록에서 지도 앱까지 #2</title>
+<meta name="description" content="100만 개의 수가 있는 목록 맨 앞에 새 수를 하나 넣어요. 배열에서는 100만 개의 수를 옮겨야 해요. 연결 리스트에서는 화살표 두 개만 바꾸면 돼요. 그런데도 왜 대부분의 경우 배열이 이길까요? 배열이 어떤 항목이든 한 단계로 찾아내는 방법(그리고 표가 한 행씩 차례로 저장되는 이유), 삽입에 정말 드는 비용, 연결 리스트가 메모리 속에서 화살표를 따라가는 모습, 그리고 CPU 캐시가 이웃한 데이터를 빠르게 만드는 방법을 알아봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/02/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/02/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/02/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/02/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/02/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/02/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/02/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/02/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/02/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="배열과 연결 리스트: 데이터는 어디에 저장될까 — 숫자 목록에서 지도 앱까지 #2">
+<meta property="og:description" content="100만 개의 수가 있는 목록 맨 앞에 새 수를 하나 넣어요. 배열에서는 100만 개의 수를 옮겨야 해요. 연결 리스트에서는 화살표 두 개만 바꾸면 돼요. 그런데도 왜 대부분의 경우 배열이 이길까요? 배열이 어떤 항목이든 한 단계로 찾아내는 방법(그리고 표가 한 행씩 차례로 저장되는 이유), 삽입에 정말 드는 비용, 연결 리스트가 메모리 속에서 화살표를 따라가는 모습, 그리고 CPU 캐시가 이웃한 데이터를 빠르게 만드는 방법을 알아봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-02.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/02/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "배열과 연결 리스트: 데이터는 어디에 저장될까", "description": "100만 개의 수가 있는 목록 맨 앞에 새 수를 하나 넣어요. 배열에서는 100만 개의 수를 옮겨야 해요. 연결 리스트에서는 화살표 두 개만 바꾸면 돼요. 그런데도 왜 대부분의 경우 배열이 이길까요? 배열이 어떤 항목이든 한 단계로 찾아내는 방법(그리고 표가 한 행씩 차례로 저장되는 이유), 삽입에 정말 드는 비용, 연결 리스트가 메모리 속에서 화살표를 따라가는 모습, 그리고 CPU 캐시가 이웃한 데이터를 빠르게 만드는 방법을 알아봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-02.webp"], "uploadDate": "2026-11-13T21:00:00+08:00", "duration": "PT3M25S", "embedUrl": "https://www.youtube.com/embed/EDu2aC9zFaI", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 숫자 목록에서 지도 앱까지 · 2편</p>
+      <h1 class="ep-title">배열과 연결 리스트: 데이터는 어디에 저장될까</h1>
+      <div class="vplayer" data-yt="EDu2aC9zFaI" data-title="배열과 연결 리스트: 데이터는 어디에 저장될까">
+        <button type="button" class="vplay" aria-label="재생: 배열과 연결 리스트: 데이터는 어디에 저장될까">
+          <img src="../../../../assets/img/videos/dsa-02.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/EDu2aC9zFaI" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">100만 개의 수가 있는 목록 맨 앞에 새 수를 하나 넣어요. 배열에서는 100만 개의 수를 옮겨야 해요. 연결 리스트에서는 화살표 두 개만 바꾸면 돼요. 그런데도 왜 대부분의 경우 배열이 이길까요?<br>배열이 어떤 항목이든 한 단계로 찾아내는 방법(그리고 표가 한 행씩 차례로 저장되는 이유), 삽입에 정말 드는 비용, 연결 리스트가 메모리 속에서 화살표를 따라가는 모습, 그리고 CPU 캐시가 이웃한 데이터를 빠르게 만드는 방법을 알아봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 목소리예요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>100만 번 옮길까, 화살표 두 개일까</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>배열: 나란히 놓기</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=71" data-t="71" rel="noopener"><span class="t">1:11</span>삽입의 비용</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=100" data-t="100" rel="noopener"><span class="t">1:40</span>연결 리스트: 화살표 따라가기</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>실제로는 어느 쪽이 빠를까</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=184" data-t="184" rel="noopener"><span class="t">3:04</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>수 100만 개가 들어 있는 목록의 맨 앞에 새 수를 하나 넣어요. 어떤 종류의 목록에서는 수 100만 개를 옮겨야 해요. 다른 종류의 목록에서는 화살표 두 개만 바꾸면 돼요. 오늘은 데이터를 메모리에 두는 가장 오래된 두 가지 방법과, 어느 쪽도 항상 이기지는 못하는 이유를 알아봐요.</p>
+        <p>메모리는 번호가 붙은 칸이 길게 한 줄로 늘어선 것이에요. 시즌 1의 8편에서 만들어 봤어요. 배열은 항목을 나란히 놓아요. 주소 100에서 시작하고, 항목 하나가 4바이트를 차지한다고 해 봐요. 그러면 0부터 세었을 때 5번 항목은 100 + 5 × 4, 즉 120번지에 있어요. 곱셈 한 번, 덧셈 한 번이면 도착해요. 어떤 항목이든 한 단계예요. 표도 같은 방식이에요. 격자는 한 행씩 차례로 저장되기 때문에, 2행 3열은 바로 11번 항목이에요. 주소 하나가 더 늘 뿐이에요.</p>
+        <p>문제는 삽입이에요. 맨 앞에 새 수를 넣으려면, 자리를 만들기 위해 모든 항목이 한 칸씩 옆으로 밀려야 해요. 항목이 8개면 8번 옮겨요. 100만 개면 100만 번 옮겨요. 그리고 배열이 가득 차면, 다른 곳에 더 큰 덩어리를 마련해서 모든 것을 복사해 와야 해요. 많은 언어가 매번 두 배의 공간을 확보하는 건 이 때문이에요.</p>
+        <p>연결 리스트는 다르게 해요. 각 항목은 빈 공간이 있는 곳 어디에나 놓이고, 화살표를 하나 가지고 있어요. 다음 항목의 주소예요. 맨 앞에 넣으려면, 새 항목이 기존의 첫 항목을 가리키게 하고, 그다음 시작점이 새 항목을 가리키게 해요. 화살표 두 개만 바꾸고, 아무것도 옮기지 않아요. 지울 때도 마찬가지예요. 그 항목을 건너뛰어 가리키면, 사라져요. 하지만 다섯 번째 항목을 찾으려면, 맨 앞에서 시작해서 화살표를 따라가야 해요. 하나, 둘, 셋, 넷, 다섯. 항목이 100만 개면, 최대 100만 번을 따라가야 해요.</p>
+        <p>그럼 실제로는 어느 쪽이 더 빠를까요? 시즌 1의 14편에서 본 캐시를 기억하나요? CPU가 칸 하나를 읽으면, 그 주변 전체를 함께 가져와요. 이것이 캐시 라인이에요. 배열의 항목은 서로 이웃이라서, 그다음 몇 개는 이미 거기에 있어요. 연결 리스트의 항목은 여기저기 흩어져 있어요. 따라가는 한 번 한 번이, 느린 메인 메모리까지 다녀오는 또 한 번의 먼 길이 될 수 있어요. 그래서 일상적인 작업 대부분에서는 배열이 이겨요. 연결 리스트는 항목을 계속 넣고 빼는데 위치를 이미 알고 있을 때 제 몫을 해요.</p>
+        <p>배열은 어느 항목이든 바로 건너뛸 수 있지만, 삽입하려면 옮겨야 해요. 연결 리스트는 어디에든 삽입할 수 있지만, 찾으려면 걸어가야 해요. 다음 편은 이 둘 위에 쌓은 두 가지 간단한 규칙이에요. 모든 되돌리기 버튼과 모든 대기줄 뒤에 있어요. 스택과 큐예요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 스택과 큐, 모든 되돌리기 버튼과 모든 대기줄 뒤에 있는 두 가지 간단한 규칙이에요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../01/ko/"><span>이전 편 · 1편</span><b>같은 답이 100만 배 빨라지는 이유: 빅오</b></a><div class="ep-pg next soon"><span>다음 편</span><b>3편은 <time datetime="2026-11-14T21:00:00+08:00" data-at="2026-11-14T21:00:00+08:00" data-fmt="when">11-14 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

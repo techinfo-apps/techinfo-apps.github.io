@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>陣列與鏈結串列：資料住在哪裡 — 從一串數到地圖導航 #2</title>
+<meta name="description" content="在一百萬個數的最前面放進一個新的數：用陣列的話，要移動一百萬個數；用鏈結串列的話，只要改兩個箭頭。那為什麼大多數時候，還是陣列比較厲害？ 我們會看陣列怎麼一步就找到任何一項（以及表格為什麼是一列接著一列存放）、插入到底要付出什麼代價、鏈結串列怎麼順著箭頭在記憶體裡走，還有 CPU 的快取為什麼讓相鄰的資料變得很快。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/02/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/02/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/02/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/02/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/02/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/02/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/02/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/02/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/02/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="陣列與鏈結串列：資料住在哪裡 — 從一串數到地圖導航 #2">
+<meta property="og:description" content="在一百萬個數的最前面放進一個新的數：用陣列的話，要移動一百萬個數；用鏈結串列的話，只要改兩個箭頭。那為什麼大多數時候，還是陣列比較厲害？ 我們會看陣列怎麼一步就找到任何一項（以及表格為什麼是一列接著一列存放）、插入到底要付出什麼代價、鏈結串列怎麼順著箭頭在記憶體裡走，還有 CPU 的快取為什麼讓相鄰的資料變得很快。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-02.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/02/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "陣列與鏈結串列：資料住在哪裡", "description": "在一百萬個數的最前面放進一個新的數：用陣列的話，要移動一百萬個數；用鏈結串列的話，只要改兩個箭頭。那為什麼大多數時候，還是陣列比較厲害？ 我們會看陣列怎麼一步就找到任何一項（以及表格為什麼是一列接著一列存放）、插入到底要付出什麼代價、鏈結串列怎麼順著箭頭在記憶體裡走，還有 CPU 的快取為什麼讓相鄰的資料變得很快。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-02.webp"], "uploadDate": "2026-11-13T21:00:00+08:00", "duration": "PT3M25S", "embedUrl": "https://www.youtube.com/embed/EDu2aC9zFaI", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一串數到地圖導航 · 第 2 集</p>
+      <h1 class="ep-title">陣列與鏈結串列：資料住在哪裡</h1>
+      <div class="vplayer" data-yt="EDu2aC9zFaI" data-title="陣列與鏈結串列：資料住在哪裡">
+        <button type="button" class="vplay" aria-label="播放: 陣列與鏈結串列：資料住在哪裡">
+          <img src="../../../../assets/img/videos/dsa-02.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/EDu2aC9zFaI" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">在一百萬個數的最前面放進一個新的數：用陣列的話，要移動一百萬個數；用鏈結串列的話，只要改兩個箭頭。那為什麼大多數時候，還是陣列比較厲害？<br>我們會看陣列怎麼一步就找到任何一項（以及表格為什麼是一列接著一列存放）、插入到底要付出什麼代價、鏈結串列怎麼順著箭頭在記憶體裡走，還有 CPU 的快取為什麼讓相鄰的資料變得很快。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的，旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>一百萬次移動，還是兩個箭頭</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>陣列：並排放在一起</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=71" data-t="71" rel="noopener"><span class="t">1:11</span>插入的代價</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=100" data-t="100" rel="noopener"><span class="t">1:40</span>鏈結串列：順著箭頭走</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=145" data-t="145" rel="noopener"><span class="t">2:25</span>實際用起來哪個比較快</a></li>
+        <li><a href="https://youtu.be/EDu2aC9zFaI?t=184" data-t="184" rel="noopener"><span class="t">3:04</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>在一百萬個數的最前面，放進一個新的數。在其中一種清單裡，要移動一百萬個數。在另一種清單裡，你只要改兩個箭頭。今天要講的是：在記憶體裡存放資料最古老的兩種方式，以及為什麼沒有哪一種永遠勝出。</p>
+        <p>記憶體就是一長排編了號的儲存格。我們在第一季第 8 集把它蓋了出來。陣列把各項並排放在一起。假設它從位址 100 開始，每一項佔 4 個位元組。那麼第 5 項（從 0 開始數）就在 100 加 5 乘以 4：也就是 120。一次乘法，一次加法，就到了。不管是哪一項，都只要一步。表格也是同樣的道理。一個格狀的表格是一列接著一列存放的，所以第 2 列第 3 欄，剛好就是第 11 項：只是再多算一個位址。</p>
+        <p>麻煩的是插入。要在最前面放進一個新數，每一項都得往後移一格，騰出空位。八項，就要移動八次。一百萬項，就要移動一百萬次。而且陣列滿了之後，你得在別的地方找一塊更大的空間，再把所有東西複製過去。這就是為什麼許多程式語言每次都會要兩倍的空間。</p>
+        <p>鏈結串列的做法不一樣。每一項可以放在任何有空位的地方，並帶著一個箭頭：也就是下一項的位址。要在最前面插入，就讓新的那一項指向原本的第一項，再讓開頭指向新的這一項。改兩個箭頭，什麼都不用移動。刪除也是同樣的做法：讓箭頭繞過那一項，它就消失了。可是要找第五項，就得從最前面開始，順著箭頭走：一、二、三、四、五。一百萬項，最多要跳一百萬次。</p>
+        <p>那麼，在真實使用上哪一個比較快？還記得第一季第 14 集的快取嗎？當 CPU 讀取一個儲存格時，會把周圍的整塊鄰居一起帶進來，這叫做快取列。陣列的各項本來就是鄰居，所以接下來的幾項早就已經在那裡了。鏈結串列的各項是分散的。每跳一次，都可能又是一趟通往主記憶體的緩慢旅程。這就是為什麼陣列在大多數日常工作上都贏。當各項不斷被新增和移除，而你已經知道位置在哪裡的時候，鏈結串列才有用武之地。</p>
+        <p>陣列：可以直接跳到任何一項，但插入就得移動。鏈結串列：可以在任何地方插入，但尋找就得一路走過去。下一集：建立在它們之上的兩條簡單規則，每一個復原按鈕、每一條排隊隊伍的背後，都有它們：堆疊和佇列。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：堆疊和佇列，每一個復原按鈕和每一條排隊隊伍背後的兩條簡單規則。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../01/zh-tw/"><span>上一集 · 第 1 集</span><b>同一個答案，為什麼能快一百萬倍：大 O</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 3 集 <time datetime="2026-11-14T21:00:00+08:00" data-at="2026-11-14T21:00:00+08:00" data-fmt="when">11-14 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
