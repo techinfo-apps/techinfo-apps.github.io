@@ -7,12 +7,14 @@ What went up stays up: a failed check changes nothing. Runs on the Mac and in th
 
   python3 tools/build_videos.py            # ask YouTube about episodes not up yet, then build
   python3 tools/build_videos.py --offline  # build from videos/_data/status.json only
+  python3 tools/build_videos.py --late     # build nothing: exit 1 if an episode whose time has passed is not up
 """
 import argparse
 import datetime as dt
 import html
 import json
 import pathlib
+import sys
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -23,6 +25,7 @@ STATUS = DATA / "status.json"
 BASE = "https://techinfo-apps.github.io/"
 CHANNEL = "https://www.youtube.com/@TechInForFree"
 BEIJING = dt.timezone(dt.timedelta(hours=8))
+GRACE = dt.timedelta(minutes=5)   # how long after its scheduled time an episode may still be missing
 
 LANGS = ["en", "zh-CN", "zh-TW", "ja", "ko", "es", "fr"]
 HREFLANG = {"en": "en", "zh-CN": "zh-Hans", "zh-TW": "zh-Hant", "ja": "ja", "ko": "ko", "es": "es", "fr": "fr"}
@@ -136,6 +139,21 @@ def is_public(video_id):
         return None
     except Exception:
         return None
+
+
+def late(all_series, status, now):
+    """Episodes whose scheduled time (plus GRACE) has passed and that are still not up: (series, n, id, at)."""
+    out = []
+    for s in all_series:
+        for e in s["episodes"]:
+            if not e.get("at") or e["id"] in status:
+                continue
+            at = dt.datetime.fromisoformat(e["at"])
+            if at.tzinfo is None:
+                at = at.replace(tzinfo=BEIJING)
+            if at + GRACE <= now:
+                out.append((s["id"], e["n"], e["id"], e["at"]))
+    return out
 
 
 # ---------- shared page parts ----------
@@ -431,11 +449,22 @@ def sitemap(groups):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--offline", action="store_true", help="don't ask YouTube; use status.json as it is")
-    offline = ap.parse_args().offline
+    ap.add_argument("--late", action="store_true",
+                    help="build nothing; exit 1 if an episode whose scheduled time has passed is not up (run after a build)")
+    args = ap.parse_args()
+    offline = args.offline
     status = json.loads(STATUS.read_text(encoding="utf-8")) if STATUS.exists() else {}
     # The overview lists the seasons in order, whatever the file names are.
     all_series = sorted((json.loads(p.read_text(encoding="utf-8")) for p in DATA.glob("*.json") if p != STATUS),
                         key=lambda s: (s["season"], s["id"]))
+
+    if args.late:
+        missing = late(all_series, status, dt.datetime.now(BEIJING))
+        for sid, n, vid, at in missing:
+            print(f"LATE: {sid} #{n} https://youtu.be/{vid} was due {at} and is not public (or YouTube could not be asked)")
+        if not missing:
+            print("on time: every episode whose time has passed is up")
+        sys.exit(1 if missing else 0)
 
     if not offline:
         today = dt.datetime.now(BEIJING).strftime("%Y-%m-%d")
