@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>스택과 큐: 되돌리기는 왜 거꾸로 일어날까 — 숫자 목록에서 지도 앱까지 #3</title>
+<meta name="description" content="단어 세 개를 입력하고 되돌리기를 세 번 누르면, 거꾸로 사라져요. 파일 세 개를 프린터로 보내면, 보낸 순서대로 나와요. 나중에 들어간 것이 먼저 나오는 후입선출과, 먼저 들어간 것이 먼저 나오는 선입선출. 이 두 가지 간단한 규칙이 컴퓨터의 놀랄 만큼 많은 부분을 움직여요. 스택을 만들고(푸시, 팝, 되돌리기 버튼, 뒤로 가기 버튼), 스택으로 코드 편집기처럼 괄호를 검사하고, 큐를 줄 세우고(프린터, 입력하는 키), 배열을 링 버퍼로 구부려서 아무것도 옮기지 않아도 되게 만들어 봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/03/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/03/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/03/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/03/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/03/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/03/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/03/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/03/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/03/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="스택과 큐: 되돌리기는 왜 거꾸로 일어날까 — 숫자 목록에서 지도 앱까지 #3">
+<meta property="og:description" content="단어 세 개를 입력하고 되돌리기를 세 번 누르면, 거꾸로 사라져요. 파일 세 개를 프린터로 보내면, 보낸 순서대로 나와요. 나중에 들어간 것이 먼저 나오는 후입선출과, 먼저 들어간 것이 먼저 나오는 선입선출. 이 두 가지 간단한 규칙이 컴퓨터의 놀랄 만큼 많은 부분을 움직여요. 스택을 만들고(푸시, 팝, 되돌리기 버튼, 뒤로 가기 버튼), 스택으로 코드 편집기처럼 괄호를 검사하고, 큐를 줄 세우고(프린터, 입력하는 키), 배열을 링 버퍼로 구부려서 아무것도 옮기지 않아도 되게 만들어 봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-03.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/03/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "스택과 큐: 되돌리기는 왜 거꾸로 일어날까", "description": "단어 세 개를 입력하고 되돌리기를 세 번 누르면, 거꾸로 사라져요. 파일 세 개를 프린터로 보내면, 보낸 순서대로 나와요. 나중에 들어간 것이 먼저 나오는 후입선출과, 먼저 들어간 것이 먼저 나오는 선입선출. 이 두 가지 간단한 규칙이 컴퓨터의 놀랄 만큼 많은 부분을 움직여요. 스택을 만들고(푸시, 팝, 되돌리기 버튼, 뒤로 가기 버튼), 스택으로 코드 편집기처럼 괄호를 검사하고, 큐를 줄 세우고(프린터, 입력하는 키), 배열을 링 버퍼로 구부려서 아무것도 옮기지 않아도 되게 만들어 봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-03.webp"], "uploadDate": "2026-11-14T21:00:00+08:00", "duration": "PT3M14S", "embedUrl": "https://www.youtube.com/embed/NJWtH7_dgGU", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 숫자 목록에서 지도 앱까지 · 3편</p>
+      <h1 class="ep-title">스택과 큐: 되돌리기는 왜 거꾸로 일어날까</h1>
+      <div class="vplayer" data-yt="NJWtH7_dgGU" data-title="스택과 큐: 되돌리기는 왜 거꾸로 일어날까">
+        <button type="button" class="vplay" aria-label="재생: 스택과 큐: 되돌리기는 왜 거꾸로 일어날까">
+          <img src="../../../../assets/img/videos/dsa-03.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/NJWtH7_dgGU" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">단어 세 개를 입력하고 되돌리기를 세 번 누르면, 거꾸로 사라져요. 파일 세 개를 프린터로 보내면, 보낸 순서대로 나와요. 나중에 들어간 것이 먼저 나오는 후입선출과, 먼저 들어간 것이 먼저 나오는 선입선출. 이 두 가지 간단한 규칙이 컴퓨터의 놀랄 만큼 많은 부분을 움직여요.<br>스택을 만들고(푸시, 팝, 되돌리기 버튼, 뒤로 가기 버튼), 스택으로 코드 편집기처럼 괄호를 검사하고, 큐를 줄 세우고(프린터, 입력하는 키), 배열을 링 버퍼로 구부려서 아무것도 옮기지 않아도 되게 만들어 봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 목소리예요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>후입선출</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=31" data-t="31" rel="noopener"><span class="t">0:31</span>스택: 푸시와 팝</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=68" data-t="68" rel="noopener"><span class="t">1:08</span>스택으로 괄호 검사하기</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=105" data-t="105" rel="noopener"><span class="t">1:45</span>큐: 선입선출</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=139" data-t="139" rel="noopener"><span class="t">2:19</span>링 버퍼</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=172" data-t="172" rel="noopener"><span class="t">2:52</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>단어 세 개를 입력한 다음, 되돌리기를 세 번 눌러요. 거꾸로 사라져요. 마지막에 입력한 것이 가장 먼저 사라져요. 이번에는 파일 세 개를 프린터로 보내요. 보낸 순서대로 나와요. 간단한 규칙이 두 가지 있어요. 나중에 들어간 것이 먼저 나오는 후입선출, 그리고 먼저 들어간 것이 먼저 나오는 선입선출이에요. 오늘은 스택과 큐를 알아봐요.</p>
+        <p>스택은 한쪽 끝에서만 넣고 뺄 수 있는 목록이에요. 그 끝을 맨 위라고 해요. 넣는 것을 푸시라고 하고, 빼는 것을 팝이라고 해요. 되돌리기 버튼은 모두 스택이에요. 동작 하나하나가 푸시되고, 되돌리기는 가장 최근 것을 팝해요. 브라우저의 뒤로 가기 버튼도 같은 방식이에요. 여는 페이지마다 푸시되고, 뒤로 가기는 그것을 팝해요. 배열 위에 만들면 푸시와 팝이 각각 한 단계예요. 맨 위 표시만 옮기면 돼요.</p>
+        <p>스택은 괄호가 맞는지 확인하는 데도 쓸 수 있어요. 왼쪽에서 오른쪽으로 읽어요. 여는 괄호는 모두 푸시해요. 닫는 괄호는 맨 위에 있는 것과 짝이 맞아야 해요. 소괄호 열기, 대괄호 열기, 대괄호 닫기, 소괄호 닫기. 모두 짝이 맞고, 스택은 마지막에 비어요. 이번에는 닫는 괄호 두 개의 자리를 바꿔요. 소괄호를 닫는 것이 왔는데 맨 위에는 대괄호가 있어요. 짝이 맞지 않아요. 코드 편집기와 컴파일러는 하루 종일 이 검사를 해요.</p>
+        <p>큐는 다른 규칙이에요. 뒤에 넣고, 앞에서 꺼내요. 프린터로 보낸 파일은 큐에서 기다리고, 보낸 순서대로 나와요. 입력한 키도 프로그램이 읽을 준비가 될 때까지 작은 큐에서 기다려요. 시즌 1의 17편에 나온 키보드예요. 뒤에 넣는 건 쉬워요. 하지만 배열의 맨 앞에서 하나를 꺼내면 나머지를 모두 밀어야 해요. 지난 편에서 본 것처럼요.</p>
+        <p>비결은 항목을 옮기지 않는 거예요. 대신 앞과 뒤, 두 개의 표시를 옮겨요. 뒤가 배열의 끝에 닿으면 처음으로 돌아가서, 앞이 이미 비워 둔 자리를 써요. 배열을 고리 모양으로 구부리면, 그것이 링 버퍼예요. 한 단계는 표시를 한 번 옮기는 것뿐이에요. 키보드, 사운드 카드, 네트워크 카드는 모두 이런 고리에 데이터를 담아요.</p>
+        <p>스택은 후입선출, 큐는 선입선출이에요. 둘 다 배열이나 리스트에 규칙 하나를 더한 것뿐이에요. 다음 편에서는 스택이 놀라운 일을 해요. 함수가 자기 자신을 부르게 해 줘요. 재귀예요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 재귀, 자기 자신을 부르는 함수예요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../02/ko/"><span>이전 편 · 2편</span><b>배열과 연결 리스트: 데이터는 어디에 저장될까</b></a><div class="ep-pg next soon"><span>다음 편</span><b>4편은 <time datetime="2026-11-15T21:00:00+08:00" data-at="2026-11-15T21:00:00+08:00" data-fmt="when">11-15 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

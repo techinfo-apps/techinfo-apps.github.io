@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>栈和队列：撤销为什么是倒着来的 — 从一串数到地图导航 #3</title>
+<meta name="description" content="打三个词，再按三次撤销：它们倒着消失。把三个文件发给打印机：它们按顺序出来。“后进先出”和“先进先出”这两条简单的规矩，管着电脑里出乎意料多的事。 我们先搭一个栈（压入、弹出、撤销键、后退键），再用它像代码编辑器那样检查括号，然后排一个队列（打印机、你敲的键），最后把数组弯成一个环形队列，让数据一个都不用挪。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/03/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/03/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/03/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/03/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/03/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/03/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/03/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/03/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/03/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="栈和队列：撤销为什么是倒着来的 — 从一串数到地图导航 #3">
+<meta property="og:description" content="打三个词，再按三次撤销：它们倒着消失。把三个文件发给打印机：它们按顺序出来。“后进先出”和“先进先出”这两条简单的规矩，管着电脑里出乎意料多的事。 我们先搭一个栈（压入、弹出、撤销键、后退键），再用它像代码编辑器那样检查括号，然后排一个队列（打印机、你敲的键），最后把数组弯成一个环形队列，让数据一个都不用挪。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-03.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/03/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "栈和队列：撤销为什么是倒着来的", "description": "打三个词，再按三次撤销：它们倒着消失。把三个文件发给打印机：它们按顺序出来。“后进先出”和“先进先出”这两条简单的规矩，管着电脑里出乎意料多的事。 我们先搭一个栈（压入、弹出、撤销键、后退键），再用它像代码编辑器那样检查括号，然后排一个队列（打印机、你敲的键），最后把数组弯成一个环形队列，让数据一个都不用挪。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-03.webp"], "uploadDate": "2026-11-14T21:00:00+08:00", "duration": "PT3M14S", "embedUrl": "https://www.youtube.com/embed/NJWtH7_dgGU", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一串数到地图导航 · 第 3 集</p>
+      <h1 class="ep-title">栈和队列：撤销为什么是倒着来的</h1>
+      <div class="vplayer" data-yt="NJWtH7_dgGU" data-title="栈和队列：撤销为什么是倒着来的">
+        <button type="button" class="vplay" aria-label="播放: 栈和队列：撤销为什么是倒着来的">
+          <img src="../../../../assets/img/videos/dsa-03.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/NJWtH7_dgGU" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">打三个词，再按三次撤销：它们倒着消失。把三个文件发给打印机：它们按顺序出来。“后进先出”和“先进先出”这两条简单的规矩，管着电脑里出乎意料多的事。<br>我们先搭一个栈（压入、弹出、撤销键、后退键），再用它像代码编辑器那样检查括号，然后排一个队列（打印机、你敲的键），最后把数组弯成一个环形队列，让数据一个都不用挪。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>后进先出</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=31" data-t="31" rel="noopener"><span class="t">0:31</span>栈：压入和弹出</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=68" data-t="68" rel="noopener"><span class="t">1:08</span>用栈检查括号</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=105" data-t="105" rel="noopener"><span class="t">1:45</span>队列：先进先出</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=139" data-t="139" rel="noopener"><span class="t">2:19</span>环形队列</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=172" data-t="172" rel="noopener"><span class="t">2:52</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>打三个词，再按三次撤销。它们倒着消失：最后打的最先被撤掉。再把三个文件发给打印机，它们按发出去的顺序出来。两条简单的规矩：后进先出，和先进先出。今天讲：栈和队列。</p>
+        <p>栈是一种只许在一头放、一头拿的表，这一头叫栈顶。放上去叫“压入”，拿下来叫“弹出”。每个撤销键都是一个栈：每做一步就压进去，撤销就弹出最新的那一步。浏览器的后退键也一样：每打开一页就压进去，后退就把它弹出来。用数组来做，压入和弹出都只要一步：把栈顶的记号挪一格。</p>
+        <p>栈还能帮你检查括号配不配对。从左往右读：遇到左括号就压进去；遇到右括号，它必须和栈顶那个配成一对。圆的、方的、方的收、圆的收：全都配上了，最后栈是空的。再把两个右括号换个位置：圆的右括号来的时候，栈顶是方的，配不上。写代码的编辑器和编译器，整天都在做这个检查。</p>
+        <p>队列是另一条规矩：从队尾进，从队头出。发给打印机的文件在队列里等，按发出去的顺序一个个出来。你敲的键也在一个小队列里等着，等程序有空来读。这就是第一季第 17 集的那个键盘。在队尾加很容易。可要从数组的最前面拿走一个，后面的就都得往前挪，就像上一集那样。</p>
+        <p>窍门是：不挪数据，只挪两个记号，队头和队尾。队尾走到数组末尾，就绕回开头，用上队头已经空出来的地方。把数组弯成一个圈，就是环形队列。每一步都只是挪一下记号。键盘、声卡、网卡，都把数据放在这样的圈里。</p>
+        <p>栈：后进先出。队列：先进先出。两个都只是一个数组或链表，加一条规矩。下一集，栈会做一件让人意外的事：让一个函数调用它自己。递归。下集见。</p>
+        </div>
+        <p class="ep-close">下一集：递归，一个调用它自己的函数。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../02/zh-cn/"><span>上一集 · 第 2 集</span><b>数组和链表：数据住在哪</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 4 集 <time datetime="2026-11-15T21:00:00+08:00" data-at="2026-11-15T21:00:00+08:00" data-fmt="when">11-15 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

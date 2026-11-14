@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>堆疊與佇列：為什麼復原是倒著來的 — 從一串數到地圖導航 #3</title>
+<meta name="description" content="輸入三個詞，再按三次復原：它們會倒著消失。把三個檔案送到印表機：它們會依序印出來。「後進先出」和「先進先出」這兩條簡單的規則，掌管著電腦裡多得出人意料的事。 我們會先打造一個堆疊（推入、彈出、復原按鈕、上一頁按鈕），再用它像程式碼編輯器那樣檢查括號，接著排出一個佇列（印表機、你敲的按鍵），最後把陣列彎成一個環形緩衝區，讓資料一個都不用移動。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/03/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/03/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/03/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/03/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/03/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/03/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/03/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/03/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/03/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="堆疊與佇列：為什麼復原是倒著來的 — 從一串數到地圖導航 #3">
+<meta property="og:description" content="輸入三個詞，再按三次復原：它們會倒著消失。把三個檔案送到印表機：它們會依序印出來。「後進先出」和「先進先出」這兩條簡單的規則，掌管著電腦裡多得出人意料的事。 我們會先打造一個堆疊（推入、彈出、復原按鈕、上一頁按鈕），再用它像程式碼編輯器那樣檢查括號，接著排出一個佇列（印表機、你敲的按鍵），最後把陣列彎成一個環形緩衝區，讓資料一個都不用移動。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-03.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/03/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "堆疊與佇列：為什麼復原是倒著來的", "description": "輸入三個詞，再按三次復原：它們會倒著消失。把三個檔案送到印表機：它們會依序印出來。「後進先出」和「先進先出」這兩條簡單的規則，掌管著電腦裡多得出人意料的事。 我們會先打造一個堆疊（推入、彈出、復原按鈕、上一頁按鈕），再用它像程式碼編輯器那樣檢查括號，接著排出一個佇列（印表機、你敲的按鍵），最後把陣列彎成一個環形緩衝區，讓資料一個都不用移動。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-03.webp"], "uploadDate": "2026-11-14T21:00:00+08:00", "duration": "PT3M14S", "embedUrl": "https://www.youtube.com/embed/NJWtH7_dgGU", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一串數到地圖導航 · 第 3 集</p>
+      <h1 class="ep-title">堆疊與佇列：為什麼復原是倒著來的</h1>
+      <div class="vplayer" data-yt="NJWtH7_dgGU" data-title="堆疊與佇列：為什麼復原是倒著來的">
+        <button type="button" class="vplay" aria-label="播放: 堆疊與佇列：為什麼復原是倒著來的">
+          <img src="../../../../assets/img/videos/dsa-03.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/NJWtH7_dgGU" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">輸入三個詞，再按三次復原：它們會倒著消失。把三個檔案送到印表機：它們會依序印出來。「後進先出」和「先進先出」這兩條簡單的規則，掌管著電腦裡多得出人意料的事。<br>我們會先打造一個堆疊（推入、彈出、復原按鈕、上一頁按鈕），再用它像程式碼編輯器那樣檢查括號，接著排出一個佇列（印表機、你敲的按鍵），最後把陣列彎成一個環形緩衝區，讓資料一個都不用移動。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的，旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>後進先出</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=31" data-t="31" rel="noopener"><span class="t">0:31</span>堆疊：推入與彈出</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=68" data-t="68" rel="noopener"><span class="t">1:08</span>用堆疊檢查括號</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=105" data-t="105" rel="noopener"><span class="t">1:45</span>佇列：先進先出</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=139" data-t="139" rel="noopener"><span class="t">2:19</span>環形緩衝區</a></li>
+        <li><a href="https://youtu.be/NJWtH7_dgGU?t=172" data-t="172" rel="noopener"><span class="t">2:52</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>打三個詞，再按三次復原。它們會倒著消失：最後打的那個，最先消失。現在把三個檔案送到印表機。它們會依照你送出的順序印出來。兩條簡單的規則：後進先出，和先進先出。今天要講的是：堆疊和佇列。</p>
+        <p>堆疊是一種清單，你只能在其中一端新增或移除項目：那一端叫做頂端。新增叫做推入，移除叫做彈出。每一個復原按鈕都是一個堆疊。每個動作都會被推入，而復原會彈出最新的那一個。瀏覽器的「上一頁」按鈕也是同樣的運作方式。你開啟的每一頁都會被推入，按下上一頁就把它彈出。用陣列來做，推入和彈出各只要一步：只要移動頂端的標記。</p>
+        <p>堆疊還能檢查你的括號。由左往右讀。遇到左括號就推入。每一個右括號，都必須和頂端的那一個配成一對。左圓括號、左方括號、右方括號、右圓括號。全部都配對成功，堆疊最後是空的。現在把兩個右括號互換位置。右圓括號出現的時候，頂端是一個左方括號：配對不上。程式碼編輯器和編譯器，整天都在做這項檢查。</p>
+        <p>佇列是另一條規則。從尾端加入，從前端取出。送到印表機的檔案會在佇列中等待，並依照送出的順序印出來。你敲的按鍵也會在一個小佇列裡等待，直到程式準備好讀取。這就是第一季第 17 集的鍵盤。在尾端加入很簡單。但要從陣列的前端取走一項，就得把其他所有項目往前移，就像上一集那樣。</p>
+        <p>訣竅是：不要移動資料，改成移動兩個標記，前端和尾端。當尾端走到陣列的盡頭，就會繞回開頭，進入前端已經空出來的位置。把陣列彎成一個圓環，就是環形緩衝區。每一步都只是移動一次標記。鍵盤、音效卡和網路卡，都把資料放在像這樣的環裡。</p>
+        <p>堆疊：後進先出。佇列：先進先出。兩者都只是一個陣列或鏈結串列，再加上一條規則。下一集，堆疊會做一件令人意外的事：它讓函式呼叫自己。這就是遞迴。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：遞迴，一個呼叫自己的函式。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../02/zh-tw/"><span>上一集 · 第 2 集</span><b>陣列與鏈結串列：資料住在哪裡</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 4 集 <time datetime="2026-11-15T21:00:00+08:00" data-at="2026-11-15T21:00:00+08:00" data-fmt="when">11-15 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
