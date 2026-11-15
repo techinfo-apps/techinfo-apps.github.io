@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>遞迴：呼叫自己的函式 — 從一串數到地圖導航 #4</title>
+<meta name="description" content="一個資料夾裡有資料夾，裡面又有更多資料夾，它到底有多大？你可以為每一層都寫步驟，也可以只寫一條不斷用到自己的簡短規則。 我們用一條遞迴規則算出資料夾的大小，找出讓它停下來的終止條件（基本情況），看呼叫堆疊一層層長高、變矮（順便弄懂「堆疊溢位」到底是什麼意思），比較遞迴和迴圈，最後用一條規則長出一整棵樹。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/04/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/04/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/04/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/04/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/04/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/04/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/04/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/04/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/04/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="遞迴：呼叫自己的函式 — 從一串數到地圖導航 #4">
+<meta property="og:description" content="一個資料夾裡有資料夾，裡面又有更多資料夾，它到底有多大？你可以為每一層都寫步驟，也可以只寫一條不斷用到自己的簡短規則。 我們用一條遞迴規則算出資料夾的大小，找出讓它停下來的終止條件（基本情況），看呼叫堆疊一層層長高、變矮（順便弄懂「堆疊溢位」到底是什麼意思），比較遞迴和迴圈，最後用一條規則長出一整棵樹。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-04.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/04/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "遞迴：呼叫自己的函式", "description": "一個資料夾裡有資料夾，裡面又有更多資料夾，它到底有多大？你可以為每一層都寫步驟，也可以只寫一條不斷用到自己的簡短規則。 我們用一條遞迴規則算出資料夾的大小，找出讓它停下來的終止條件（基本情況），看呼叫堆疊一層層長高、變矮（順便弄懂「堆疊溢位」到底是什麼意思），比較遞迴和迴圈，最後用一條規則長出一整棵樹。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-04.webp"], "uploadDate": "2026-11-15T21:00:00+08:00", "duration": "PT2M33S", "embedUrl": "https://www.youtube.com/embed/aF9eVgu7CF4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一串數到地圖導航 · 第 4 集</p>
+      <h1 class="ep-title">遞迴：呼叫自己的函式</h1>
+      <div class="vplayer" data-yt="aF9eVgu7CF4" data-title="遞迴：呼叫自己的函式">
+        <button type="button" class="vplay" aria-label="播放: 遞迴：呼叫自己的函式">
+          <img src="../../../../assets/img/videos/dsa-04.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/aF9eVgu7CF4" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">一個資料夾裡有資料夾，裡面又有更多資料夾，它到底有多大？你可以為每一層都寫步驟，也可以只寫一條不斷用到自己的簡短規則。<br>我們用一條遞迴規則算出資料夾的大小，找出讓它停下來的終止條件（基本情況），看呼叫堆疊一層層長高、變矮（順便弄懂「堆疊溢位」到底是什麼意思），比較遞迴和迴圈，最後用一條規則長出一整棵樹。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的，旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>裝滿資料夾的資料夾</a></li>
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>一條規則算任意資料夾</a></li>
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=72" data-t="72" rel="noopener"><span class="t">1:12</span>終止條件</a></li>
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=90" data-t="90" rel="noopener"><span class="t">1:30</span>呼叫堆疊</a></li>
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=122" data-t="122" rel="noopener"><span class="t">2:02</span>遞迴還是迴圈？</a></li>
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=139" data-t="139" rel="noopener"><span class="t">2:19</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>這個資料夾有多大？裡面有檔案，還有別的資料夾，那些資料夾裡又有檔案，又有資料夾。你可以為每一層都寫一長串步驟；也可以只寫一條簡短的規則，讓它不斷用到它自己。今天要講的是：一個呼叫自己的函式。遞迴。</p>
+        <p>規則是這樣的：一個資料夾的大小，等於它自己檔案的大小，加上裡面每一個資料夾的大小。要對 home 用這條規則，就得先知道 photos 的大小。所以我們對 photos 用同一條規則，接著再對 photos 裡面的資料夾用。每一次呼叫，都把同一個問題交給更小的資料夾，一路往下，直到某個資料夾裡面沒有資料夾為止。到了那裡，答案就只是它自己的檔案。然後答案一路往回傳。每個資料夾把它們加起來，直到 home 得到它的總數。</p>
+        <p>最底下的那種情況，也就是裡面沒有資料夾的資料夾，叫做終止條件（基本情況）。每個遞迴函式都需要一個。沒有它，函式就會一直呼叫自己，永遠不停，就像一個不知怎麼地裝著它自己的資料夾。</p>
+        <p>電腦要怎麼記住這麼多還沒做完的呼叫？靠的是上一集的堆疊。每一次呼叫都會被推入呼叫堆疊，裡面記著它自己的資料夾，以及它算到一半的總數。一次呼叫結束時就會彈出，下面那一個接著從剛才停下來的地方繼續。如果呼叫太深，堆疊就會沒有空間。這就是那個有名的錯誤：堆疊溢位。</p>
+        <p>凡是用遞迴寫得出來的東西，也都能用迴圈，加上一個你自己管理的堆疊來寫。選比較清楚的那一個。遇到樹狀結構，還有任何一層套一層的東西，通常是遞迴更勝一籌。</p>
+        <p>遞迴：解決一小塊，然後相信同一條規則會處理剩下的部分。下一集，同樣的想法，可以在排好序的清單裡，大約二十步就找到任何東西。這就是二分搜尋。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：二分搜尋，在已排序的清單裡大約二十步就能找到任何東西。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../03/zh-tw/"><span>上一集 · 第 3 集</span><b>堆疊與佇列：為什麼復原是倒著來的</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 5 集 <time datetime="2026-11-16T21:00:00+08:00" data-at="2026-11-16T21:00:00+08:00" data-fmt="when">11-16 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

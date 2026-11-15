@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>La récursivité : une fonction qui s&#x27;appelle elle-même — D&#x27;une liste à l&#x27;appli de cartes #4</title>
+<meta name="description" content="Quelle est la taille d&#x27;un dossier qui contient des dossiers, qui contiennent encore d&#x27;autres dossiers ? Vous pourriez écrire des étapes pour chaque niveau, ou une seule règle courte qui se réutilise elle-même. Nous calculons la taille d&#x27;un dossier avec une règle récursive, nous trouvons le cas de base qui l&#x27;arrête, nous regardons la pile d&#x27;appels grandir puis rétrécir (et nous voyons ce que signifie vraiment le « dépassement de pile (stack overflow) »), nous comparons la récursivité à une boucle, et nous faisons pousser un arbre entier à partir d&#x27;une seule règle.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/04/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/04/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/04/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/04/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/04/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/04/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/04/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/04/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/04/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="La récursivité : une fonction qui s&#x27;appelle elle-même — D&#x27;une liste à l&#x27;appli de cartes #4">
+<meta property="og:description" content="Quelle est la taille d&#x27;un dossier qui contient des dossiers, qui contiennent encore d&#x27;autres dossiers ? Vous pourriez écrire des étapes pour chaque niveau, ou une seule règle courte qui se réutilise elle-même. Nous calculons la taille d&#x27;un dossier avec une règle récursive, nous trouvons le cas de base qui l&#x27;arrête, nous regardons la pile d&#x27;appels grandir puis rétrécir (et nous voyons ce que signifie vraiment le « dépassement de pile (stack overflow) »), nous comparons la récursivité à une boucle, et nous faisons pousser un arbre entier à partir d&#x27;une seule règle.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-04.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/04/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "La récursivité : une fonction qui s'appelle elle-même", "description": "Quelle est la taille d'un dossier qui contient des dossiers, qui contiennent encore d'autres dossiers ? Vous pourriez écrire des étapes pour chaque niveau, ou une seule règle courte qui se réutilise elle-même. Nous calculons la taille d'un dossier avec une règle récursive, nous trouvons le cas de base qui l'arrête, nous regardons la pile d'appels grandir puis rétrécir (et nous voyons ce que signifie vraiment le « dépassement de pile (stack overflow) »), nous comparons la récursivité à une boucle, et nous faisons pousser un arbre entier à partir d'une seule règle.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-04.webp"], "uploadDate": "2026-11-15T21:00:00+08:00", "duration": "PT2M33S", "embedUrl": "https://www.youtube.com/embed/aF9eVgu7CF4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;une liste à l&#x27;appli de cartes · Épisode 4</p>
+      <h1 class="ep-title">La récursivité : une fonction qui s&#x27;appelle elle-même</h1>
+      <div class="vplayer" data-yt="aF9eVgu7CF4" data-title="La récursivité : une fonction qui s&#x27;appelle elle-même">
+        <button type="button" class="vplay" aria-label="Lire: La récursivité : une fonction qui s&#x27;appelle elle-même">
+          <img src="../../../../assets/img/videos/dsa-04.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/aF9eVgu7CF4" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Quelle est la taille d&#x27;un dossier qui contient des dossiers, qui contiennent encore d&#x27;autres dossiers ? Vous pourriez écrire des étapes pour chaque niveau, ou une seule règle courte qui se réutilise elle-même.<br>Nous calculons la taille d&#x27;un dossier avec une règle récursive, nous trouvons le cas de base qui l&#x27;arrête, nous regardons la pile d&#x27;appels grandir puis rétrécir (et nous voyons ce que signifie vraiment le « dépassement de pile (stack overflow) »), nous comparons la récursivité à une boucle, et nous faisons pousser un arbre entier à partir d&#x27;une seule règle.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Un dossier plein de dossiers</a></li>
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>Une règle pour n&#x27;importe quel dossier</a></li>
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=72" data-t="72" rel="noopener"><span class="t">1:12</span>Le cas de base</a></li>
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=90" data-t="90" rel="noopener"><span class="t">1:30</span>La pile d&#x27;appels</a></li>
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=122" data-t="122" rel="noopener"><span class="t">2:02</span>Récursivité ou boucle ?</a></li>
+        <li><a href="https://youtu.be/aF9eVgu7CF4?t=139" data-t="139" rel="noopener"><span class="t">2:19</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Quelle est la taille de ce dossier ? Il contient des fichiers et d&#x27;autres dossiers, qui contiennent encore des fichiers et encore des dossiers. Vous pourriez écrire une longue liste d&#x27;étapes pour chaque niveau. Ou écrire une seule règle courte qui se réutilise elle-même. Aujourd&#x27;hui : une fonction qui s&#x27;appelle elle-même. La récursivité.</p>
+        <p>Voici la règle. La taille d&#x27;un dossier est la taille de ses fichiers, plus la taille de chaque dossier qu&#x27;il contient. Pour l&#x27;appliquer à home, il nous faut la taille de photos. Nous utilisons donc la même règle sur photos, puis sur les dossiers qui se trouvent dans photos. Chaque appel confie la même question à un dossier plus petit, de plus en plus bas, jusqu&#x27;à un dossier qui ne contient aucun dossier. Là, la réponse se limite à ses fichiers. Les réponses remontent ensuite. Chaque dossier les additionne, jusqu&#x27;à ce que home obtienne son total.</p>
+        <p>Ce cas du fond, un dossier qui ne contient aucun dossier, s&#x27;appelle le cas de base. Toute fonction récursive en a besoin d&#x27;un. Sans lui, la fonction s&#x27;appellerait elle-même indéfiniment, comme un dossier qui contiendrait, on ne sait comment, lui-même.</p>
+        <p>Comment l&#x27;ordinateur garde-t-il la trace de tous ces appels inachevés ? Avec la pile de l&#x27;épisode précédent. Chaque appel est empilé sur la pile d&#x27;appels, avec son propre dossier et son propre total en cours. Quand un appel se termine, il est dépilé, et celui du dessous reprend là où il s&#x27;était arrêté. Si les appels vont trop profond, la pile n&#x27;a plus de place. C&#x27;est la fameuse erreur : le dépassement de pile (stack overflow).</p>
+        <p>Tout ce qui s&#x27;écrit avec de la récursivité peut aussi s&#x27;écrire avec une boucle et une pile que vous gérez vous-même. Choisissez la plus claire. Pour les arbres et tout ce qui est imbriqué, la récursivité l&#x27;emporte généralement.</p>
+        <p>La récursivité : résoudre un petit morceau, et faire confiance à la même règle pour traiter le reste. La prochaine fois, la même idée permet de trouver n&#x27;importe quoi dans une liste triée en une vingtaine d&#x27;étapes. La recherche dichotomique. À bientôt.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : la recherche dichotomique, qui trouve n&#x27;importe quoi dans une liste triée en une vingtaine d&#x27;étapes.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../03/fr/"><span>Précédent · Épisode 3</span><b>Piles et files : pourquoi « annuler » fonctionne à l&#x27;envers</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 5 sort le <time datetime="2026-11-16T21:00:00+08:00" data-at="2026-11-16T21:00:00+08:00" data-fmt="when">11-16 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
