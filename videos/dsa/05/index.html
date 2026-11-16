@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Binary Search: Find Anything in 20 Guesses — From a List to Your Map App #5</title>
+<meta name="description" content="Think of a number from 1 to 100: seven guesses are always enough. The same trick finds one name among a million in twenty steps, and among a billion in thirty. We see why seven is enough (2⁷ = 128), write binary search with two markers, low and high, show why the list must be sorted first, catch the one-character bug almost every programmer writes once, and use it to find which of a thousand versions first broke, in ten tests.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/05/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/05/" data-lang="en" data-href="./">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/05/zh-cn/" data-lang="zh-CN" data-href="./zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/05/zh-tw/" data-lang="zh-TW" data-href="./zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/05/ja/" data-lang="ja" data-href="./ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/05/ko/" data-lang="ko" data-href="./ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/05/es/" data-lang="es" data-href="./es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/05/fr/" data-lang="fr" data-href="./fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/05/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Binary Search: Find Anything in 20 Guesses — From a List to Your Map App #5">
+<meta property="og:description" content="Think of a number from 1 to 100: seven guesses are always enough. The same trick finds one name among a million in twenty steps, and among a billion in thirty. We see why seven is enough (2⁷ = 128), write binary search with two markers, low and high, show why the list must be sorted first, catch the one-character bug almost every programmer writes once, and use it to find which of a thousand versions first broke, in ten tests.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-05.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/05/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Binary Search: Find Anything in 20 Guesses", "description": "Think of a number from 1 to 100: seven guesses are always enough. The same trick finds one name among a million in twenty steps, and among a billion in thirty. We see why seven is enough (2⁷ = 128), write binary search with two markers, low and high, show why the list must be sorted first, catch the one-character bug almost every programmer writes once, and use it to find which of a thousand versions first broke, in ten tests.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-05.webp"], "uploadDate": "2026-11-16T21:00:00+08:00", "duration": "PT3M4S", "embedUrl": "https://www.youtube.com/embed/h7Tgijx47AA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../" data-page-lang="en">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../videos/">All episodes</a> · From a List to Your Map App · Episode 5</p>
+      <h1 class="ep-title">Binary Search: Find Anything in 20 Guesses</h1>
+      <div class="vplayer" data-yt="h7Tgijx47AA" data-title="Binary Search: Find Anything in 20 Guesses">
+        <button type="button" class="vplay" aria-label="Play: Binary Search: Find Anything in 20 Guesses">
+          <img src="../../../assets/img/videos/dsa-05.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Pressing play loads the video from YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/h7Tgijx47AA" rel="noopener">Watch on YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">Subscribe on YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Think of a number from 1 to 100: seven guesses are always enough. The same trick finds one name among a million in twenty steps, and among a billion in thirty.<br>We see why seven is enough (2⁷ = 128), write binary search with two markers, low and high, show why the list must be sorted first, catch the one-character bug almost every programmer writes once, and use it to find which of a thousand versions first broke, in ten tests.</p>
+      <p class="ep-ai">Every animation in this video is drawn by code, and the narration is an AI voice.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapters</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Seven guesses</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=38" data-t="38" rel="noopener"><span class="t">0:38</span>Why seven is enough</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=69" data-t="69" rel="noopener"><span class="t">1:09</span>Low, high and the middle</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=97" data-t="97" rel="noopener"><span class="t">1:37</span>Why the list must be sorted</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=118" data-t="118" rel="noopener"><span class="t">1:58</span>The bug almost everyone writes</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=148" data-t="148" rel="noopener"><span class="t">2:28</span>Where it&#x27;s used</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=170" data-t="170" rel="noopener"><span class="t">2:50</span>What&#x27;s next</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcript</h2>
+        <div class="ep-text">
+        <p>Think of a number from one to a hundred. I&#x27;ll find it in seven guesses or fewer, every time. Fifty? Higher. Seventy-five? Lower. Sixty-two? Higher. Sixty-eight? Lower. Sixty-five, sixty-six: higher. Sixty-seven. That&#x27;s binary search. Today: how it works, why it needs a sorted list, and the one bug almost everyone writes.</p>
+        <p>Every guess cuts the range in half: a hundred, fifty, twenty-five, twelve, six, three, one. Each doubling of the range adds just one guess. Two to the seventh is a hundred and twenty-eight, so seven is always enough. A million needs twenty guesses, a billion needs thirty. That count of halvings is log base two of n.</p>
+        <p>In a program, two markers hold the range that&#x27;s still possible: low and high. Look at the middle. If it&#x27;s too small, move low just past it. If it&#x27;s too big, move high just below it. Stop when you find it, or when low passes high. Then the number isn&#x27;t there at all.</p>
+        <p>All of this only works because the list is sorted. Shuffle it, and “too small” no longer tells you which half to throw away. So if you&#x27;ll search many times, sorting first pays off. That&#x27;s what the next four episodes are about.</p>
+        <p>Now the bug. Write “move low to the middle” instead of “just past the middle”, and watch what happens. With two numbers left, the middle is low itself. Low never moves, and the loop runs forever. One “plus one” decides whether it ever finishes. Always test the tiny cases: one item, and two items.</p>
+        <p>Binary search is everywhere: looking up a word in a sorted dictionary, or finding exactly where a new item should go. It can even find which of a thousand versions of a program first broke. Test the middle one, keep the half that changed: about ten tests in all.</p>
+        <p>Binary search: keep the half that can still hold the answer, until just one is left. Next time: how does a list get sorted in the first place? Three simple ways you could do by hand. See you there.</p>
+        </div>
+        <p class="ep-close">Next episode: sorting by hand, with insertion, selection and bubble sort.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../04/"><span>Previous · Episode 4</span><b>Recursion: A Function That Calls Itself</b></a><div class="ep-pg next soon"><span>Next</span><b>Episode 6 comes out <time datetime="2026-11-17T21:00:00+08:00" data-at="2026-11-17T21:00:00+08:00" data-fmt="when">11-17 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../assets/strings.js"></script>
+<script src="../../../assets/site.js"></script>
+<script src="../../../assets/videos.js"></script>
+</body>
+</html>

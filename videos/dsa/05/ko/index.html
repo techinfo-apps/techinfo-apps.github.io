@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>이진 탐색: 스무 번 안에 무엇이든 찾기 — 숫자 목록에서 지도 앱까지 #5</title>
+<meta name="description" content="1부터 100 사이의 숫자를 떠올려 보세요. 일곱 번이면 언제나 충분해요. 같은 요령으로 100만 개의 이름 중 하나를 20단계에, 10억 개 중 하나를 30단계에 찾아요. 왜 일곱 번이면 충분한지(2⁷ = 128) 알아보고, low와 high 두 표시로 이진 탐색을 쓰고, 왜 목록을 먼저 정렬해야 하는지 보여 주고, 거의 모든 프로그래머가 한 번은 쓰는 그 버그를 잡아내고, 이진 탐색으로 천 개의 버전 중 처음 고장 난 버전을 테스트 열 번 만에 찾아요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/05/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/05/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/05/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/05/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/05/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/05/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/05/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/05/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/05/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="이진 탐색: 스무 번 안에 무엇이든 찾기 — 숫자 목록에서 지도 앱까지 #5">
+<meta property="og:description" content="1부터 100 사이의 숫자를 떠올려 보세요. 일곱 번이면 언제나 충분해요. 같은 요령으로 100만 개의 이름 중 하나를 20단계에, 10억 개 중 하나를 30단계에 찾아요. 왜 일곱 번이면 충분한지(2⁷ = 128) 알아보고, low와 high 두 표시로 이진 탐색을 쓰고, 왜 목록을 먼저 정렬해야 하는지 보여 주고, 거의 모든 프로그래머가 한 번은 쓰는 그 버그를 잡아내고, 이진 탐색으로 천 개의 버전 중 처음 고장 난 버전을 테스트 열 번 만에 찾아요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-05.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/05/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "이진 탐색: 스무 번 안에 무엇이든 찾기", "description": "1부터 100 사이의 숫자를 떠올려 보세요. 일곱 번이면 언제나 충분해요. 같은 요령으로 100만 개의 이름 중 하나를 20단계에, 10억 개 중 하나를 30단계에 찾아요. 왜 일곱 번이면 충분한지(2⁷ = 128) 알아보고, low와 high 두 표시로 이진 탐색을 쓰고, 왜 목록을 먼저 정렬해야 하는지 보여 주고, 거의 모든 프로그래머가 한 번은 쓰는 그 버그를 잡아내고, 이진 탐색으로 천 개의 버전 중 처음 고장 난 버전을 테스트 열 번 만에 찾아요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-05.webp"], "uploadDate": "2026-11-16T21:00:00+08:00", "duration": "PT3M4S", "embedUrl": "https://www.youtube.com/embed/h7Tgijx47AA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 숫자 목록에서 지도 앱까지 · 5편</p>
+      <h1 class="ep-title">이진 탐색: 스무 번 안에 무엇이든 찾기</h1>
+      <div class="vplayer" data-yt="h7Tgijx47AA" data-title="이진 탐색: 스무 번 안에 무엇이든 찾기">
+        <button type="button" class="vplay" aria-label="재생: 이진 탐색: 스무 번 안에 무엇이든 찾기">
+          <img src="../../../../assets/img/videos/dsa-05.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/h7Tgijx47AA" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">1부터 100 사이의 숫자를 떠올려 보세요. 일곱 번이면 언제나 충분해요. 같은 요령으로 100만 개의 이름 중 하나를 20단계에, 10억 개 중 하나를 30단계에 찾아요.<br>왜 일곱 번이면 충분한지(2⁷ = 128) 알아보고, low와 high 두 표시로 이진 탐색을 쓰고, 왜 목록을 먼저 정렬해야 하는지 보여 주고, 거의 모든 프로그래머가 한 번은 쓰는 그 버그를 잡아내고, 이진 탐색으로 천 개의 버전 중 처음 고장 난 버전을 테스트 열 번 만에 찾아요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 목소리예요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>일곱 번에 맞히기</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=38" data-t="38" rel="noopener"><span class="t">0:38</span>왜 일곱 번이면 충분할까?</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=69" data-t="69" rel="noopener"><span class="t">1:09</span>low, high 그리고 가운데</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=97" data-t="97" rel="noopener"><span class="t">1:37</span>왜 먼저 정렬해야 할까?</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=118" data-t="118" rel="noopener"><span class="t">1:58</span>거의 누구나 쓰는 그 버그</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=148" data-t="148" rel="noopener"><span class="t">2:28</span>어디에 쓸까?</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=170" data-t="170" rel="noopener"><span class="t">2:50</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>1부터 100 사이의 숫자를 하나 떠올려 보세요. 일곱 번 안에 반드시 맞힐게요. 언제나요. 50? 더 커요. 75? 더 작아요. 62? 더 커요. 68? 더 작아요. 65, 66: 둘 다 더 커요. 67. 이것이 이진 탐색이에요. 오늘은 어떻게 동작하는지, 왜 정렬된 목록이 꼭 필요한지, 그리고 거의 누구나 한 번은 쓰는 그 버그를 알아봐요.</p>
+        <p>한 번 추측할 때마다 범위가 절반으로 줄어요. 100, 50, 25, 12, 6, 3, 1. 범위가 두 배가 될 때마다 추측은 딱 한 번만 늘어요. 2의 7제곱은 128이니까, 일곱 번이면 언제나 충분해요. 100만이면 20번, 10억이면 30번이 필요해요. 이렇게 절반으로 나눌 수 있는 횟수가 밑이 2인 n의 로그, 곧 log₂ n이에요.</p>
+        <p>프로그램에서는 아직 가능성이 남은 범위를 두 개의 표시로 잡아요. low와 high예요. 가운데를 봐요. 너무 작으면 low를 가운데 바로 다음으로 옮겨요. 너무 크면 high를 가운데 바로 앞으로 옮겨요. 찾으면 멈춰요. 아니면 low가 high를 넘어설 때 멈춰요. 그러면 그 숫자는 아예 없는 거예요.</p>
+        <p>이 모든 건 목록이 정렬되어 있기 때문에 되는 거예요. 섞어 버리면 “너무 작다”는 말이 어느 쪽 절반을 버려야 하는지 더는 알려 주지 못해요. 그러니 여러 번 찾을 거라면 먼저 정렬해 두는 게 이득이에요. 이어지는 네 편이 바로 그 이야기예요.</p>
+        <p>이제 버그예요. low를 “가운데 바로 다음”(low = mid + 1)이 아니라 “가운데”(low = mid)로 옮기도록 쓰면 어떻게 되는지 봐요. 두 개가 남으면 가운데는 low 자신이에요. low는 움직이지 않고, 반복문은 영원히 돌아요. “+1” 하나가 끝날지 말지를 정해요. 항상 아주 작은 경우로 시험해 봐요. 항목이 하나일 때와 두 개일 때요.</p>
+        <p>이진 탐색은 어디에나 쓰여요. 정렬된 사전에서 단어를 찾거나, 새 항목이 들어갈 정확한 자리를 찾을 때요. 천 개의 프로그램 버전 중에서 처음으로 고장 난 버전을 찾을 수도 있어요. 가운데 버전을 시험하고, 변화가 생긴 쪽 절반을 남겨요. 모두 합쳐 열 번쯤이면 돼요.</p>
+        <p>이진 탐색은 답이 아직 있을 수 있는 절반만 남기고, 하나가 남을 때까지 이어 가는 거예요. 다음 편에서는 목록이 애초에 어떻게 정렬되는지 알아봐요. 손으로도 할 수 있는 간단한 방법 세 가지예요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 손으로 하는 정렬, 삽입 정렬, 선택 정렬, 버블 정렬이에요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../04/ko/"><span>이전 편 · 4편</span><b>재귀: 자기 자신을 부르는 함수</b></a><div class="ep-pg next soon"><span>다음 편</span><b>6편은 <time datetime="2026-11-17T21:00:00+08:00" data-at="2026-11-17T21:00:00+08:00" data-fmt="when">11-17 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

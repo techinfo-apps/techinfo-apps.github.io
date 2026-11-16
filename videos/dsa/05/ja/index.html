@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>二分探索：20回の予想でなんでも見つける — 数の並びから地図アプリまで #5</title>
+<meta name="description" content="1から100までの数を思い浮かべてください。7回の予想で必ず足ります。同じ方法で、100万個の名前の中から1つを20ステップで、10億個の中からでも30ステップで見つけられます。 なぜ7回で足りるのか（2⁷ = 128）を確かめ、low と high の2つの目印で二分探索を書き、先にリストを並べておく必要がある理由を示し、ほとんどのプログラマーが一度は書いてしまうバグを見つけ、最後にそれを使って、1000個のバージョンの中から最初に壊れたものを10回のテストで探します。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/05/ja/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/05/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/05/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/05/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/05/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/05/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/05/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/05/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/05/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="二分探索：20回の予想でなんでも見つける — 数の並びから地図アプリまで #5">
+<meta property="og:description" content="1から100までの数を思い浮かべてください。7回の予想で必ず足ります。同じ方法で、100万個の名前の中から1つを20ステップで、10億個の中からでも30ステップで見つけられます。 なぜ7回で足りるのか（2⁷ = 128）を確かめ、low と high の2つの目印で二分探索を書き、先にリストを並べておく必要がある理由を示し、ほとんどのプログラマーが一度は書いてしまうバグを見つけ、最後にそれを使って、1000個のバージョンの中から最初に壊れたものを10回のテストで探します。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-05.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/05/ja/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "二分探索：20回の予想でなんでも見つける", "description": "1から100までの数を思い浮かべてください。7回の予想で必ず足ります。同じ方法で、100万個の名前の中から1つを20ステップで、10億個の中からでも30ステップで見つけられます。 なぜ7回で足りるのか（2⁷ = 128）を確かめ、low と high の2つの目印で二分探索を書き、先にリストを並べておく必要がある理由を示し、ほとんどのプログラマーが一度は書いてしまうバグを見つけ、最後にそれを使って、1000個のバージョンの中から最初に壊れたものを10回のテストで探します。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-05.webp"], "uploadDate": "2026-11-16T21:00:00+08:00", "duration": "PT3M4S", "embedUrl": "https://www.youtube.com/embed/h7Tgijx47AA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ja">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">すべての回</a> · 数の並びから地図アプリまで · 第5話</p>
+      <h1 class="ep-title">二分探索：20回の予想でなんでも見つける</h1>
+      <div class="vplayer" data-yt="h7Tgijx47AA" data-title="二分探索：20回の予想でなんでも見つける">
+        <button type="button" class="vplay" aria-label="再生: 二分探索：20回の予想でなんでも見つける">
+          <img src="../../../../assets/img/videos/dsa-05.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">再生を押すと、動画をYouTubeから読み込みます。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/h7Tgijx47AA" rel="noopener">YouTubeで見る</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTubeでチャンネル登録</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">1から100までの数を思い浮かべてください。7回の予想で必ず足ります。同じ方法で、100万個の名前の中から1つを20ステップで、10億個の中からでも30ステップで見つけられます。<br>なぜ7回で足りるのか（2⁷ = 128）を確かめ、low と high の2つの目印で二分探索を書き、先にリストを並べておく必要がある理由を示し、ほとんどのプログラマーが一度は書いてしまうバグを見つけ、最後にそれを使って、1000個のバージョンの中から最初に壊れたものを10回のテストで探します。</p>
+      <p class="ep-ai">この動画のアニメーションは、すべてコードで描いています。ナレーションはAI音声です。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">チャプター</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>7回で当てる</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=38" data-t="38" rel="noopener"><span class="t">0:38</span>なぜ7回で足りるのか</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=69" data-t="69" rel="noopener"><span class="t">1:09</span>low、high、そして真ん中</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=97" data-t="97" rel="noopener"><span class="t">1:37</span>なぜ先に並べ替えるのか</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=118" data-t="118" rel="noopener"><span class="t">1:58</span>ほとんどの人が書くバグ</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=148" data-t="148" rel="noopener"><span class="t">2:28</span>使われる場所</a></li>
+        <li><a href="https://youtu.be/h7Tgijx47AA?t=170" data-t="170" rel="noopener"><span class="t">2:50</span>次回予告</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">ナレーション全文</h2>
+        <div class="ep-text">
+        <p>1から100までの数を、1つ思い浮かべてください。7回以内に、必ず当てます。毎回です。50？もっと大きい。75？もっと小さい。62？もっと大きい。68？もっと小さい。65、66は、どちらももっと大きい。67。これが二分探索です。今日は、その仕組みと、なぜ順番に並んだリストが必要なのか、そして、ほとんどの人が書いてしまう1つのバグを見ていきます。</p>
+        <p>1回予想するたびに、範囲が半分になります。100、50、25、12、6、3、1。範囲が2倍になるごとに、予想が1回増えるだけです。2の7乗は128なので、7回あれば必ず足ります。100万なら20回、10億なら30回かかります。この半分にできる回数が、2を底とする n の対数、log₂ n です。</p>
+        <p>プログラムでは、まだ可能性が残っている範囲を、2つの目印で表します。low と high です。真ん中を見ます。小さすぎたら、low を真ん中のすぐ右へ動かします。大きすぎたら、high を真ん中のすぐ左へ動かします。見つかったら止めます。または、low が high を追い越したら止めます。そのときは、その数はそもそもありません。</p>
+        <p>これがうまくいくのは、リストが順番に並んでいるからです。シャッフルしてしまうと、「小さすぎる」とわかっても、どちらの半分を捨てればいいのかわからなくなります。何度も探すなら、先に並べ替えておくと得をします。このあとの4回は、その話です。</p>
+        <p>ここからはバグの話です。low を「真ん中のすぐ先」（low = mid + 1）ではなく、「真ん中」（low = mid）にしてしまうと、何が起こるか見てみましょう。数が2つ残ったとき、真ん中は low 自身になります。low は動かず、ループは永遠に続きます。たった1つの「+1」が、終わるかどうかを決めます。必ず、いちばん小さなケースで試しましょう。要素が1つの場合と、2つの場合です。</p>
+        <p>二分探索は、あちこちで使われています。順番に並んだ辞書で単語を引くときや、新しい項目をちょうどどこに入れるかを探すときです。プログラムの1000個のバージョンの中から、最初に壊れたものを見つけることもできます。真ん中のバージョンを試し、変化があったほうの半分を残します。全部で約10回のテストで済みます。</p>
+        <p>二分探索とは、答えがまだ入っているかもしれない半分だけを残し、1つになるまで続けることです。次回は、そもそもリストはどうやって並べ替えるのか。手作業でもできる、3つの簡単な方法です。また会いましょう。</p>
+        </div>
+        <p class="ep-close">次回：手作業での並べ替え。挿入ソート、選択ソート、バブルソートを扱います。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../04/ja/"><span>前の回 · 第4話</span><b>再帰：自分自身を呼び出す関数</b></a><div class="ep-pg next soon"><span>次の回</span><b>第6話は <time datetime="2026-11-17T21:00:00+08:00" data-at="2026-11-17T21:00:00+08:00" data-fmt="when">11-17 21:00 (UTC+8)</time> に公開</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
