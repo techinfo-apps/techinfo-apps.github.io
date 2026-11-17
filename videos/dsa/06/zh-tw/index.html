@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>手工排序：插入排序、選擇排序和氣泡排序 — 從一串數到地圖導航 #6</title>
+<meta name="description" content="八座積木塔，三種排法，每一種你都能自己動手做。三種的結果一模一樣，但如果換成一千個項目，它們最多要比較將近五十萬次。 我們一步一步執行插入排序、選擇排序和氣泡排序，把每一次比較都數出來（八個項目是 7 + 6 + … + 1 = 28 次，一般來說約為 n² ÷ 2），看看插入排序什麼時候特別快，再弄懂什麼是「穩定」排序。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/06/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/06/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/06/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/06/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/06/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/06/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/06/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/06/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/06/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="手工排序：插入排序、選擇排序和氣泡排序 — 從一串數到地圖導航 #6">
+<meta property="og:description" content="八座積木塔，三種排法，每一種你都能自己動手做。三種的結果一模一樣，但如果換成一千個項目，它們最多要比較將近五十萬次。 我們一步一步執行插入排序、選擇排序和氣泡排序，把每一次比較都數出來（八個項目是 7 + 6 + … + 1 = 28 次，一般來說約為 n² ÷ 2），看看插入排序什麼時候特別快，再弄懂什麼是「穩定」排序。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-06.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/06/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "手工排序：插入排序、選擇排序和氣泡排序", "description": "八座積木塔，三種排法，每一種你都能自己動手做。三種的結果一模一樣，但如果換成一千個項目，它們最多要比較將近五十萬次。 我們一步一步執行插入排序、選擇排序和氣泡排序，把每一次比較都數出來（八個項目是 7 + 6 + … + 1 = 28 次，一般來說約為 n² ÷ 2），看看插入排序什麼時候特別快，再弄懂什麼是「穩定」排序。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-06.webp"], "uploadDate": "2026-11-17T21:00:00+08:00", "duration": "PT2M46S", "embedUrl": "https://www.youtube.com/embed/ly1Zkn90yxk", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一串數到地圖導航 · 第 6 集</p>
+      <h1 class="ep-title">手工排序：插入排序、選擇排序和氣泡排序</h1>
+      <div class="vplayer" data-yt="ly1Zkn90yxk" data-title="手工排序：插入排序、選擇排序和氣泡排序">
+        <button type="button" class="vplay" aria-label="播放: 手工排序：插入排序、選擇排序和氣泡排序">
+          <img src="../../../../assets/img/videos/dsa-06.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/ly1Zkn90yxk" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">八座積木塔，三種排法，每一種你都能自己動手做。三種的結果一模一樣，但如果換成一千個項目，它們最多要比較將近五十萬次。<br>我們一步一步執行插入排序、選擇排序和氣泡排序，把每一次比較都數出來（八個項目是 7 + 6 + … + 1 = 28 次，一般來說約為 n² ÷ 2），看看插入排序什麼時候特別快，再弄懂什麼是「穩定」排序。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的，旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>三種排法</a></li>
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>插入排序</a></li>
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=58" data-t="58" rel="noopener"><span class="t">0:58</span>選擇排序</a></li>
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=81" data-t="81" rel="noopener"><span class="t">1:21</span>氣泡排序</a></li>
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=104" data-t="104" rel="noopener"><span class="t">1:44</span>數一數比較次數</a></li>
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=147" data-t="147" rel="noopener"><span class="t">2:27</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>八座積木塔，高矮亂放。這裡有三種排法，每一種你都能自己動手做。三種排出來的結果一模一樣。但如果換成一千個項目，它們最多要比較將近五十萬次。今天要講：三種簡單的排序，還有為什麼簡單不等於快。</p>
+        <p>第一種，插入排序。大多數人在書架上整理書，用的就是這個方法。拿起下一座，往左挪，越過每一座比它高的，直到它在左邊已排好的那一段裡放得下。排好的那一段一座一座變長，直到占滿整排。有一種聰明的改良叫希爾排序：先比較離得很遠的項目，再越比越近。這裡就點到為止。</p>
+        <p>第二種，選擇排序。把剩下的全部掃一遍，找出最矮的，放到最前面。再把剩下的掃一遍，找出第二矮的，然後是第三矮的……它比較的次數永遠一樣，就算這一排本來就排好了也一樣。</p>
+        <p>第三種，氣泡排序。相鄰的兩座比一比，順序不對就交換。走完一趟，最高的那座塔就一路「冒」到了最後面。再來一趟，每一趟又定下一座。如果某一趟一次交換都沒有，就可以提早收工。</p>
+        <p>現在來數一數。八座塔，選擇排序要比較 28 次：7 加 6 加 5，一直加下去。大約是 n² ÷ 2。一千個項目，就是將近五十萬次比較。如果這一排本來就差不多排好了，插入排序會很快。但資料如果是亂的，三種都像 n² 一樣成長。再說一個概念：穩定排序，會讓一樣大的項目保持原來的先後順序。插入排序和氣泡排序是穩定的；選擇排序照一般的寫法，則不是。</p>
+        <p>三種簡單的排序：好寫，處理小清單沒問題，但清單一大，就是 n²。下一集，有個好得多的辦法：把清單對半拆開，兩半各自排好，再合併起來。這就是合併排序。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：合併排序，把清單對半拆開，快得多。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../05/zh-tw/"><span>上一集 · 第 5 集</span><b>二分搜尋：二十次之內找到任何東西</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 7 集 <time datetime="2026-11-18T21:00:00+08:00" data-at="2026-11-18T21:00:00+08:00" data-fmt="when">11-18 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

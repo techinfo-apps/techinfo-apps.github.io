@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>손으로 하는 정렬: 삽입 정렬, 선택 정렬, 버블 정렬 — 숫자 목록에서 지도 앱까지 #6</title>
+<meta name="description" content="블록 타워 여덟 개, 정렬하는 방법 세 가지, 그리고 그중 무엇이든 손으로 직접 할 수 있어요. 세 가지 모두 같은 답을 내지만, 항목이 천 개가 되면 비교를 최대 50만 번 가까이 해야 해요. 삽입 정렬, 선택 정렬, 버블 정렬을 한 단계씩 실행하고, 모든 비교를 세어 보고(여덟 개일 때 7 + 6 + … + 1 = 28번, 일반적으로는 약 n² ÷ 2번), 삽입 정렬이 빠른 경우를 확인하고, “안정” 정렬이 무엇인지 알아봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/06/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/06/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/06/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/06/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/06/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/06/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/06/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/06/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/06/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="손으로 하는 정렬: 삽입 정렬, 선택 정렬, 버블 정렬 — 숫자 목록에서 지도 앱까지 #6">
+<meta property="og:description" content="블록 타워 여덟 개, 정렬하는 방법 세 가지, 그리고 그중 무엇이든 손으로 직접 할 수 있어요. 세 가지 모두 같은 답을 내지만, 항목이 천 개가 되면 비교를 최대 50만 번 가까이 해야 해요. 삽입 정렬, 선택 정렬, 버블 정렬을 한 단계씩 실행하고, 모든 비교를 세어 보고(여덟 개일 때 7 + 6 + … + 1 = 28번, 일반적으로는 약 n² ÷ 2번), 삽입 정렬이 빠른 경우를 확인하고, “안정” 정렬이 무엇인지 알아봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-06.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/06/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "손으로 하는 정렬: 삽입 정렬, 선택 정렬, 버블 정렬", "description": "블록 타워 여덟 개, 정렬하는 방법 세 가지, 그리고 그중 무엇이든 손으로 직접 할 수 있어요. 세 가지 모두 같은 답을 내지만, 항목이 천 개가 되면 비교를 최대 50만 번 가까이 해야 해요. 삽입 정렬, 선택 정렬, 버블 정렬을 한 단계씩 실행하고, 모든 비교를 세어 보고(여덟 개일 때 7 + 6 + … + 1 = 28번, 일반적으로는 약 n² ÷ 2번), 삽입 정렬이 빠른 경우를 확인하고, “안정” 정렬이 무엇인지 알아봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-06.webp"], "uploadDate": "2026-11-17T21:00:00+08:00", "duration": "PT2M46S", "embedUrl": "https://www.youtube.com/embed/ly1Zkn90yxk", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 숫자 목록에서 지도 앱까지 · 6편</p>
+      <h1 class="ep-title">손으로 하는 정렬: 삽입 정렬, 선택 정렬, 버블 정렬</h1>
+      <div class="vplayer" data-yt="ly1Zkn90yxk" data-title="손으로 하는 정렬: 삽입 정렬, 선택 정렬, 버블 정렬">
+        <button type="button" class="vplay" aria-label="재생: 손으로 하는 정렬: 삽입 정렬, 선택 정렬, 버블 정렬">
+          <img src="../../../../assets/img/videos/dsa-06.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/ly1Zkn90yxk" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">블록 타워 여덟 개, 정렬하는 방법 세 가지, 그리고 그중 무엇이든 손으로 직접 할 수 있어요. 세 가지 모두 같은 답을 내지만, 항목이 천 개가 되면 비교를 최대 50만 번 가까이 해야 해요.<br>삽입 정렬, 선택 정렬, 버블 정렬을 한 단계씩 실행하고, 모든 비교를 세어 보고(여덟 개일 때 7 + 6 + … + 1 = 28번, 일반적으로는 약 n² ÷ 2번), 삽입 정렬이 빠른 경우를 확인하고, “안정” 정렬이 무엇인지 알아봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 목소리예요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>정렬 세 가지</a></li>
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>삽입 정렬</a></li>
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=58" data-t="58" rel="noopener"><span class="t">0:58</span>선택 정렬</a></li>
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=81" data-t="81" rel="noopener"><span class="t">1:21</span>버블 정렬</a></li>
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=104" data-t="104" rel="noopener"><span class="t">1:44</span>비교 횟수 세어 보기</a></li>
+        <li><a href="https://youtu.be/ly1Zkn90yxk?t=147" data-t="147" rel="noopener"><span class="t">2:27</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>블록 타워 여덟 개가 뒤죽박죽 놓여 있어요. 이걸 정렬하는 방법이 세 가지 있는데, 하나하나 손으로 직접 할 수 있어요. 세 가지 모두 같은 답을 내요. 하지만 항목이 천 개가 되면, 비교를 최대 50만 번 가까이 해야 해요. 오늘은 간단한 정렬 세 가지와, 간단하다고 해서 빠르지는 않은 이유를 알아봐요.</p>
+        <p>첫 번째는 삽입 정렬이에요. 대부분의 사람이 책장에 책을 정리할 때 쓰는 방법이에요. 다음 것을 집어서, 그보다 높은 것을 하나씩 지나 왼쪽으로 밀어요. 왼쪽의 정렬된 부분에 딱 맞는 자리가 나올 때까지요. 정렬된 부분이 하나씩 늘어나서, 마침내 줄 전체를 채워요. 셸 정렬이라는 똑똑한 개선 방법은 먼저 멀리 떨어진 항목끼리 비교하고, 점점 가까운 것끼리 비교해요. 여기서는 이 정도만 알아봐요.</p>
+        <p>두 번째는 선택 정렬이에요. 남은 것을 전부 훑어서 가장 낮은 것을 찾아 맨 앞에 놓아요. 그다음 남은 것을 다시 훑어서 두 번째로 낮은 것, 그다음 것을 찾아요. 비교하는 횟수는 항상 똑같아요. 줄이 처음부터 정렬되어 있어도 마찬가지예요.</p>
+        <p>세 번째는 버블 정렬이에요. 이웃한 것끼리 비교해서, 순서가 틀렸으면 서로 바꿔요. 한 번 훑고 나면, 가장 높은 타워가 맨 끝까지 거품처럼 떠올라 있어요. 이걸 반복하면 한 번 훑을 때마다 타워가 하나씩 제자리를 찾아요. 한 번 훑는 동안 바꾼 게 하나도 없으면, 일찍 멈춰도 돼요.</p>
+        <p>이제 세어 봐요. 타워가 여덟 개면 선택 정렬은 비교를 28번 해요. 7 더하기 6 더하기 5, 이렇게 계속 더한 값이에요. 대략 n² ÷ 2예요. 항목이 천 개면 비교가 50만 번에 가까워요. 줄이 이미 거의 정렬되어 있으면 삽입 정렬은 빨라요. 하지만 뒤섞인 데이터에서는 세 가지 모두 n²처럼 늘어나요. 개념 하나만 더 알아봐요. 안정 정렬은 크기가 같은 항목들의 원래 순서를 그대로 유지해요. 삽입 정렬과 버블 정렬은 안정 정렬이에요. 선택 정렬은 보통 쓰는 방식으로는 안정 정렬이 아니에요.</p>
+        <p>간단한 정렬 세 가지는 쓰기 쉽고 작은 목록에는 충분하지만, 목록이 커지면 n²이 돼요. 다음 편에서는 훨씬 나은 방법을 알아봐요. 목록을 절반으로 나누고, 각 절반을 정렬한 다음, 합치는 거예요. 병합 정렬이에요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 목록을 절반으로 나누어 훨씬 더 잘하는 병합 정렬이에요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../05/ko/"><span>이전 편 · 5편</span><b>이진 탐색: 스무 번 안에 무엇이든 찾기</b></a><div class="ep-pg next soon"><span>다음 편</span><b>7편은 <time datetime="2026-11-18T21:00:00+08:00" data-at="2026-11-18T21:00:00+08:00" data-fmt="when">11-18 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
