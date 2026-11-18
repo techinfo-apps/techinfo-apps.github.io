@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>归并排序：拆开、排好、合并 — 从一串数到地图导航 #7</title>
+<meta name="description" content="手工排一千个，最多要比将近五十万次。归并排序不到一万次。窍门是：把名单对半拆，再对半拆，然后按顺序一块块合回去。 我们先学关键的一步（合并两排排好的），再把八个数一路拆到底、一层层合上去，看看为什么加起来是 n log n，最后看同样的想法怎么排连内存都装不下的数据：外部排序。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/07/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/07/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/07/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/07/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/07/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/07/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/07/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/07/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/07/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="归并排序：拆开、排好、合并 — 从一串数到地图导航 #7">
+<meta property="og:description" content="手工排一千个，最多要比将近五十万次。归并排序不到一万次。窍门是：把名单对半拆，再对半拆，然后按顺序一块块合回去。 我们先学关键的一步（合并两排排好的），再把八个数一路拆到底、一层层合上去，看看为什么加起来是 n log n，最后看同样的想法怎么排连内存都装不下的数据：外部排序。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-07.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/07/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "归并排序：拆开、排好、合并", "description": "手工排一千个，最多要比将近五十万次。归并排序不到一万次。窍门是：把名单对半拆，再对半拆，然后按顺序一块块合回去。 我们先学关键的一步（合并两排排好的），再把八个数一路拆到底、一层层合上去，看看为什么加起来是 n log n，最后看同样的想法怎么排连内存都装不下的数据：外部排序。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-07.webp"], "uploadDate": "2026-11-18T21:00:00+08:00", "duration": "PT2M45S", "embedUrl": "https://www.youtube.com/embed/0l9qga1iOOE", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一串数到地图导航 · 第 7 集</p>
+      <h1 class="ep-title">归并排序：拆开、排好、合并</h1>
+      <div class="vplayer" data-yt="0l9qga1iOOE" data-title="归并排序：拆开、排好、合并">
+        <button type="button" class="vplay" aria-label="播放: 归并排序：拆开、排好、合并">
+          <img src="../../../../assets/img/videos/dsa-07.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/0l9qga1iOOE" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">手工排一千个，最多要比将近五十万次。归并排序不到一万次。窍门是：把名单对半拆，再对半拆，然后按顺序一块块合回去。<br>我们先学关键的一步（合并两排排好的），再把八个数一路拆到底、一层层合上去，看看为什么加起来是 n log n，最后看同样的想法怎么排连内存都装不下的数据：外部排序。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/0l9qga1iOOE?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>不到一万次</a></li>
+        <li><a href="https://youtu.be/0l9qga1iOOE?t=29" data-t="29" rel="noopener"><span class="t">0:29</span>合并两排排好的</a></li>
+        <li><a href="https://youtu.be/0l9qga1iOOE?t=57" data-t="57" rel="noopener"><span class="t">0:57</span>拆开，再一层层合</a></li>
+        <li><a href="https://youtu.be/0l9qga1iOOE?t=87" data-t="87" rel="noopener"><span class="t">1:27</span>为什么快：n log n</a></li>
+        <li><a href="https://youtu.be/0l9qga1iOOE?t=118" data-t="118" rel="noopener"><span class="t">1:58</span>代价，和装不下的数据</a></li>
+        <li><a href="https://youtu.be/0l9qga1iOOE?t=147" data-t="147" rel="noopener"><span class="t">2:27</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>手工排一千个，最多要比将近五十万次。今天这个办法，不到一万次。窍门是：不要一口气排整条。先对半拆，再对半拆，直到每一块都只剩一个。然后再按顺序拼回去。今天讲：归并排序。</p>
+        <p>先看关键的一步：这里有两排，都已经排好了。比一比两排最前面的那个，拿走小的，再比。每比一次，就往结果里放进一个。一排拿空了，另一排剩下的直接排进去。八个数，最多比七次。</p>
+        <p>再看整个办法：八个拆成两半，再拆成四份，最后一个一个。只有一个的，本来就是排好的。然后一层层往上合：先两个一组，再四个一组，最后八个。这就叫分而治之：把一个大问题拆成同样的小问题，分别解决，再把答案合起来。</p>
+        <p>为什么快？每合一层，每个数都只碰一次：大约 n 步。八个砍到一个，只要三层。这就是以 2 为底的 log n。所以合起来大约是 n 乘 log n。一千个不到一万次，而不是五十万次。</p>
+        <p>代价是内存：合并要另外一排，和原来那排一样长。可同样的想法，还能排连内存都装不下的数据：一次只排一段，排好写回硬盘，然后把排好的几段合起来，每段只读一小点进来。这叫外部排序。</p>
+        <p>归并排序：拆到不能再拆，再合起来，永远是 n log n。下一集讲一个实际中通常更快、而且不用多一排的排序：快速排序。下集见。</p>
+        </div>
+        <p class="ep-close">下一集：快速排序，实际中通常更快，而且不用多一排。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../06/zh-cn/"><span>上一集 · 第 6 集</span><b>手工排序：插入、选择、冒泡</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 8 集 <time datetime="2026-11-19T21:00:00+08:00" data-at="2026-11-19T21:00:00+08:00" data-fmt="when">11-19 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
