@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Le tri rapide : choisir un pivot, séparer le reste — D&#x27;une liste à l&#x27;appli de cartes #8</title>
+<meta name="description" content="Choisissez une tour, mettez à sa gauche tout ce qui est plus bas et à sa droite tout ce qui est plus haut, et cette tour est exactement à sa place. Faites de même de chaque côté, et toute la rangée est triée. Nous faisons la partition de douze tours avec deux repères qui avancent depuis les deux extrémités, nous voyons pourquoi le tri rapide (quicksort) travaille en place et reste souvent le tri le plus rapide en pratique, nous trouvons son unique point faible (une rangée déjà triée avec un mauvais pivot), et nous le corrigeons en choisissant le pivot de façon aléatoire.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/08/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/08/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/08/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/08/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/08/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/08/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/08/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/08/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/08/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Le tri rapide : choisir un pivot, séparer le reste — D&#x27;une liste à l&#x27;appli de cartes #8">
+<meta property="og:description" content="Choisissez une tour, mettez à sa gauche tout ce qui est plus bas et à sa droite tout ce qui est plus haut, et cette tour est exactement à sa place. Faites de même de chaque côté, et toute la rangée est triée. Nous faisons la partition de douze tours avec deux repères qui avancent depuis les deux extrémités, nous voyons pourquoi le tri rapide (quicksort) travaille en place et reste souvent le tri le plus rapide en pratique, nous trouvons son unique point faible (une rangée déjà triée avec un mauvais pivot), et nous le corrigeons en choisissant le pivot de façon aléatoire.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-08.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/08/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Le tri rapide : choisir un pivot, séparer le reste", "description": "Choisissez une tour, mettez à sa gauche tout ce qui est plus bas et à sa droite tout ce qui est plus haut, et cette tour est exactement à sa place. Faites de même de chaque côté, et toute la rangée est triée. Nous faisons la partition de douze tours avec deux repères qui avancent depuis les deux extrémités, nous voyons pourquoi le tri rapide (quicksort) travaille en place et reste souvent le tri le plus rapide en pratique, nous trouvons son unique point faible (une rangée déjà triée avec un mauvais pivot), et nous le corrigeons en choisissant le pivot de façon aléatoire.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-08.webp"], "uploadDate": "2026-11-19T21:00:00+08:00", "duration": "PT2M32S", "embedUrl": "https://www.youtube.com/embed/PiuaE5iGOZ0", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;une liste à l&#x27;appli de cartes · Épisode 8</p>
+      <h1 class="ep-title">Le tri rapide : choisir un pivot, séparer le reste</h1>
+      <div class="vplayer" data-yt="PiuaE5iGOZ0" data-title="Le tri rapide : choisir un pivot, séparer le reste">
+        <button type="button" class="vplay" aria-label="Lire: Le tri rapide : choisir un pivot, séparer le reste">
+          <img src="../../../../assets/img/videos/dsa-08.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/PiuaE5iGOZ0" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Choisissez une tour, mettez à sa gauche tout ce qui est plus bas et à sa droite tout ce qui est plus haut, et cette tour est exactement à sa place. Faites de même de chaque côté, et toute la rangée est triée.<br>Nous faisons la partition de douze tours avec deux repères qui avancent depuis les deux extrémités, nous voyons pourquoi le tri rapide (quicksort) travaille en place et reste souvent le tri le plus rapide en pratique, nous trouvons son unique point faible (une rangée déjà triée avec un mauvais pivot), et nous le corrigeons en choisissant le pivot de façon aléatoire.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/PiuaE5iGOZ0?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Choisir un pivot</a></li>
+        <li><a href="https://youtu.be/PiuaE5iGOZ0?t=29" data-t="29" rel="noopener"><span class="t">0:29</span>La partition</a></li>
+        <li><a href="https://youtu.be/PiuaE5iGOZ0?t=67" data-t="67" rel="noopener"><span class="t">1:07</span>Chaque côté, de la même façon</a></li>
+        <li><a href="https://youtu.be/PiuaE5iGOZ0?t=95" data-t="95" rel="noopener"><span class="t">1:35</span>Le point faible</a></li>
+        <li><a href="https://youtu.be/PiuaE5iGOZ0?t=123" data-t="123" rel="noopener"><span class="t">2:03</span>Un pivot aléatoire</a></li>
+        <li><a href="https://youtu.be/PiuaE5iGOZ0?t=136" data-t="136" rel="noopener"><span class="t">2:16</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Choisissez une tour, n&#x27;importe laquelle. Mettez à sa gauche tout ce qui est plus bas, et à sa droite tout ce qui est plus haut. Cette tour est maintenant exactement à sa place. Faites de même de chaque côté, et toute la rangée finit triée. Aujourd&#x27;hui : le tri rapide (quicksort), celui qu&#x27;on trouve dans beaucoup de logiciels réels, et son unique point faible.</p>
+        <p>La tour choisie s&#x27;appelle le pivot. Ici, nous prenons la dernière : celle qui vaut sept. Deux repères partent des deux extrémités. Le repère left avance vers la droite jusqu&#x27;à trouver une tour plus haute que le pivot. Le repère right avance vers la gauche jusqu&#x27;à trouver une tour plus basse. Les deux sont dans la mauvaise moitié : échangez-les. Puis continuez, jusqu&#x27;à ce que les repères se croisent. Enfin, le pivot s&#x27;échange pour se placer dans l&#x27;espace entre les deux moitiés. Pas besoin de rangée supplémentaire : tout se passe en place.</p>
+        <p>Appliquez maintenant le tri rapide à chaque côté de la même façon, avec son propre pivot. Les morceaux deviennent de plus en plus petits, jusqu&#x27;à ce que chacun ne soit plus qu&#x27;une seule tour. En moyenne, cela représente environ n log n étapes, comme le tri fusion. En pratique, c&#x27;est souvent le plus rapide de tous. Il travaille en place, et il parcourt la mémoire dans l&#x27;ordre, ce que le cache adore.</p>
+        <p>Mais il a un point faible. Donnez-lui une rangée déjà triée, et prenez toujours la dernière tour comme pivot. Chaque pivot est la tour la plus haute de celles qui restent. Un côté reçoit tout, l&#x27;autre ne reçoit rien, et chaque niveau n&#x27;enlève qu&#x27;une seule tour. Cela fait environ n niveaux au lieu de log n. Retour à n au carré, comme un tri à la main.</p>
+        <p>La solution est simple : choisissez le pivot de façon aléatoire. Dans ce cas, une mauvaise séparation à chaque niveau est si improbable qu&#x27;en pratique, cela n&#x27;arrive tout simplement pas.</p>
+        <p>Tri rapide : choisissez un pivot, séparez autour de lui, et recommencez de chaque côté. La prochaine fois : un tri peut-il faire mieux que n log n ? Seulement s&#x27;il ne compare jamais deux éléments. À bientôt.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : un tri peut-il faire mieux que n log n ? Seulement s&#x27;il ne compare jamais deux éléments.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../07/fr/"><span>Précédent · Épisode 7</span><b>Le tri fusion : couper, trier, fusionner</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 9 sort le <time datetime="2026-11-20T21:00:00+08:00" data-at="2026-11-20T21:00:00+08:00" data-fmt="when">11-20 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
