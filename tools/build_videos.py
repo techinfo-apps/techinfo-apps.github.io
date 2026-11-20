@@ -167,6 +167,7 @@ def nav(root):
       <a href="{root}broomy/" data-i18n="nav.broomy">Broomy</a>
       <a href="{root}#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
       <a href="{root}aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="{root}tideline/" data-i18n="nav.tideline">Tideline</a>
       <a href="{root}videos/" data-i18n="nav.videos">Tutorials</a>
     </nav>
     <label class="lang">
