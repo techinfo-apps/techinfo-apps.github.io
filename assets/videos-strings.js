@@ -107,7 +107,12 @@
 "vid.os.season": "Season 4",
 "vid.os.progress": "0 of 17 episodes out",
 "vid.os.when": "A new episode every day at <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
-"vid.os.next": "Episode 1 comes out <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time>"
+"vid.os.next": "Episode 1 comes out <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time>",
+"vid.net.name": "From a Bit on a Wire to a Web Page",
+"vid.net.season": "Season 5",
+"vid.net.progress": "0 of 16 episodes out",
+"vid.net.when": "A new episode every day at <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.net.next": "Episode 1 comes out <time datetime=\"2027-01-12T21:00:00+08:00\" data-at=\"2027-01-12T21:00:00+08:00\" data-fmt=\"when\">01-12 21:00 (UTC+8)</time>"
 },
 "zh-CN": {
 "vid.title": "免费教程 — Technology Information",
@@ -214,7 +219,12 @@
 "vid.os.season": "第四季",
 "vid.os.progress": "已更新 0 / 17 集",
 "vid.os.when": "每天 <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
-"vid.os.next": "第 1 集 <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time> 上线"
+"vid.os.next": "第 1 集 <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time> 上线",
+"vid.net.name": "从线上的一个比特到一张网页",
+"vid.net.season": "第五季",
+"vid.net.progress": "已更新 0 / 16 集",
+"vid.net.when": "每天 <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
+"vid.net.next": "第 1 集 <time datetime=\"2027-01-12T21:00:00+08:00\" data-at=\"2027-01-12T21:00:00+08:00\" data-fmt=\"when\">01-12 21:00 (UTC+8)</time> 上线"
 },
 "zh-TW": {
 "vid.title": "免費教學 — Technology Information",
@@ -321,7 +331,12 @@
 "vid.os.season": "第四季",
 "vid.os.progress": "已更新 0 / 17 集",
 "vid.os.when": "每天 <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
-"vid.os.next": "第 1 集 <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time> 上線"
+"vid.os.next": "第 1 集 <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time> 上線",
+"vid.net.name": "從線路上的一個位元到一張網頁",
+"vid.net.season": "第五季",
+"vid.net.progress": "已更新 0 / 16 集",
+"vid.net.when": "每天 <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> 更新一集。",
+"vid.net.next": "第 1 集 <time datetime=\"2027-01-12T21:00:00+08:00\" data-at=\"2027-01-12T21:00:00+08:00\" data-fmt=\"when\">01-12 21:00 (UTC+8)</time> 上線"
 },
 "ja": {
 "vid.title": "無料チュートリアル — Technology Information",
@@ -428,7 +443,12 @@
 "vid.os.season": "シーズン4",
 "vid.os.progress": "全17話のうち0話を公開中",
 "vid.os.when": "毎日 <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> に新しい回を公開します。",
-"vid.os.next": "第1話は <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time> に公開"
+"vid.os.next": "第1話は <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time> に公開",
+"vid.net.name": "回線上の1ビットからウェブページまで",
+"vid.net.season": "シーズン5",
+"vid.net.progress": "全16話のうち0話を公開中",
+"vid.net.when": "毎日 <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time> に新しい回を公開します。",
+"vid.net.next": "第1話は <time datetime=\"2027-01-12T21:00:00+08:00\" data-at=\"2027-01-12T21:00:00+08:00\" data-fmt=\"when\">01-12 21:00 (UTC+8)</time> に公開"
 },
 "ko": {
 "vid.title": "무료 강좌 — Technology Information",
@@ -535,7 +555,12 @@
 "vid.os.season": "시즌 4",
 "vid.os.progress": "전체 17편 중 0편 공개",
 "vid.os.when": "매일 <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>에 새 편이 올라옵니다.",
-"vid.os.next": "1편은 <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time>에 공개"
+"vid.os.next": "1편은 <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time>에 공개",
+"vid.net.name": "전선 위의 비트 하나에서 웹 페이지까지",
+"vid.net.season": "시즌 5",
+"vid.net.progress": "전체 16편 중 0편 공개",
+"vid.net.when": "매일 <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>에 새 편이 올라옵니다.",
+"vid.net.next": "1편은 <time datetime=\"2027-01-12T21:00:00+08:00\" data-at=\"2027-01-12T21:00:00+08:00\" data-fmt=\"when\">01-12 21:00 (UTC+8)</time>에 공개"
 },
 "es": {
 "vid.title": "Tutoriales gratis — Technology Information",
@@ -642,7 +667,12 @@
 "vid.os.season": "Temporada 4",
 "vid.os.progress": "0 de 17 episodios publicados",
 "vid.os.when": "Un episodio nuevo cada día a las <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
-"vid.os.next": "El episodio 1 sale el <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time>"
+"vid.os.next": "El episodio 1 sale el <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time>",
+"vid.net.name": "De un bit en el cable a una página web",
+"vid.net.season": "Temporada 5",
+"vid.net.progress": "0 de 16 episodios publicados",
+"vid.net.when": "Un episodio nuevo cada día a las <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.net.next": "El episodio 1 sale el <time datetime=\"2027-01-12T21:00:00+08:00\" data-at=\"2027-01-12T21:00:00+08:00\" data-fmt=\"when\">01-12 21:00 (UTC+8)</time>"
 },
 "fr": {
 "vid.title": "Tutoriels gratuits — Technology Information",
@@ -749,6 +779,11 @@
 "vid.os.season": "Saison 4",
 "vid.os.progress": "0 épisodes sur 17 en ligne",
 "vid.os.when": "Un nouvel épisode chaque jour à <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
-"vid.os.next": "L'épisode 1 sort le <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time>"
+"vid.os.next": "L'épisode 1 sort le <time datetime=\"2026-12-26T21:00:00+08:00\" data-at=\"2026-12-26T21:00:00+08:00\" data-fmt=\"when\">12-26 21:00 (UTC+8)</time>",
+"vid.net.name": "D'un bit sur le fil à une page web",
+"vid.net.season": "Saison 5",
+"vid.net.progress": "0 épisodes sur 16 en ligne",
+"vid.net.when": "Un nouvel épisode chaque jour à <time datetime=\"2026-11-21T21:00:00+08:00\" data-at=\"2026-11-21T21:00:00+08:00\" data-fmt=\"clock\">21:00 (UTC+8)</time>.",
+"vid.net.next": "L'épisode 1 sort le <time datetime=\"2027-01-12T21:00:00+08:00\" data-at=\"2027-01-12T21:00:00+08:00\" data-fmt=\"when\">01-12 21:00 (UTC+8)</time>"
 }
 });
