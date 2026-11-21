@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>一下子找到：雜湊表 — 從一串數到地圖導航 #10</title>
+<meta name="description" content="二分搜尋在一百萬個詞裡找出一個，大約要二十步。雜湊表通常一步就到：它把一個詞直接算成一個位置。 我們來做一個簡單的雜湊函式（把字母加起來，除以 8，只留下餘數），把詞放進八個桶裡，用兩種辦法對付衝突，看看衝突為什麼來得比你想的還早（只要二十三個人，兩人同一天生日的機會就超過一半），最後看表裝到大約四分之三滿的時候，怎麼擴大成兩倍。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/10/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/10/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/10/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/10/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/10/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/10/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/10/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/10/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/10/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="一下子找到：雜湊表 — 從一串數到地圖導航 #10">
+<meta property="og:description" content="二分搜尋在一百萬個詞裡找出一個，大約要二十步。雜湊表通常一步就到：它把一個詞直接算成一個位置。 我們來做一個簡單的雜湊函式（把字母加起來，除以 8，只留下餘數），把詞放進八個桶裡，用兩種辦法對付衝突，看看衝突為什麼來得比你想的還早（只要二十三個人，兩人同一天生日的機會就超過一半），最後看表裝到大約四分之三滿的時候，怎麼擴大成兩倍。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-10.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/10/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "一下子找到：雜湊表", "description": "二分搜尋在一百萬個詞裡找出一個，大約要二十步。雜湊表通常一步就到：它把一個詞直接算成一個位置。 我們來做一個簡單的雜湊函式（把字母加起來，除以 8，只留下餘數），把詞放進八個桶裡，用兩種辦法對付衝突，看看衝突為什麼來得比你想的還早（只要二十三個人，兩人同一天生日的機會就超過一半），最後看表裝到大約四分之三滿的時候，怎麼擴大成兩倍。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-10.webp"], "uploadDate": "2026-11-21T21:00:00+08:00", "duration": "PT2M40S", "embedUrl": "https://www.youtube.com/embed/CjOO54ipeoQ", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一串數到地圖導航 · 第 10 集</p>
+      <h1 class="ep-title">一下子找到：雜湊表</h1>
+      <div class="vplayer" data-yt="CjOO54ipeoQ" data-title="一下子找到：雜湊表">
+        <button type="button" class="vplay" aria-label="播放: 一下子找到：雜湊表">
+          <img src="../../../../assets/img/videos/dsa-10.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/CjOO54ipeoQ" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">二分搜尋在一百萬個詞裡找出一個，大約要二十步。雜湊表通常一步就到：它把一個詞直接算成一個位置。<br>我們來做一個簡單的雜湊函式（把字母加起來，除以 8，只留下餘數），把詞放進八個桶裡，用兩種辦法對付衝突，看看衝突為什麼來得比你想的還早（只要二十三個人，兩人同一天生日的機會就超過一半），最後看表裝到大約四分之三滿的時候，怎麼擴大成兩倍。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的，旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>一步，而不是二十步</a></li>
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=22" data-t="22" rel="noopener"><span class="t">0:22</span>雜湊函式</a></li>
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=58" data-t="58" rel="noopener"><span class="t">0:58</span>衝突</a></li>
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=83" data-t="83" rel="noopener"><span class="t">1:23</span>比你想的還早</a></li>
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=109" data-t="109" rel="noopener"><span class="t">1:49</span>表裝滿了怎麼辦</a></li>
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=142" data-t="142" rel="noopener"><span class="t">2:22</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>要在一百萬個排好序的詞當中找出一個，第 5 集的二分搜尋大約要二十步。雜湊表通常一步就到。今天要講：怎麼把一個詞直接算成一個位置。</p>
+        <p>先擺八個桶，編號從 0 到 7。我們需要一條規則，能把任何一個詞變成這幾個編號之一。這是一條簡單的規則：把每個字母在字母表裡的位置加起來，除以 8，只留下餘數。這條規則就叫雜湊函式。每個詞都直接落進它自己的桶裡。之後要找一個詞，再算一次同樣的規則，只看那一個桶就好，其他的都不用找。</p>
+        <p>但遲早會有兩個詞落進同一個桶，這就叫衝突。一種辦法：每個桶掛著一小串，新來的詞就掛在下面。另一種：如果這個桶已經被佔了，就試下一個，再下一個，直到找到空位。</p>
+        <p>衝突來得比你想的還早。想像有 365 個桶，一年裡每天一個，再按照生日把人一個個放進去。要有幾個人，才會有兩個人同一天生日？只要 23 個人，機率就已經超過一半了。所以每一個雜湊表，都得做好應付衝突的準備。</p>
+        <p>而且表越裝越滿，鏈就越掛越長，每一次查詢也跟著變慢。所以當表裝到大約四分之三滿的時候，就把它擴大成兩倍，每個詞都重新放一遍。把全部搬一遍雖然慢，但很少發生。分攤到所有的詞身上，平均每個詞還是只要幾步。</p>
+        <p>雜湊表把一個詞直接算成一個位置，所以不管表變得多大，找到它大約都只要一步。下一集：樹狀結構。你電腦裡的資料夾、一道算式，還有走遍它們的四種走法。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：樹狀結構，從電腦裡的資料夾到一道算式，還有走遍它們的四種走法。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../09/zh-tw/"><span>上一集 · 第 9 集</span><b>排序還能更快嗎：計數和基數排序</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 11 集 <time datetime="2026-11-22T21:00:00+08:00" data-at="2026-11-22T21:00:00+08:00" data-fmt="when">11-22 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

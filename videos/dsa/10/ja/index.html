@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>プログラムは一瞬で単語を見つける：ハッシュテーブル — 数の並びから地図アプリまで #10</title>
+<meta name="description" content="二分探索は、100万個の単語の中から1つを約20ステップで見つけます。ハッシュテーブルは、たいてい1ステップです。単語をそのまま場所に変えるからです。 簡単なハッシュ関数（文字を足し合わせ、8で割って、余りを残す）を作り、単語を8個のバケットに入れ、衝突への対処を2通り見て、衝突が思っているより早く起こる理由（23人いれば、誕生日が同じ2人がいる確率は半分を超えます）を確かめ、テーブルがおよそ4分の3まで埋まると大きさが2倍になる様子を見ます。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/10/ja/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/10/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/10/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/10/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/10/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/10/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/10/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/10/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/10/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="プログラムは一瞬で単語を見つける：ハッシュテーブル — 数の並びから地図アプリまで #10">
+<meta property="og:description" content="二分探索は、100万個の単語の中から1つを約20ステップで見つけます。ハッシュテーブルは、たいてい1ステップです。単語をそのまま場所に変えるからです。 簡単なハッシュ関数（文字を足し合わせ、8で割って、余りを残す）を作り、単語を8個のバケットに入れ、衝突への対処を2通り見て、衝突が思っているより早く起こる理由（23人いれば、誕生日が同じ2人がいる確率は半分を超えます）を確かめ、テーブルがおよそ4分の3まで埋まると大きさが2倍になる様子を見ます。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-10.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/10/ja/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "プログラムは一瞬で単語を見つける：ハッシュテーブル", "description": "二分探索は、100万個の単語の中から1つを約20ステップで見つけます。ハッシュテーブルは、たいてい1ステップです。単語をそのまま場所に変えるからです。 簡単なハッシュ関数（文字を足し合わせ、8で割って、余りを残す）を作り、単語を8個のバケットに入れ、衝突への対処を2通り見て、衝突が思っているより早く起こる理由（23人いれば、誕生日が同じ2人がいる確率は半分を超えます）を確かめ、テーブルがおよそ4分の3まで埋まると大きさが2倍になる様子を見ます。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-10.webp"], "uploadDate": "2026-11-21T21:00:00+08:00", "duration": "PT2M40S", "embedUrl": "https://www.youtube.com/embed/CjOO54ipeoQ", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ja">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">すべての回</a> · 数の並びから地図アプリまで · 第10話</p>
+      <h1 class="ep-title">プログラムは一瞬で単語を見つける：ハッシュテーブル</h1>
+      <div class="vplayer" data-yt="CjOO54ipeoQ" data-title="プログラムは一瞬で単語を見つける：ハッシュテーブル">
+        <button type="button" class="vplay" aria-label="再生: プログラムは一瞬で単語を見つける：ハッシュテーブル">
+          <img src="../../../../assets/img/videos/dsa-10.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">再生を押すと、動画をYouTubeから読み込みます。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/CjOO54ipeoQ" rel="noopener">YouTubeで見る</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTubeでチャンネル登録</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">二分探索は、100万個の単語の中から1つを約20ステップで見つけます。ハッシュテーブルは、たいてい1ステップです。単語をそのまま場所に変えるからです。<br>簡単なハッシュ関数（文字を足し合わせ、8で割って、余りを残す）を作り、単語を8個のバケットに入れ、衝突への対処を2通り見て、衝突が思っているより早く起こる理由（23人いれば、誕生日が同じ2人がいる確率は半分を超えます）を確かめ、テーブルがおよそ4分の3まで埋まると大きさが2倍になる様子を見ます。</p>
+      <p class="ep-ai">この動画のアニメーションは、すべてコードで描いています。ナレーションはAI音声です。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">チャプター</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>20ステップではなく1ステップ</a></li>
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=22" data-t="22" rel="noopener"><span class="t">0:22</span>ハッシュ関数</a></li>
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=58" data-t="58" rel="noopener"><span class="t">0:58</span>衝突</a></li>
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=83" data-t="83" rel="noopener"><span class="t">1:23</span>思ったより早い</a></li>
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=109" data-t="109" rel="noopener"><span class="t">1:49</span>テーブルがいっぱいになったら</a></li>
+        <li><a href="https://youtu.be/CjOO54ipeoQ?t=142" data-t="142" rel="noopener"><span class="t">2:22</span>次回予告</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">ナレーション全文</h2>
+        <div class="ep-text">
+        <p>順番に並んだ100万個の単語の中から1つを見つけるのに、第5回の二分探索では約20ステップかかります。ハッシュテーブルなら、たいてい1ステップです。今日は、単語をそのまま場所に変える方法を見ていきます。</p>
+        <p>まず、0から7までの番号をつけた8個のバケットを用意します。どんな単語でも、この番号のどれかに変えてくれる規則が必要です。簡単な規則を紹介します。各文字がアルファベットで何番目かを足し合わせ、8で割って、余りを残します。この規則を、ハッシュ関数といいます。どの単語も、そのまま自分のバケットに落ちます。あとでその単語を探すときは、同じ規則をもう一度計算して、そのバケットだけを見ます。ほかを探す必要はありません。</p>
+        <p>ところが、遅かれ早かれ、2つの単語が同じバケットに入ってしまいます。これを衝突といいます。対処法の1つは、各バケットに短い鎖を持たせて、新しい単語をその下につなぐことです。もう1つは、バケットが埋まっていたら、次のバケット、さらにその次と試して、空いている場所を見つけるまで続けることです。</p>
+        <p>衝突は、思っているより早く起こります。365個のバケットを思い浮かべてください。1年の日数と同じ、1日に1つずつです。そこへ、誕生日に合わせて人を入れていきます。2人の誕生日が同じになるには、何人必要でしょうか。たった23人で、その確率はもう半分を超えます。だから、どのハッシュテーブルも、衝突に備えておく必要があります。</p>
+        <p>しかも、テーブルが埋まってくるほど、鎖は長くなり、どの検索も遅くなります。そこで、テーブルがおよそ4分の3まで埋まったら、大きさを2倍にして、すべての単語を最初から置き直します。全部を移し替えるのは遅いですが、めったに起こりません。すべての単語に割り振れば、1つあたり平均でも数ステップで済みます。</p>
+        <p>ハッシュテーブルは単語をそのまま場所に変えるので、テーブルがどれだけ大きくなっても、見つけるのに約1ステップです。次回は木構造です。コンピューターの中のフォルダ、数式、そしてそれらをたどる4つの方法を見ていきます。また会いましょう。</p>
+        </div>
+        <p class="ep-close">次回：木構造。コンピューターの中のフォルダから数式まで、そしてそれらをたどる4つの方法です。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../09/ja/"><span>前の回 · 第9話</span><b>並べ替えはもっと速くなる？計数ソートと基数ソート</b></a><div class="ep-pg next soon"><span>次の回</span><b>第11話は <time datetime="2026-11-22T21:00:00+08:00" data-at="2026-11-22T21:00:00+08:00" data-fmt="when">11-22 21:00 (UTC+8)</time> に公開</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
