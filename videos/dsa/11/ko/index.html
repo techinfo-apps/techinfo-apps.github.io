@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>코드 속 트리: 폴더, 수식, 순회 — 숫자 목록에서 지도 앱까지 #11</title>
+<meta name="description" content="컴퓨터 속 폴더와 (3 + 4) × 5 같은 수식은 속이 같은 모양이에요. 루트 하나에서 아래로 뻗어 나가고, 다시 돌아오지 않는 트리예요. 먼저 용어(루트, 자식, 리프, 깊이, 이진 트리)를 익히고, 수식을 트리로 바꾼 다음, 네 가지 고전적인 순회 방법(전위, 중위, 후위, 레벨 순회)으로 훑어 봐요. 후위 순회가 답인 35를 계산해 내는 모습을 지켜보고, 마지막으로 코드에서 트리를 저장하는 두 가지 방법, 포인터를 쓰는 방법과 배열에 꾹꾹 담는 방법을 살펴봐요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/11/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/11/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/11/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/11/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/11/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/11/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/11/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/11/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/11/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="코드 속 트리: 폴더, 수식, 순회 — 숫자 목록에서 지도 앱까지 #11">
+<meta property="og:description" content="컴퓨터 속 폴더와 (3 + 4) × 5 같은 수식은 속이 같은 모양이에요. 루트 하나에서 아래로 뻗어 나가고, 다시 돌아오지 않는 트리예요. 먼저 용어(루트, 자식, 리프, 깊이, 이진 트리)를 익히고, 수식을 트리로 바꾼 다음, 네 가지 고전적인 순회 방법(전위, 중위, 후위, 레벨 순회)으로 훑어 봐요. 후위 순회가 답인 35를 계산해 내는 모습을 지켜보고, 마지막으로 코드에서 트리를 저장하는 두 가지 방법, 포인터를 쓰는 방법과 배열에 꾹꾹 담는 방법을 살펴봐요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-11.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/11/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "코드 속 트리: 폴더, 수식, 순회", "description": "컴퓨터 속 폴더와 (3 + 4) × 5 같은 수식은 속이 같은 모양이에요. 루트 하나에서 아래로 뻗어 나가고, 다시 돌아오지 않는 트리예요. 먼저 용어(루트, 자식, 리프, 깊이, 이진 트리)를 익히고, 수식을 트리로 바꾼 다음, 네 가지 고전적인 순회 방법(전위, 중위, 후위, 레벨 순회)으로 훑어 봐요. 후위 순회가 답인 35를 계산해 내는 모습을 지켜보고, 마지막으로 코드에서 트리를 저장하는 두 가지 방법, 포인터를 쓰는 방법과 배열에 꾹꾹 담는 방법을 살펴봐요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-11.webp"], "uploadDate": "2026-11-22T21:00:00+08:00", "duration": "PT2M43S", "embedUrl": "https://www.youtube.com/embed/hwabLowFAQU", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 숫자 목록에서 지도 앱까지 · 11편</p>
+      <h1 class="ep-title">코드 속 트리: 폴더, 수식, 순회</h1>
+      <div class="vplayer" data-yt="hwabLowFAQU" data-title="코드 속 트리: 폴더, 수식, 순회">
+        <button type="button" class="vplay" aria-label="재생: 코드 속 트리: 폴더, 수식, 순회">
+          <img src="../../../../assets/img/videos/dsa-11.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/hwabLowFAQU" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">컴퓨터 속 폴더와 (3 + 4) × 5 같은 수식은 속이 같은 모양이에요. 루트 하나에서 아래로 뻗어 나가고, 다시 돌아오지 않는 트리예요.<br>먼저 용어(루트, 자식, 리프, 깊이, 이진 트리)를 익히고, 수식을 트리로 바꾼 다음, 네 가지 고전적인 순회 방법(전위, 중위, 후위, 레벨 순회)으로 훑어 봐요. 후위 순회가 답인 35를 계산해 내는 모습을 지켜보고, 마지막으로 코드에서 트리를 저장하는 두 가지 방법, 포인터를 쓰는 방법과 배열에 꾹꾹 담는 방법을 살펴봐요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 목소리예요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/hwabLowFAQU?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>어디에나 같은 모양</a></li>
+        <li><a href="https://youtu.be/hwabLowFAQU?t=23" data-t="23" rel="noopener"><span class="t">0:23</span>루트, 자식, 리프</a></li>
+        <li><a href="https://youtu.be/hwabLowFAQU?t=55" data-t="55" rel="noopener"><span class="t">0:55</span>수식도 트리</a></li>
+        <li><a href="https://youtu.be/hwabLowFAQU?t=71" data-t="71" rel="noopener"><span class="t">1:11</span>트리를 훑는 네 가지 방법</a></li>
+        <li><a href="https://youtu.be/hwabLowFAQU?t=119" data-t="119" rel="noopener"><span class="t">1:59</span>트리 저장하기</a></li>
+        <li><a href="https://youtu.be/hwabLowFAQU?t=143" data-t="143" rel="noopener"><span class="t">2:23</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>컴퓨터 속의 폴더는 모두 다른 폴더 안에 들어 있어서, 계속 올라가다 보면 맨 위의 폴더 하나에 닿아요. 그리고 3 더하기 4에 5를 곱하는 것 같은 수식도, 속은 똑같은 모양이에요. 그 모양이 바로 트리예요.</p>
+        <p>트리는 루트 하나에서 시작해서 아래로 가지를 뻗어요. 각 점은 노드이고, 위로 되돌아가는 길은 어디에도 없어요. 어떤 노드 바로 아래에 있는 노드들은 그 노드의 자식이에요. 자식이 없는 노드는 리프(잎)이고, 노드가 루트에서 몇 걸음 떨어져 있는지가 깊이예요. 이진 트리에서는 모든 노드가 자식을 최대 두 개까지만 가져요. 왼쪽 하나, 오른쪽 하나예요.</p>
+        <p>이제 수식을 볼게요. 연산은 위쪽에 놓이고, 숫자는 리프에 놓여요. 덧셈은 더 아래에 있으니까 먼저 계산돼요. 괄호의 뜻은 이미 트리의 모양 안에 들어 있어요.</p>
+        <p>모든 노드를 방문하는 고전적인 방법은 네 가지예요. 그중 세 가지는 4편에서 본 재귀예요. 양쪽을 각각 전체 트리와 같은 방식으로 처리하는 거예요. 전위 순회는 노드를 먼저 방문하고, 그다음 왼쪽, 그다음 오른쪽을 방문해요. 중위 순회는 왼쪽, 노드, 오른쪽 순서예요. 그러면 수식이 우리가 평소에 쓰는 모양 그대로 읽혀요. 후위 순회는 양쪽을 먼저 하고 노드를 마지막에 해요. 그러면 각 연산이 만났을 때 두 숫자가 이미 준비되어 있어서, 답이 나와요. 35예요. 그리고 레벨 순회는 위에서 아래로 한 줄씩 차례로 가요.</p>
+        <p>코드에서는 각 노드가 보통 포인터를 두 개 가져요. 자식마다 하나씩이고, 2편의 연결 리스트와 비슷해요. 하지만 모든 줄이 가득 차 있다면, 포인터를 없애고 트리를 배열에 그대로 늘어놓을 수 있어요. 위치 i에 있는 노드의 자식은 2i+1과 2i+2 위치에 있어요.</p>
+        <p>트리는 루트 하나에서 아래로 뻗어 나가고, 다시 돌아오는 일이 없어요. 알맞은 순서로 훑어 가면, 수식을 푸는 것 같은 진짜 일을 해내요. 다음 편은 모든 것을 순서대로 유지하는 트리예요. 숫자를 찾는 일이 루트에서 리프까지 한 번 내려가는 것으로 끝나요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 이진 탐색 트리예요. 숫자를 찾는 일이 루트에서 리프까지 한 번 내려가는 것으로 끝나요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../10/ko/"><span>이전 편 · 10편</span><b>프로그램은 단어를 어떻게 한 번에 찾을까? 해시 테이블</b></a><div class="ep-pg next soon"><span>다음 편</span><b>12편은 <time datetime="2026-11-23T21:00:00+08:00" data-at="2026-11-23T21:00:00+08:00" data-fmt="when">11-23 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
