@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>이진 탐색 트리와 균형을 유지하는 방법 — 숫자 목록에서 지도 앱까지 #12</title>
+<meta name="description" content="이진 탐색 트리에서는 모든 숫자가 자기 자리를 알고 있어요. 작은 숫자는 왼쪽으로, 큰 숫자는 오른쪽으로 가요. 숫자를 찾는 데는 몇 단계면 충분해요. 숫자를 넣는 순서만 잘못되지 않는다면요. 세 단계 만에 숫자를 찾아보고, 새 숫자를 하나 추가하고, 중위 순회로 훑어서 모든 숫자가 저절로 정렬되는 모습을 봐요. 이어서 1부터 7까지 차례로 넣으면 깊이 7의 막대기로 자라는 모습을 지켜보고, 마지막으로 회전으로 고쳐서 7을 찾는 데 일곱 단계 대신 세 단계만 걸리게 만들어요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/12/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/12/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/12/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/12/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/12/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/12/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/12/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/12/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/12/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="이진 탐색 트리와 균형을 유지하는 방법 — 숫자 목록에서 지도 앱까지 #12">
+<meta property="og:description" content="이진 탐색 트리에서는 모든 숫자가 자기 자리를 알고 있어요. 작은 숫자는 왼쪽으로, 큰 숫자는 오른쪽으로 가요. 숫자를 찾는 데는 몇 단계면 충분해요. 숫자를 넣는 순서만 잘못되지 않는다면요. 세 단계 만에 숫자를 찾아보고, 새 숫자를 하나 추가하고, 중위 순회로 훑어서 모든 숫자가 저절로 정렬되는 모습을 봐요. 이어서 1부터 7까지 차례로 넣으면 깊이 7의 막대기로 자라는 모습을 지켜보고, 마지막으로 회전으로 고쳐서 7을 찾는 데 일곱 단계 대신 세 단계만 걸리게 만들어요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-12.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/12/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "이진 탐색 트리와 균형을 유지하는 방법", "description": "이진 탐색 트리에서는 모든 숫자가 자기 자리를 알고 있어요. 작은 숫자는 왼쪽으로, 큰 숫자는 오른쪽으로 가요. 숫자를 찾는 데는 몇 단계면 충분해요. 숫자를 넣는 순서만 잘못되지 않는다면요. 세 단계 만에 숫자를 찾아보고, 새 숫자를 하나 추가하고, 중위 순회로 훑어서 모든 숫자가 저절로 정렬되는 모습을 봐요. 이어서 1부터 7까지 차례로 넣으면 깊이 7의 막대기로 자라는 모습을 지켜보고, 마지막으로 회전으로 고쳐서 7을 찾는 데 일곱 단계 대신 세 단계만 걸리게 만들어요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-12.webp"], "uploadDate": "2026-11-23T21:00:00+08:00", "duration": "PT2M37S", "embedUrl": "https://www.youtube.com/embed/VOOqJJb2Kvs", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 숫자 목록에서 지도 앱까지 · 12편</p>
+      <h1 class="ep-title">이진 탐색 트리와 균형을 유지하는 방법</h1>
+      <div class="vplayer" data-yt="VOOqJJb2Kvs" data-title="이진 탐색 트리와 균형을 유지하는 방법">
+        <button type="button" class="vplay" aria-label="재생: 이진 탐색 트리와 균형을 유지하는 방법">
+          <img src="../../../../assets/img/videos/dsa-12.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/VOOqJJb2Kvs" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">이진 탐색 트리에서는 모든 숫자가 자기 자리를 알고 있어요. 작은 숫자는 왼쪽으로, 큰 숫자는 오른쪽으로 가요. 숫자를 찾는 데는 몇 단계면 충분해요. 숫자를 넣는 순서만 잘못되지 않는다면요.<br>세 단계 만에 숫자를 찾아보고, 새 숫자를 하나 추가하고, 중위 순회로 훑어서 모든 숫자가 저절로 정렬되는 모습을 봐요. 이어서 1부터 7까지 차례로 넣으면 깊이 7의 막대기로 자라는 모습을 지켜보고, 마지막으로 회전으로 고쳐서 7을 찾는 데 일곱 단계 대신 세 단계만 걸리게 만들어요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 목소리예요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>모든 숫자는 자기 자리를 알아요</a></li>
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>찾기와 추가하기</a></li>
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=63" data-t="63" rel="noopener"><span class="t">1:03</span>덤으로 정렬</a></li>
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=74" data-t="74" rel="noopener"><span class="t">1:14</span>나쁜 경우</a></li>
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=94" data-t="94" rel="noopener"><span class="t">1:34</span>회전</a></li>
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=136" data-t="136" rel="noopener"><span class="t">2:16</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>이 트리에서는 모든 숫자가 자기 자리를 알고 있어요. 작은 숫자는 왼쪽으로, 큰 숫자는 오른쪽으로 가요. 어떤 숫자든 찾는 데는 몇 단계면 돼요. 하지만 숫자를 잘못된 순서로 넣으면, 긴 막대기처럼 자라 버려요. 오늘은 이진 탐색 트리와, 균형을 유지하는 방법을 알아봐요.</p>
+        <p>규칙은 이래요. 모든 노드에서 왼쪽에 있는 것은 모두 더 작고, 오른쪽에 있는 것은 모두 더 커요. 6을 찾으려면 루트에서 시작해요. 6은 8보다 작으니까 왼쪽으로 가요. 4보다 크니까 오른쪽으로 가요. 세 단계 만에 찾았어요. 5편에서 본 이진 탐색이 트리의 모양 속에 그대로 들어 있는 거예요. 숫자를 추가하는 것도 같은 방식이에요. 빈자리가 나올 때까지 아래로 내려가서, 거기에 놓아요.</p>
+        <p>지난 편의 중위 순회를 기억하나요? 이 트리를 그 순서로 훑으면, 숫자가 가장 작은 것부터 가장 큰 것까지 정렬되어 나와요.</p>
+        <p>하지만 트리의 모양은 넣는 순서에 따라 달라져요. 1, 2, 3, 이렇게 7까지 차례로 넣으면, 모든 숫자가 오른쪽으로 가요. 이제 트리는 깊이가 7인 막대기가 됐어요. 7을 찾는 데 일곱 단계가 걸려서, 평범한 목록과 다를 게 없어요.</p>
+        <p>해결책은 회전이라고 해요. 한 줄로 늘어선 노드 세 개에서 가운데 것을 위로 들어 올리고, 나머지 둘은 양쪽에 매달아요. 왼쪽에서 오른쪽으로 가는 순서는 전혀 바뀌지 않으니까, 트리는 여전히 정렬되어 있어요. 그저 더 낮아졌을 뿐이에요. 회전을 세 번 더 하면, 막대기가 깊이 3인 트리가 돼요. 이제 7을 찾는 데는 일곱 단계가 아니라 세 단계면 돼요. AVL 트리나 레드-블랙 트리 같은 자가 균형 트리는, 무언가를 추가할 때마다 이런 회전을 대신 해 줘요.</p>
+        <p>이진 탐색 트리는 추가하는 대로 모든 것을 정렬된 상태로 유지해요. 균형만 잘 잡아 두면, 모든 탐색은 짧게 내려가는 것으로 끝나요. 약 log n 단계예요. 다음 편에서는 데이터베이스가 낮고 넓은 트리를 쓰는 이유를 알아봐요. 하드 디스크는 먼 길을 걷는 걸 싫어하거든요. 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: B-트리예요. 데이터베이스가 왜 낮고 넓은 트리를 쓰는지 알아봐요.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../11/ko/"><span>이전 편 · 11편</span><b>코드 속 트리: 폴더, 수식, 순회</b></a><div class="ep-pg next soon"><span>다음 편</span><b>13편은 <time datetime="2026-11-24T21:00:00+08:00" data-at="2026-11-24T21:00:00+08:00" data-fmt="when">11-24 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

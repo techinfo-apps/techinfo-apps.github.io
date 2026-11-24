@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>二元搜尋樹，和它怎麼保持平衡 — 從一串數到地圖導航 #12</title>
+<meta name="description" content="二元搜尋樹裡的每個數都有自己的位置：小的往左，大的往右。要找一個數只要幾步，除非你加數的順序不對。 我們三步找到一個數，再加入一個新數，按中序走一遍，所有數就自動排好了序；接著看 1 到 7 依序加進去，長成一根七層深的長棍，最後用旋轉把它扶正，找 7 從七步變成三步。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/12/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/12/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/12/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/12/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/12/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/12/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/12/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/12/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/12/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="二元搜尋樹，和它怎麼保持平衡 — 從一串數到地圖導航 #12">
+<meta property="og:description" content="二元搜尋樹裡的每個數都有自己的位置：小的往左，大的往右。要找一個數只要幾步，除非你加數的順序不對。 我們三步找到一個數，再加入一個新數，按中序走一遍，所有數就自動排好了序；接著看 1 到 7 依序加進去，長成一根七層深的長棍，最後用旋轉把它扶正，找 7 從七步變成三步。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-12.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/12/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "二元搜尋樹，和它怎麼保持平衡", "description": "二元搜尋樹裡的每個數都有自己的位置：小的往左，大的往右。要找一個數只要幾步，除非你加數的順序不對。 我們三步找到一個數，再加入一個新數，按中序走一遍，所有數就自動排好了序；接著看 1 到 7 依序加進去，長成一根七層深的長棍，最後用旋轉把它扶正，找 7 從七步變成三步。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-12.webp"], "uploadDate": "2026-11-23T21:00:00+08:00", "duration": "PT2M37S", "embedUrl": "https://www.youtube.com/embed/VOOqJJb2Kvs", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一串數到地圖導航 · 第 12 集</p>
+      <h1 class="ep-title">二元搜尋樹，和它怎麼保持平衡</h1>
+      <div class="vplayer" data-yt="VOOqJJb2Kvs" data-title="二元搜尋樹，和它怎麼保持平衡">
+        <button type="button" class="vplay" aria-label="播放: 二元搜尋樹，和它怎麼保持平衡">
+          <img src="../../../../assets/img/videos/dsa-12.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/VOOqJJb2Kvs" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">二元搜尋樹裡的每個數都有自己的位置：小的往左，大的往右。要找一個數只要幾步，除非你加數的順序不對。<br>我們三步找到一個數，再加入一個新數，按中序走一遍，所有數就自動排好了序；接著看 1 到 7 依序加進去，長成一根七層深的長棍，最後用旋轉把它扶正，找 7 從七步變成三步。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的，旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>每個數都有自己的位置</a></li>
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=27" data-t="27" rel="noopener"><span class="t">0:27</span>搜尋和插入</a></li>
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=63" data-t="63" rel="noopener"><span class="t">1:03</span>順手排好了序</a></li>
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=74" data-t="74" rel="noopener"><span class="t">1:14</span>壞情況</a></li>
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=94" data-t="94" rel="noopener"><span class="t">1:34</span>旋轉</a></li>
+        <li><a href="https://youtu.be/VOOqJJb2Kvs?t=136" data-t="136" rel="noopener"><span class="t">2:16</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>這棵樹裡的每個數都有自己的位置：小的往左，大的往右。要找哪個數，都只要幾步。可是如果餵給它的數順序不對，它就會長成一根長棍。今天要講：二元搜尋樹，以及它是怎麼保持平衡的。</p>
+        <p>規則是這樣：對每個結點來說，左邊的全都比它小，右邊的全都比它大。要找 6，先從根開始。6 比 8 小：往左。比 4 大：往右。三步，它就在那裡了。這就是第 5 集的二分搜尋，直接長進了樹的形狀裡。加入一個數也是同樣的做法：一路往下走，走到空位，就把它放在那裡。</p>
+        <p>還記得上一集的中序嗎？照那樣把這棵樹走一遍，數就會排好序，從最小到最大一個個出來。</p>
+        <p>可是樹長成什麼樣子，要看你加東西的順序。如果按 1、2、3 一路加到 7，每個數都會往右邊掛。現在這棵樹成了一根長棍，有七層深。要找 7 得走七步，跟一般的清單沒什麼兩樣。</p>
+        <p>解決的辦法叫做旋轉。取三個排成一直線的結點，把中間那個提上來，讓另外兩個分別掛在它的兩邊。從左到右，順序完全沒變，所以樹仍然是排好序的。只是變矮了。再轉三次，長棍就變成一棵三層深的樹。現在要找 7 只要三步，不是七步。自平衡樹，像 AVL 樹和紅黑樹，會在你每次加東西的時候，替你做這些旋轉。</p>
+        <p>二元搜尋樹在你加入東西的同時，就把一切排好序。只要讓它保持平衡，每次搜尋都只是往下走一小段，大約 log n 步。下一集：資料庫為什麼用又矮又胖的樹，因為硬碟最討厭走遠路。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：B 樹，以及資料庫為什麼用又矮又胖的樹。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../11/zh-tw/"><span>上一集 · 第 11 集</span><b>程式碼裡的樹：資料夾、算式和走訪</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 13 集 <time datetime="2026-11-24T21:00:00+08:00" data-at="2026-11-24T21:00:00+08:00" data-fmt="when">11-24 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
