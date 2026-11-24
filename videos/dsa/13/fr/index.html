@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Arbres B : les arbres courts et larges des bases de données — D&#x27;une liste à l&#x27;appli de cartes #13</title>
+<meta name="description" content="Une base de données peut garder un milliard d&#x27;enregistrements sur disque et pourtant retrouver n&#x27;importe lequel en quelques lectures sur disque. L&#x27;astuce, c&#x27;est un arbre court et large. Nous voyons pourquoi chaque niveau d&#x27;un arbre sur disque coûte une lecture lente (si lire la mémoire prenait une seconde, lire sur un disque dur mécanique prendrait plus d&#x27;un jour), pourquoi un milliard de clés demandent trente niveaux dans un arbre binaire mais seulement quatre dans un arbre B, comment un nœud plein se scinde et envoie sa clé du milieu vers le haut, et pourquoi la plupart des bases de données et des systèmes de fichiers utilisent la variante appelée arbre B+.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/13/fr/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/13/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/13/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/13/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/13/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/13/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/13/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/13/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/13/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Arbres B : les arbres courts et larges des bases de données — D&#x27;une liste à l&#x27;appli de cartes #13">
+<meta property="og:description" content="Une base de données peut garder un milliard d&#x27;enregistrements sur disque et pourtant retrouver n&#x27;importe lequel en quelques lectures sur disque. L&#x27;astuce, c&#x27;est un arbre court et large. Nous voyons pourquoi chaque niveau d&#x27;un arbre sur disque coûte une lecture lente (si lire la mémoire prenait une seconde, lire sur un disque dur mécanique prendrait plus d&#x27;un jour), pourquoi un milliard de clés demandent trente niveaux dans un arbre binaire mais seulement quatre dans un arbre B, comment un nœud plein se scinde et envoie sa clé du milieu vers le haut, et pourquoi la plupart des bases de données et des systèmes de fichiers utilisent la variante appelée arbre B+.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-13.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/13/fr/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Arbres B : les arbres courts et larges des bases de données", "description": "Une base de données peut garder un milliard d'enregistrements sur disque et pourtant retrouver n'importe lequel en quelques lectures sur disque. L'astuce, c'est un arbre court et large. Nous voyons pourquoi chaque niveau d'un arbre sur disque coûte une lecture lente (si lire la mémoire prenait une seconde, lire sur un disque dur mécanique prendrait plus d'un jour), pourquoi un milliard de clés demandent trente niveaux dans un arbre binaire mais seulement quatre dans un arbre B, comment un nœud plein se scinde et envoie sa clé du milieu vers le haut, et pourquoi la plupart des bases de données et des systèmes de fichiers utilisent la variante appelée arbre B+.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-13.webp"], "uploadDate": "2026-11-24T21:00:00+08:00", "duration": "PT2M34S", "embedUrl": "https://www.youtube.com/embed/V4uDZHf7yqA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="fr">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Tous les épisodes</a> · D&#x27;une liste à l&#x27;appli de cartes · Épisode 13</p>
+      <h1 class="ep-title">Arbres B : les arbres courts et larges des bases de données</h1>
+      <div class="vplayer" data-yt="V4uDZHf7yqA" data-title="Arbres B : les arbres courts et larges des bases de données">
+        <button type="button" class="vplay" aria-label="Lire: Arbres B : les arbres courts et larges des bases de données">
+          <img src="../../../../assets/img/videos/dsa-13.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">En appuyant sur lecture, la vidéo se charge depuis YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/V4uDZHf7yqA" rel="noopener">Regarder sur YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">S&#x27;abonner sur YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Une base de données peut garder un milliard d&#x27;enregistrements sur disque et pourtant retrouver n&#x27;importe lequel en quelques lectures sur disque. L&#x27;astuce, c&#x27;est un arbre court et large.<br>Nous voyons pourquoi chaque niveau d&#x27;un arbre sur disque coûte une lecture lente (si lire la mémoire prenait une seconde, lire sur un disque dur mécanique prendrait plus d&#x27;un jour), pourquoi un milliard de clés demandent trente niveaux dans un arbre binaire mais seulement quatre dans un arbre B, comment un nœud plein se scinde et envoie sa clé du milieu vers le haut, et pourquoi la plupart des bases de données et des systèmes de fichiers utilisent la variante appelée arbre B+.</p>
+      <p class="ep-ai">Toutes les animations de cette vidéo sont dessinées avec du code, et la narration est une voix d&#x27;IA. Les comparaisons de vitesse sont approximatives.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Chapitres</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Un milliard d&#x27;enregistrements, quelques lectures</a></li>
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>Sur disque, un niveau, une lecture</a></li>
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=61" data-t="61" rel="noopener"><span class="t">1:01</span>Des nœuds larges</a></li>
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=86" data-t="86" rel="noopener"><span class="t">1:26</span>Plein ? Scindez-le</a></li>
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=114" data-t="114" rel="noopener"><span class="t">1:54</span>Arbres B+</a></li>
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=136" data-t="136" rel="noopener"><span class="t">2:16</span>La suite</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcription</h2>
+        <div class="ep-text">
+        <p>Une base de données peut garder un milliard d&#x27;enregistrements sur disque, et pourtant retrouver n&#x27;importe lequel en seulement quelques lectures sur disque. L&#x27;astuce, c&#x27;est un arbre court et large, avec des centaines de clés dans chaque nœud. Aujourd&#x27;hui : les arbres B, la forme qui se cache derrière presque toutes les bases de données.</p>
+        <p>La dernière fois, trouver quelque chose revenait à descendre dans l&#x27;arbre, un niveau à la fois. Quand l&#x27;arbre est stocké sur disque, chaque niveau est une lecture sur disque, et les lectures sur disque sont lentes. Si lire la mémoire prenait une seconde, une lecture sur SSD prendrait plus de dix minutes, et sur un disque dur mécanique, plus d&#x27;une journée. Un arbre binaire équilibré avec un milliard de clés a trente niveaux de profondeur. Ça fait trente lectures lentes.</p>
+        <p>Alors, rendons chaque nœud large. Un nœud garde des centaines de clés dans l&#x27;ordre, avec un enfant entre chaque paire, et le nœud entier arrive en une seule lecture. Avec cinq cents clés par nœud, quatre niveaux peuvent contenir plus de soixante milliards de clés. Quatre lectures au lieu de trente.</p>
+        <p>Voici un petit arbre, avec au plus trois clés par nœud. Ajoutez des nombres, et chacun tombe à sa place, dans l&#x27;ordre. Quand un nœud est plein, on le scinde : la clé du milieu monte d&#x27;un niveau, et les deux autres deviennent des nœuds distincts. Quand la racine elle-même est pleine, elle se scinde aussi, et l&#x27;arbre gagne un niveau, par le haut. Ainsi, toutes les feuilles restent toujours à la même profondeur.</p>
+        <p>La plupart des bases de données et des systèmes de fichiers utilisent une variante appelée arbre B+. Toutes les données se trouvent sur la rangée du bas, et les nœuds du bas sont reliés côte à côte. Pour trouver tout ce qui va de trente à soixante-dix, descendez une fois, puis parcourez simplement la rangée du bas.</p>
+        <p>Sur un disque lent, comptez les lectures, pas les étapes. Un arbre B garde ce compte minuscule en restant court et large. La prochaine fois : un arbre qui garde toujours l&#x27;élément le plus urgent au sommet. Les tas et les files de priorité. À bientôt.</p>
+        </div>
+        <p class="ep-close">Prochain épisode : les tas et les files de priorité, un arbre qui garde toujours l&#x27;élément le plus urgent au sommet.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../12/fr/"><span>Précédent · Épisode 12</span><b>Les arbres binaires de recherche et leur équilibre</b></a><div class="ep-pg next soon"><span>Suivant</span><b>L'épisode 14 sort le <time datetime="2026-11-25T21:00:00+08:00" data-at="2026-11-25T21:00:00+08:00" data-fmt="when">11-25 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

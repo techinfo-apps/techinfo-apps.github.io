@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>数据库为什么用矮胖的树：B 树 — 从一串数到地图导航 #13</title>
+<meta name="description" content="一个数据库可以在硬盘上存十亿条记录，找其中任何一条也只要读几次硬盘。诀窍是一棵又矮又胖的树。 我们来看：树放在硬盘上时，为什么每走一层都要付出一次很慢的读（如果读一次内存算一秒，读一次机械硬盘要一天多）；十亿个键为什么在二叉树里要三十层，在 B 树里只要四层；结点满了怎么劈开、把中间的键送上去；以及为什么大多数数据库和文件系统用的是它的变体 B+ 树。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/13/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/13/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/13/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/13/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/13/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/13/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/13/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/13/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/13/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="数据库为什么用矮胖的树：B 树 — 从一串数到地图导航 #13">
+<meta property="og:description" content="一个数据库可以在硬盘上存十亿条记录，找其中任何一条也只要读几次硬盘。诀窍是一棵又矮又胖的树。 我们来看：树放在硬盘上时，为什么每走一层都要付出一次很慢的读（如果读一次内存算一秒，读一次机械硬盘要一天多）；十亿个键为什么在二叉树里要三十层，在 B 树里只要四层；结点满了怎么劈开、把中间的键送上去；以及为什么大多数数据库和文件系统用的是它的变体 B+ 树。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-13.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/13/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "数据库为什么用矮胖的树：B 树", "description": "一个数据库可以在硬盘上存十亿条记录，找其中任何一条也只要读几次硬盘。诀窍是一棵又矮又胖的树。 我们来看：树放在硬盘上时，为什么每走一层都要付出一次很慢的读（如果读一次内存算一秒，读一次机械硬盘要一天多）；十亿个键为什么在二叉树里要三十层，在 B 树里只要四层；结点满了怎么劈开、把中间的键送上去；以及为什么大多数数据库和文件系统用的是它的变体 B+ 树。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-13.webp"], "uploadDate": "2026-11-24T21:00:00+08:00", "duration": "PT2M34S", "embedUrl": "https://www.youtube.com/embed/V4uDZHf7yqA", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一串数到地图导航 · 第 13 集</p>
+      <h1 class="ep-title">数据库为什么用矮胖的树：B 树</h1>
+      <div class="vplayer" data-yt="V4uDZHf7yqA" data-title="数据库为什么用矮胖的树：B 树">
+        <button type="button" class="vplay" aria-label="播放: 数据库为什么用矮胖的树：B 树">
+          <img src="../../../../assets/img/videos/dsa-13.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/V4uDZHf7yqA" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">一个数据库可以在硬盘上存十亿条记录，找其中任何一条也只要读几次硬盘。诀窍是一棵又矮又胖的树。<br>我们来看：树放在硬盘上时，为什么每走一层都要付出一次很慢的读（如果读一次内存算一秒，读一次机械硬盘要一天多）；十亿个键为什么在二叉树里要三十层，在 B 树里只要四层；结点满了怎么劈开、把中间的键送上去；以及为什么大多数数据库和文件系统用的是它的变体 B+ 树。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。速度对比都是大约的数。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>十亿条记录，读几次</a></li>
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>在硬盘上，层数就是读的次数</a></li>
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=61" data-t="61" rel="noopener"><span class="t">1:01</span>把结点做宽</a></li>
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=86" data-t="86" rel="noopener"><span class="t">1:26</span>满了就劈开</a></li>
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=114" data-t="114" rel="noopener"><span class="t">1:54</span>B+ 树</a></li>
+        <li><a href="https://youtu.be/V4uDZHf7yqA?t=136" data-t="136" rel="noopener"><span class="t">2:16</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>一个数据库可以在硬盘上存十亿条记录，找其中任何一条，也只要读几次硬盘。诀窍是一棵又矮又胖的树，每个结点里放几百个键。今天讲 B 树，几乎每个数据库背后都是它。</p>
+        <p>上一集，找东西就是沿着树一层层往下走。要是树放在硬盘上，每走一层就要读一次硬盘，而读硬盘很慢。如果读一次内存算一秒，读一次固态硬盘要十几分钟，读一次机械硬盘要一天多。装十亿个键的平衡二叉树有三十层深，就是三十次慢慢的读。</p>
+        <p>所以把每个结点做宽：一个结点按顺序放几百个键，每两个键之间连一个孩子，整个结点一次就读进来。每个结点五百个键，四层就能装六百多亿个键。读四次，不是三十次。</p>
+        <p>来看一棵小的，每个结点最多三个键。加进来的数，各自按顺序落到位置上。结点满了就劈开：中间那个键升一层，剩下两个各成一个结点。要是根自己满了，也一样劈开，树就从顶上长高一层。所以所有叶子永远在同一个深度。</p>
+        <p>大多数数据库和文件系统用的是一种变体，叫 B+ 树：数据都放在最底下一层，底层的结点一个挨一个串起来。要找 30 到 70 之间的所有数，往下走一次，然后沿着底层一路往右走就行。</p>
+        <p>在慢的硬盘上，要数的是读了几次，不是走了几步。B 树又矮又胖，读的次数就少得很。下一集讲一种总把最急的那个放在顶上的树：堆和优先队列。下集见。</p>
+        </div>
+        <p class="ep-close">下一集：堆和优先队列，一种总把最急的那个放在顶上的树。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../12/zh-cn/"><span>上一集 · 第 12 集</span><b>二叉搜索树，和它怎么保持平衡</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 14 集 <time datetime="2026-11-25T21:00:00+08:00" data-at="2026-11-25T21:00:00+08:00" data-fmt="when">11-25 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
