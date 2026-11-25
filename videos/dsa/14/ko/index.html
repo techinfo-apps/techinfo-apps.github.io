@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>무엇이 먼저일까? 힙과 우선순위 큐 — 숫자 목록에서 지도 앱까지 #14</title>
+<meta name="description" content="어떤 줄은 선착순이 아니에요. 가장 급한 일을 먼저 처리해야 하니까요. 힙은 가장 급한 것을 항상 맨 위에 둬요. 힙을 트리와 배열, 두 가지 모습으로 동시에 살펴보고, 새 숫자가 위로 떠오르고 마지막 숫자가 아래로 가라앉는 모습을 지켜보고(어느 쪽이든 교환은 대략 log n 번이에요), 이것을 우선순위 큐로 써 보고(운영체제와 지도 앱이 기대는 도구예요), 마지막으로 추가 공간 없이 제자리에서 정렬하는 힙 정렬로 마무리해요.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/14/ko/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/14/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/14/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/14/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/14/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/14/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/14/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/14/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/14/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="무엇이 먼저일까? 힙과 우선순위 큐 — 숫자 목록에서 지도 앱까지 #14">
+<meta property="og:description" content="어떤 줄은 선착순이 아니에요. 가장 급한 일을 먼저 처리해야 하니까요. 힙은 가장 급한 것을 항상 맨 위에 둬요. 힙을 트리와 배열, 두 가지 모습으로 동시에 살펴보고, 새 숫자가 위로 떠오르고 마지막 숫자가 아래로 가라앉는 모습을 지켜보고(어느 쪽이든 교환은 대략 log n 번이에요), 이것을 우선순위 큐로 써 보고(운영체제와 지도 앱이 기대는 도구예요), 마지막으로 추가 공간 없이 제자리에서 정렬하는 힙 정렬로 마무리해요.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-14.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/14/ko/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "무엇이 먼저일까? 힙과 우선순위 큐", "description": "어떤 줄은 선착순이 아니에요. 가장 급한 일을 먼저 처리해야 하니까요. 힙은 가장 급한 것을 항상 맨 위에 둬요. 힙을 트리와 배열, 두 가지 모습으로 동시에 살펴보고, 새 숫자가 위로 떠오르고 마지막 숫자가 아래로 가라앉는 모습을 지켜보고(어느 쪽이든 교환은 대략 log n 번이에요), 이것을 우선순위 큐로 써 보고(운영체제와 지도 앱이 기대는 도구예요), 마지막으로 추가 공간 없이 제자리에서 정렬하는 힙 정렬로 마무리해요.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-14.webp"], "uploadDate": "2026-11-25T21:00:00+08:00", "duration": "PT2M34S", "embedUrl": "https://www.youtube.com/embed/HsV6h88QoJs", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="ko">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">전체 목록</a> · 숫자 목록에서 지도 앱까지 · 14편</p>
+      <h1 class="ep-title">무엇이 먼저일까? 힙과 우선순위 큐</h1>
+      <div class="vplayer" data-yt="HsV6h88QoJs" data-title="무엇이 먼저일까? 힙과 우선순위 큐">
+        <button type="button" class="vplay" aria-label="재생: 무엇이 먼저일까? 힙과 우선순위 큐">
+          <img src="../../../../assets/img/videos/dsa-14.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">재생을 누르면 YouTube에서 영상을 불러옵니다.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/HsV6h88QoJs" rel="noopener">YouTube에서 보기</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">YouTube에서 구독</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">어떤 줄은 선착순이 아니에요. 가장 급한 일을 먼저 처리해야 하니까요. 힙은 가장 급한 것을 항상 맨 위에 둬요.<br>힙을 트리와 배열, 두 가지 모습으로 동시에 살펴보고, 새 숫자가 위로 떠오르고 마지막 숫자가 아래로 가라앉는 모습을 지켜보고(어느 쪽이든 교환은 대략 log n 번이에요), 이것을 우선순위 큐로 써 보고(운영체제와 지도 앱이 기대는 도구예요), 마지막으로 추가 공간 없이 제자리에서 정렬하는 힙 정렬로 마무리해요.</p>
+      <p class="ep-ai">이 영상의 애니메이션은 모두 코드로 그렸고, 내레이션은 AI 목소리예요.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">챕터</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>가장 급한 것부터</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=26" data-t="26" rel="noopener"><span class="t">0:26</span>힙은 어떻게 생겼을까</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=55" data-t="55" rel="noopener"><span class="t">0:55</span>위로 떠오르기</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=84" data-t="84" rel="noopener"><span class="t">1:24</span>아래로 가라앉기</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=98" data-t="98" rel="noopener"><span class="t">1:38</span>우선순위 큐</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=116" data-t="116" rel="noopener"><span class="t">1:56</span>힙 정렬</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=134" data-t="134" rel="noopener"><span class="t">2:14</span>다음 편 예고</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">전체 대본</h2>
+        <div class="ep-text">
+        <p>어떤 줄은 선착순이 아니에요. 가장 급한 일을 먼저 처리해야 하니까요. 힙은 가장 급한 것을 항상 맨 위에 두고, 하나를 넣거나 빼는 데 몇 단계밖에 걸리지 않아요. 오늘은 힙과 우선순위 큐를 알아봐요.</p>
+        <p>힙은 규칙이 딱 하나뿐인 트리예요. 모든 부모가 자식보다 크다는 거예요. 그래서 가장 큰 숫자가 항상 맨 위에 있어요. 한 줄씩 빈틈없이 채워지기 때문에, 11편에서 본 것처럼 배열에 딱 맞게 들어가요. 위에는 트리, 아래에는 배열이에요. 같은 숫자들이 간단한 산수로 이어져 있어요.</p>
+        <p>숫자를 하나 추가하려면, 맨 끝의 빈자리에 넣은 다음 위로 떠오르게 해요. 부모보다 큰 동안은 부모와 교환해요. 여기서는 9가 2, 5, 8을 차례로 넘어서 맨 위까지 올라가요. 숫자가 100만 개인 힙도 높이가 20층밖에 안 돼서, 교환은 많아야 20번쯤이에요.</p>
+        <p>맨 위의 숫자를 꺼내려면, 마지막 숫자를 그 자리로 옮긴 다음 아래로 가라앉게 해요. 더 큰 쪽 자식과 계속 교환해서, 자신보다 큰 자식이 없어질 때까지 해요.</p>
+        <p>이것이 우선순위 큐예요. 작업은 어떤 순서로 들어와도, 다음에 나오는 것은 항상 가장 급한 작업이에요. 운영체제는 다음에 어떤 프로그램을 실행할지 고르는 데 이것을 쓰고, 지도 앱은 다음에 어떤 길을 살펴볼지 고르는 데 써요.</p>
+        <p>맨 위를 계속 꺼내면, 숫자가 큰 것부터 차례로 나와요. 하나씩 배열의 끝으로 교환하면, 배열이 뒤에서부터 정렬된 채로 채워져요. 이것이 힙 정렬이에요. n log n 단계이고, 추가 공간은 전혀 필요 없어요.</p>
+        <p>힙은 가장 큰 것을 맨 위에 두고, 하나를 넣거나 꺼내는 데 log n 단계쯤 들어요. 우선순위 큐에 필요한 것은 그게 전부예요. 다음 편에서는 지금 가장 좋아 보이는 것을 매번 집어 드는 방법을 알아봐요. 이 탐욕 알고리즘의 발상은 언제 정말로 통할까요? 거기서 만나요.</p>
+        </div>
+        <p class="ep-close">다음 편: 탐욕 알고리즘이에요. 지금 가장 좋아 보이는 것을 집어 들지만, 그게 정말 통하는 건 언제일까요?</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../13/ko/"><span>이전 편 · 13편</span><b>데이터베이스가 낮고 넓은 트리를 쓰는 이유: B-트리</b></a><div class="ep-pg next soon"><span>다음 편</span><b>15편은 <time datetime="2026-11-26T21:00:00+08:00" data-at="2026-11-26T21:00:00+08:00" data-fmt="when">11-26 21:00 (UTC+8)</time>에 공개</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

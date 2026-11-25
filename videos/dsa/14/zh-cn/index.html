@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>谁先办：堆和优先队列 — 从一串数到地图导航 #14</title>
+<meta name="description" content="有些队伍不是先来先办，最急的事应该先办。堆让最急的那个永远待在顶上。 我们同时从树和数组两个样子看一个堆，看新来的数怎么往上浮、最后一个数怎么往下沉（两种都大约 log n 次交换），把它当优先队列用（操作系统和地图导航都靠它），最后看堆排序：原地排好，不用额外的地方。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/14/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/14/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/14/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/14/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/14/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/14/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/14/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/14/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/14/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="谁先办：堆和优先队列 — 从一串数到地图导航 #14">
+<meta property="og:description" content="有些队伍不是先来先办，最急的事应该先办。堆让最急的那个永远待在顶上。 我们同时从树和数组两个样子看一个堆，看新来的数怎么往上浮、最后一个数怎么往下沉（两种都大约 log n 次交换），把它当优先队列用（操作系统和地图导航都靠它），最后看堆排序：原地排好，不用额外的地方。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-14.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/14/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "谁先办：堆和优先队列", "description": "有些队伍不是先来先办，最急的事应该先办。堆让最急的那个永远待在顶上。 我们同时从树和数组两个样子看一个堆，看新来的数怎么往上浮、最后一个数怎么往下沉（两种都大约 log n 次交换），把它当优先队列用（操作系统和地图导航都靠它），最后看堆排序：原地排好，不用额外的地方。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-14.webp"], "uploadDate": "2026-11-25T21:00:00+08:00", "duration": "PT2M34S", "embedUrl": "https://www.youtube.com/embed/HsV6h88QoJs", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一串数到地图导航 · 第 14 集</p>
+      <h1 class="ep-title">谁先办：堆和优先队列</h1>
+      <div class="vplayer" data-yt="HsV6h88QoJs" data-title="谁先办：堆和优先队列">
+        <button type="button" class="vplay" aria-label="播放: 谁先办：堆和优先队列">
+          <img src="../../../../assets/img/videos/dsa-14.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/HsV6h88QoJs" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">有些队伍不是先来先办，最急的事应该先办。堆让最急的那个永远待在顶上。<br>我们同时从树和数组两个样子看一个堆，看新来的数怎么往上浮、最后一个数怎么往下沉（两种都大约 log n 次交换），把它当优先队列用（操作系统和地图导航都靠它），最后看堆排序：原地排好，不用额外的地方。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>最急的先办</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=26" data-t="26" rel="noopener"><span class="t">0:26</span>堆长什么样</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=55" data-t="55" rel="noopener"><span class="t">0:55</span>往上浮</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=84" data-t="84" rel="noopener"><span class="t">1:24</span>往下沉</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=98" data-t="98" rel="noopener"><span class="t">1:38</span>优先队列</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=116" data-t="116" rel="noopener"><span class="t">1:56</span>堆排序</a></li>
+        <li><a href="https://youtu.be/HsV6h88QoJs?t=134" data-t="134" rel="noopener"><span class="t">2:14</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>有些队伍不是先来先办，最急的事应该先办。堆让最急的那个永远待在顶上，加一个、拿一个都只要几步。今天讲：堆和优先队列。</p>
+        <p>堆是一棵只守一条规矩的树：每个父结点都比它的孩子大。所以最大的数永远在顶上。它一行行排满、中间不留空，所以正好能放进一个数组，就像第 11 集那样。上面是树，下面是数组：同一批数，靠简单的算术连在一起。</p>
+        <p>加一个数：先放在最后一个空位，再让它往上浮。只要它比父结点大，就和父结点换。这里 9 越过 2、5、8，一直浮到顶上。一百万个数的堆也只有二十层高，所以最多换二十次左右。</p>
+        <p>拿走顶上的：把最后一个数挪到顶上，再让它往下沉。每次和较大的那个孩子换，一直换到没有孩子比它大。</p>
+        <p>这就是优先队列：任务随便什么顺序进来，出去的总是最急的那个。操作系统用它挑下一个运行哪个程序，地图导航用它挑下一条该看哪条路。</p>
+        <p>一直拿顶上的，数就从大到小出来。每拿一个就换到数组末尾，数组就从后往前排好了。这就是堆排序：n log n 步，一点额外的地方都不用。</p>
+        <p>堆把最大的放在顶上，加一个、拿一个都大约 log n 步，优先队列要的就是这个。下一集：每一步都挑眼前看起来最好的。这种贪心的想法，什么时候真管用？下集见。</p>
+        </div>
+        <p class="ep-close">下一集：贪心算法。每一步都挑眼前最好的，可它什么时候真的管用？</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../13/zh-cn/"><span>上一集 · 第 13 集</span><b>数据库为什么用矮胖的树：B 树</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 15 集 <time datetime="2026-11-26T21:00:00+08:00" data-at="2026-11-26T21:00:00+08:00" data-fmt="when">11-26 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
