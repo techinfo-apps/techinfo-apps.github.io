@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Elige lo mejor del momento: los algoritmos voraces — De una lista a tu app de mapas #15</title>
+<meta name="description" content="Un algoritmo voraz siempre toma lo que parece mejor ahora mismo y nunca da marcha atrás. A veces es perfecto, y a veces se equivoca en silencio. Damos el cambio con la menor cantidad de monedas, metemos el máximo de reuniones en una sola sala (si eliges la que empieza primero caben cuatro, y si eliges la que termina primero caben cinco, el máximo posible), vemos cómo falla el algoritmo voraz cuando las monedas son 1, 3 y 4, y encontramos la regla para saber cuándo se puede confiar en él.">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/15/es/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/15/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/15/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/15/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/15/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/15/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/15/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/15/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/15/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="Elige lo mejor del momento: los algoritmos voraces — De una lista a tu app de mapas #15">
+<meta property="og:description" content="Un algoritmo voraz siempre toma lo que parece mejor ahora mismo y nunca da marcha atrás. A veces es perfecto, y a veces se equivoca en silencio. Damos el cambio con la menor cantidad de monedas, metemos el máximo de reuniones en una sola sala (si eliges la que empieza primero caben cuatro, y si eliges la que termina primero caben cinco, el máximo posible), vemos cómo falla el algoritmo voraz cuando las monedas son 1, 3 y 4, y encontramos la regla para saber cuándo se puede confiar en él.">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-15.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/15/es/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "Elige lo mejor del momento: los algoritmos voraces", "description": "Un algoritmo voraz siempre toma lo que parece mejor ahora mismo y nunca da marcha atrás. A veces es perfecto, y a veces se equivoca en silencio. Damos el cambio con la menor cantidad de monedas, metemos el máximo de reuniones en una sola sala (si eliges la que empieza primero caben cuatro, y si eliges la que termina primero caben cinco, el máximo posible), vemos cómo falla el algoritmo voraz cuando las monedas son 1, 3 y 4, y encontramos la regla para saber cuándo se puede confiar en él.", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-15.webp"], "uploadDate": "2026-11-26T21:00:00+08:00", "duration": "PT2M30S", "embedUrl": "https://www.youtube.com/embed/8JiYLwevXJM", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="es">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">Todos los episodios</a> · De una lista a tu app de mapas · Episodio 15</p>
+      <h1 class="ep-title">Elige lo mejor del momento: los algoritmos voraces</h1>
+      <div class="vplayer" data-yt="8JiYLwevXJM" data-title="Elige lo mejor del momento: los algoritmos voraces">
+        <button type="button" class="vplay" aria-label="Reproducir: Elige lo mejor del momento: los algoritmos voraces">
+          <img src="../../../../assets/img/videos/dsa-15.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">Al pulsar reproducir, el video se carga desde YouTube.</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/8JiYLwevXJM" rel="noopener">Ver en YouTube</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">Suscribirse en YouTube</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">Un algoritmo voraz siempre toma lo que parece mejor ahora mismo y nunca da marcha atrás. A veces es perfecto, y a veces se equivoca en silencio.<br>Damos el cambio con la menor cantidad de monedas, metemos el máximo de reuniones en una sola sala (si eliges la que empieza primero caben cuatro, y si eliges la que termina primero caben cinco, el máximo posible), vemos cómo falla el algoritmo voraz cuando las monedas son 1, 3 y 4, y encontramos la regla para saber cuándo se puede confiar en él.</p>
+      <p class="ep-ai">Todas las animaciones de este video están dibujadas con código, y la narración es una voz de IA.</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">Capítulos</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>Tomar lo que parece mejor</a></li>
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=34" data-t="34" rel="noopener"><span class="t">0:34</span>Dar el cambio</a></li>
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=55" data-t="55" rel="noopener"><span class="t">0:55</span>Encajar reuniones</a></li>
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=85" data-t="85" rel="noopener"><span class="t">1:25</span>Cuando el algoritmo voraz falla</a></li>
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=107" data-t="107" rel="noopener"><span class="t">1:47</span>Cuando el algoritmo voraz funciona</a></li>
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=129" data-t="129" rel="noopener"><span class="t">2:09</span>Qué sigue</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">Transcripción</h2>
+        <div class="ep-text">
+        <p>Para formar 86 con la menor cantidad de monedas, toma la moneda más grande que quepa, una y otra vez. 50, 20, 10, 5, 1. Quedarse siempre con lo que parece mejor ahora mismo se llama algoritmo voraz. A veces es perfecto, y a veces se equivoca en silencio. Hoy: cuándo funcionan los algoritmos voraces.</p>
+        <p>Con monedas de 1, 5, 10, 20 y 50, el algoritmo voraz siempre usa la menor cantidad de monedas. Cinco monedas para formar 86. Y nunca da marcha atrás: una vez que una moneda está puesta, se queda puesta.</p>
+        <p>Ahora, una sala y nueve reuniones que se solapan. ¿Cuántas puedes meter sin que haya ningún choque? Primera idea voraz: elegir siempre la reunión que empieza más temprano. Así solo caben cuatro. Una regla mejor: elegir siempre la reunión que termina más temprano, para que la sala quede libre lo antes posible. Así caben cinco, el máximo posible.</p>
+        <p>Pero cambia las monedas a 1, 3 y 4, y forma 6. El algoritmo voraz toma el 4, luego el 1 y luego otro 1. Tres monedas. Sin embargo, 3 más 3 necesita solo dos. Tomar el 4 parecía lo mejor, pero bloqueó la mejor respuesta más adelante.</p>
+        <p>Así que un algoritmo voraz funciona cuando la mejor elección de ahora nunca bloquea una buena elección más adelante. Con las reuniones, terminar pronto solo deja más espacio para las demás. Cuando eso no se cumple, hay que probar todas las opciones sin repetir trabajo. Eso es programación dinámica, en el episodio 22.</p>
+        <p>Un algoritmo voraz es rápido y sencillo: una mirada, una elección, sin marcha atrás. Solo asegúrate de que la mejor elección de hoy no pueda perjudicarte mañana. La próxima vez: una idea voraz que funciona muy bien, dar los códigos más cortos a las letras más comunes. La codificación de Huffman. Nos vemos allí.</p>
+        </div>
+        <p class="ep-close">Próximo episodio: la codificación de Huffman, una idea voraz que funciona muy bien.</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../14/es/"><span>Anterior · Episodio 14</span><b>¿Quién va primero? Montículos y colas de prioridad</b></a><div class="ep-pg next soon"><span>Siguiente</span><b>El episodio 16 sale el <time datetime="2026-11-27T21:00:00+08:00" data-at="2026-11-27T21:00:00+08:00" data-fmt="when">11-27 21:00 (UTC+8)</time></b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>

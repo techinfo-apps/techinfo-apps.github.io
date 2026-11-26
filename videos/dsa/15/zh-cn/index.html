@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>每一步挑眼前最好的：贪心 — 从一串数到地图导航 #15</title>
+<meta name="description" content="贪心算法每一步都拿眼前看起来最好的，而且从不回头。有时它刚好最好，有时它悄悄地错了。 我们用最少的硬币找零，在一个房间里排进最多的会（挑最早开始的只排进四个，挑最早结束的排进五个，已经是最多），看面额换成 1、3、4 时贪心怎么失灵，最后找出什么时候可以放心用贪心。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/15/zh-cn/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/15/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/15/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/15/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/15/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/15/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/15/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/15/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/15/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="每一步挑眼前最好的：贪心 — 从一串数到地图导航 #15">
+<meta property="og:description" content="贪心算法每一步都拿眼前看起来最好的，而且从不回头。有时它刚好最好，有时它悄悄地错了。 我们用最少的硬币找零，在一个房间里排进最多的会（挑最早开始的只排进四个，挑最早结束的排进五个，已经是最多），看面额换成 1、3、4 时贪心怎么失灵，最后找出什么时候可以放心用贪心。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-15.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/15/zh-cn/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "每一步挑眼前最好的：贪心", "description": "贪心算法每一步都拿眼前看起来最好的，而且从不回头。有时它刚好最好，有时它悄悄地错了。 我们用最少的硬币找零，在一个房间里排进最多的会（挑最早开始的只排进四个，挑最早结束的排进五个，已经是最多），看面额换成 1、3、4 时贪心怎么失灵，最后找出什么时候可以放心用贪心。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-15.webp"], "uploadDate": "2026-11-26T21:00:00+08:00", "duration": "PT2M30S", "embedUrl": "https://www.youtube.com/embed/8JiYLwevXJM", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-CN">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部视频</a> · 从一串数到地图导航 · 第 15 集</p>
+      <h1 class="ep-title">每一步挑眼前最好的：贪心</h1>
+      <div class="vplayer" data-yt="8JiYLwevXJM" data-title="每一步挑眼前最好的：贪心">
+        <button type="button" class="vplay" aria-label="播放: 每一步挑眼前最好的：贪心">
+          <img src="../../../../assets/img/videos/dsa-15.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放后，视频从 YouTube 加载。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/8JiYLwevXJM" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上订阅</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">贪心算法每一步都拿眼前看起来最好的，而且从不回头。有时它刚好最好，有时它悄悄地错了。<br>我们用最少的硬币找零，在一个房间里排进最多的会（挑最早开始的只排进四个，挑最早结束的排进五个，已经是最多），看面额换成 1、3、4 时贪心怎么失灵，最后找出什么时候可以放心用贪心。</p>
+      <p class="ep-ai">这个视频里的每一段动画，都是用代码画出来的；旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章节</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>拿眼前最好的</a></li>
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=34" data-t="34" rel="noopener"><span class="t">0:34</span>找零</a></li>
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=55" data-t="55" rel="noopener"><span class="t">0:55</span>排会议</a></li>
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=85" data-t="85" rel="noopener"><span class="t">1:25</span>贪心失灵的时候</a></li>
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=107" data-t="107" rel="noopener"><span class="t">1:47</span>贪心什么时候管用</a></li>
+        <li><a href="https://youtu.be/8JiYLwevXJM?t=129" data-t="129" rel="noopener"><span class="t">2:09</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>要用最少的硬币凑出 86，就一次次拿能放下的最大那枚：50、20、10、5、1。每一步都拿眼前看起来最好的，这叫贪心算法。有时它刚好最好，有时它悄悄地错了。今天讲：贪心什么时候管用。</p>
+        <p>面额是 1、5、10、20、50 的时候，贪心用的硬币总是最少。凑 86 只要五枚。而且它从不回头：一枚硬币放下了，就不再拿起来。</p>
+        <p>再看一个房间、九个互相重叠的会。最多能排进几个，又互不冲突？第一种贪心：总挑最早开始的。这样只排进四个。更好的规则：总挑最早结束的，好让房间尽快空出来。这样排进五个，已经是最多了。</p>
+        <p>可要是面额换成 1、3、4，凑 6。贪心先拿 4，再拿 1，再拿 1：三枚。可 3 加 3 只要两枚。先拿 4 看着最好，却把后面更好的答案堵死了。</p>
+        <p>所以，贪心管用的前提是：现在最好的选择，不会堵死以后的好选择。排会议时，早结束只会给后面留出更多地方。不满足的时候，就得把各种选法都试一遍，又不重复算，这就是第 22 集的动态规划。</p>
+        <p>贪心又快又简单：看一眼，选一个，不回头。只是得先确认，今天最好的选择不会坑了明天。下一集讲一个特别好用的贪心：让最常用的字母用最短的编码，叫哈夫曼编码。下集见。</p>
+        </div>
+        <p class="ep-close">下一集：哈夫曼编码，一个特别好用的贪心。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../14/zh-cn/"><span>上一集 · 第 14 集</span><b>谁先办：堆和优先队列</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 16 集 <time datetime="2026-11-27T21:00:00+08:00" data-at="2026-11-27T21:00:00+08:00" data-fmt="when">11-27 21:00 (UTC+8)</time> 上线</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
