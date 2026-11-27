@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="zh-TW">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>常用的字用短碼：霍夫曼編碼 — 從一串數到地圖導航 #16</title>
+<meta name="description" content="一個字母 8 位元，「she sells sea shells」要 160 位元。常見的字母用短碼、少見的字母用長碼，只要 49 位元。 我們數一數每個字母出現幾次，一遍遍把最少見的兩個合成一個（這是貪婪的想法，由堆積負責挑出最小的兩個），看一棵樹長出來。往左寫 0、往右寫 1，從頂端到字母的路就是它的碼。然後把 49 位元拆回原句，看看為什麼不需要分隔符號也拆得開，最後找出 zip 壓縮檔、PNG 圖片和 JPEG 照片裡的霍夫曼編碼。">
+<link rel="canonical" href="https://techinfo-apps.github.io/videos/dsa/16/zh-tw/">
+<meta name="theme-color" content="#000000">
+<link rel="icon" href="../../../../assets/img/favicon-64.png">
+<link rel="stylesheet" href="../../../../assets/site.css">
+<link rel="alternate" hreflang="en" href="https://techinfo-apps.github.io/videos/dsa/16/" data-lang="en" data-href="../">
+<link rel="alternate" hreflang="zh-Hans" href="https://techinfo-apps.github.io/videos/dsa/16/zh-cn/" data-lang="zh-CN" data-href="../zh-cn/">
+<link rel="alternate" hreflang="zh-Hant" href="https://techinfo-apps.github.io/videos/dsa/16/zh-tw/" data-lang="zh-TW" data-href="../zh-tw/">
+<link rel="alternate" hreflang="ja" href="https://techinfo-apps.github.io/videos/dsa/16/ja/" data-lang="ja" data-href="../ja/">
+<link rel="alternate" hreflang="ko" href="https://techinfo-apps.github.io/videos/dsa/16/ko/" data-lang="ko" data-href="../ko/">
+<link rel="alternate" hreflang="es" href="https://techinfo-apps.github.io/videos/dsa/16/es/" data-lang="es" data-href="../es/">
+<link rel="alternate" hreflang="fr" href="https://techinfo-apps.github.io/videos/dsa/16/fr/" data-lang="fr" data-href="../fr/">
+<link rel="alternate" hreflang="x-default" href="https://techinfo-apps.github.io/videos/dsa/16/">
+<meta property="og:type" content="video.other">
+<meta property="og:title" content="常用的字用短碼：霍夫曼編碼 — 從一串數到地圖導航 #16">
+<meta property="og:description" content="一個字母 8 位元，「she sells sea shells」要 160 位元。常見的字母用短碼、少見的字母用長碼，只要 49 位元。 我們數一數每個字母出現幾次，一遍遍把最少見的兩個合成一個（這是貪婪的想法，由堆積負責挑出最小的兩個），看一棵樹長出來。往左寫 0、往右寫 1，從頂端到字母的路就是它的碼。然後把 49 位元拆回原句，看看為什麼不需要分隔符號也拆得開，最後找出 zip 壓縮檔、PNG 圖片和 JPEG 照片裡的霍夫曼編碼。">
+<meta property="og:image" content="https://techinfo-apps.github.io/assets/img/videos/dsa-16.webp">
+<meta property="og:url" content="https://techinfo-apps.github.io/videos/dsa/16/zh-tw/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "VideoObject", "name": "常用的字用短碼：霍夫曼編碼", "description": "一個字母 8 位元，「she sells sea shells」要 160 位元。常見的字母用短碼、少見的字母用長碼，只要 49 位元。 我們數一數每個字母出現幾次，一遍遍把最少見的兩個合成一個（這是貪婪的想法，由堆積負責挑出最小的兩個），看一棵樹長出來。往左寫 0、往右寫 1，從頂端到字母的路就是它的碼。然後把 49 位元拆回原句，看看為什麼不需要分隔符號也拆得開，最後找出 zip 壓縮檔、PNG 圖片和 JPEG 照片裡的霍夫曼編碼。", "thumbnailUrl": ["https://techinfo-apps.github.io/assets/img/videos/dsa-16.webp"], "uploadDate": "2026-11-27T21:00:00+08:00", "duration": "PT2M42S", "embedUrl": "https://www.youtube.com/embed/QDMTcrR7_i4", "inLanguage": "en", "publisher": {"@type": "Organization", "name": "Technology Information", "url": "https://techinfo-apps.github.io/"}}</script>
+</head>
+<body data-root="../../../../" data-page-lang="zh-TW">
+
+<header class="nav">
+  <div class="wrap">
+    <a class="brand" href="../../../../">Technology Information</a>
+    <nav class="links">
+      <a href="../../../../unitctrl/" data-i18n="nav.unitctrl">UnitCtrl</a>
+      <a href="../../../../broomy/" data-i18n="nav.broomy">Broomy</a>
+      <a href="../../../../#unitplayer" data-i18n="nav.unitplayer">UnitPlayer</a>
+      <a href="../../../../aiban/" data-i18n="nav.aiban">AI Ban Simulator</a>
+      <a href="../../../../tideline/" data-i18n="nav.tideline">Tideline</a>
+      <a href="../../../../videos/" data-i18n="nav.videos">Tutorials</a>
+    </nav>
+    <label class="lang">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.7 3.8 5.7 3.8 9s-1.3 6.3-3.8 9M12 3c-2.5 2.7-3.8 5.7-3.8 9s1.3 6.3 3.8 9"/></svg>
+      <select class="lang-pick" aria-label="Language">
+        <option value="en" lang="en">English</option>
+        <option value="zh-CN" lang="zh-CN">简体中文</option>
+        <option value="zh-TW" lang="zh-TW">繁體中文</option>
+        <option value="ja" lang="ja">日本語</option>
+        <option value="ko" lang="ko">한국어</option>
+        <option value="es" lang="es">Español</option>
+        <option value="fr" lang="fr">Français</option>
+      </select>
+    </label>
+  </div>
+</header>
+
+<main>
+  <section class="ep dark">
+    <div class="wrap">
+      <p class="ep-crumb"><a href="../../../../videos/">全部影片</a> · 從一串數到地圖導航 · 第 16 集</p>
+      <h1 class="ep-title">常用的字用短碼：霍夫曼編碼</h1>
+      <div class="vplayer" data-yt="QDMTcrR7_i4" data-title="常用的字用短碼：霍夫曼編碼">
+        <button type="button" class="vplay" aria-label="播放: 常用的字用短碼：霍夫曼編碼">
+          <img src="../../../../assets/img/videos/dsa-16.webp" alt="" width="960" height="540">
+          <span class="vplay-ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l13-7.5z"/></svg></span>
+        </button>
+      </div>
+      <p class="vnote">按下播放後，影片從 YouTube 載入。</p>
+      <div class="ep-actions">
+        <a class="btn" href="https://youtu.be/QDMTcrR7_i4" rel="noopener">在 YouTube 上看</a>
+        <a class="btn ghost" href="https://www.youtube.com/@TechInForFree?sub_confirmation=1" rel="noopener">在 YouTube 上訂閱</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="ep-body">
+    <div class="wrap">
+      <p class="ep-intro">一個字母 8 位元，「she sells sea shells」要 160 位元。常見的字母用短碼、少見的字母用長碼，只要 49 位元。<br>我們數一數每個字母出現幾次，一遍遍把最少見的兩個合成一個（這是貪婪的想法，由堆積負責挑出最小的兩個），看一棵樹長出來。往左寫 0、往右寫 1，從頂端到字母的路就是它的碼。然後把 49 位元拆回原句，看看為什麼不需要分隔符號也拆得開，最後找出 zip 壓縮檔、PNG 圖片和 JPEG 照片裡的霍夫曼編碼。</p>
+      <p class="ep-ai">這支影片裡的每一段動畫，都是用程式碼畫出來的，旁白是 AI 配音。</p>
+    </div>
+    <div class="wrap ep-grid">
+      <aside class="ep-side">
+        <h2 class="ep-h">章節</h2>
+        <ol class="chapters">
+        <li><a href="https://youtu.be/QDMTcrR7_i4?t=0" data-t="0" rel="noopener"><span class="t">0:00</span>常用的字用短碼</a></li>
+        <li><a href="https://youtu.be/QDMTcrR7_i4?t=24" data-t="24" rel="noopener"><span class="t">0:24</span>數一數</a></li>
+        <li><a href="https://youtu.be/QDMTcrR7_i4?t=43" data-t="43" rel="noopener"><span class="t">0:43</span>合成一棵樹</a></li>
+        <li><a href="https://youtu.be/QDMTcrR7_i4?t=79" data-t="79" rel="noopener"><span class="t">1:19</span>讀出碼</a></li>
+        <li><a href="https://youtu.be/QDMTcrR7_i4?t=108" data-t="108" rel="noopener"><span class="t">1:48</span>拆回原句</a></li>
+        <li><a href="https://youtu.be/QDMTcrR7_i4?t=126" data-t="126" rel="noopener"><span class="t">2:06</span>用在哪裡</a></li>
+        <li><a href="https://youtu.be/QDMTcrR7_i4?t=142" data-t="142" rel="noopener"><span class="t">2:22</span>下一集</a></li>
+        </ol>
+      </aside>
+      <article class="ep-main">
+        <h2 class="ep-h">文字稿</h2>
+        <div class="ep-text">
+        <p>She sells sea shells，一共 20 個字元。每個 8 位元，就是 160 位元。常見的字母用短碼，少見的字母用長碼，同一句話只要 49 位元。今天要講：霍夫曼編碼。</p>
+        <p>在第一季第 6 集裡，每個字母都佔用同樣的 8 位元，不管常見還是少見。可是在這句話裡，s 出現了六次，a 卻只出現一次。</p>
+        <p>霍夫曼的做法是貪婪的：拿出最少見的兩個，合成一個，次數加起來。然後再做一次。現在最小的兩個是 3 和 3，接著是 4 和 4，再來是 6 和 6。一直合到只剩一個：一棵樹。最少見的字母在最深處，最常見的離頂端最近。一次又一次拿出最小的兩個，正是第 14 集那個堆積最拿手的工作。</p>
+        <p>現在，在每一根往左的樹枝上寫 0，往右的樹枝上寫 1。從頂端一路走到一個字母的這條路，就是它的碼。s、e、l 各兩位元，空格三位元，h 和 a 各四位元。照次數一個個加起來，整句話現在只要 49 位元，而不是 160 位元。</p>
+        <p>而且這串位元自己就能拆開，因為沒有任何一個碼是另一個碼的開頭。從頂端出發，跟著每一個位元往下走，走到字母就記下來，再跳回頂端。</p>
+        <p>zip 壓縮檔、PNG 圖片和 JPEG 照片，裡面都用了霍夫曼編碼。碼表也得一起存起來，不過跟一個很長的檔案比起來，它小得不得了。</p>
+        <p>數一數字母，把最少見的兩個合起來，再重複。這個貪婪的迴圈，給出的是一個字母配一個碼時最短的編碼。下一集：在一大段文字裡找一個詞，又不用一遍遍重新比對同樣的字母。我們下集見。</p>
+        </div>
+        <p class="ep-close">下一集：在一大段文字裡找一個詞，又不用一遍遍重新比對同樣的字母。</p>
+      </article>
+    </div>
+    <nav class="wrap ep-pager"><a class="ep-pg prev" href="../../15/zh-tw/"><span>上一集 · 第 15 集</span><b>每一步挑眼前最好的：貪婪演算法</b></a><div class="ep-pg next soon"><span>下一集</span><b>第 17 集 <time datetime="2026-11-28T21:00:00+08:00" data-at="2026-11-28T21:00:00+08:00" data-fmt="when">11-28 21:00 (UTC+8)</time> 上線</b></div></nav>
+  </section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <span class="social">
+      <a class="ico" href="https://www.youtube.com/@TechInForFree" rel="noopener" aria-label="YouTube" title="YouTube"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31.3 31.3 0 0 0 0 12a31.3 31.3 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31.3 31.3 0 0 0 24 12a31.3 31.3 0 0 0-.5-5.8zM9.6 15.6V8.4l6.2 3.6-6.2 3.6z"/></svg></a>
+      <a class="ico" href="https://x.com/TechInfoApps" rel="noopener" aria-label="X" title="X"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+      <a class="ico" href="mailto:techinfor404@gmail.com" data-i18n-attr="aria-label:foot.contact" aria-label="Contact" title="techinfor404@gmail.com"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg></a>
+    </span>
+    <button class="coffee-link" type="button" data-open="coffee"><img src="../../../../assets/img/coffee-cup.png" alt="" width="18" height="18"><span data-i18n="coffee.link">Buy the Developer a Coffee…</span></button>
+    <span class="copy">© 2026 Technology Information</span>
+  </div>
+</footer>
+
+<dialog id="coffee" class="coffee" aria-labelledby="coffee-h">
+  <form method="dialog" class="x"><button data-i18n-attr="aria-label:coffee.close" aria-label="Close">×</button></form>
+  <img class="cup" src="../../../../assets/img/coffee-cup.png" alt="" width="64" height="64">
+  <h3 id="coffee-h" data-i18n="coffee.h">Buy the Developer a Coffee</h3>
+  <p data-i18n="coffee.p1">Entirely up to you: it works the same either way.</p>
+  <p data-i18n="coffee.p2">Every cup turns into the next update.</p>
+  <div class="codes">
+    <figure><img src="../../../../assets/img/donate/wechat.webp" alt="WeChat Pay QR code" width="398" height="540" loading="lazy"><figcaption data-i18n="coffee.wechat">WeChat Pay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/alipay.webp" alt="Alipay QR code" width="360" height="540" loading="lazy"><figcaption data-i18n="coffee.alipay">Alipay</figcaption></figure>
+    <figure><img src="../../../../assets/img/donate/paypal.webp" alt="PayPal QR code" width="454" height="540" loading="lazy"><figcaption data-i18n="coffee.paypal">PayPal</figcaption></figure>
+  </div>
+</dialog>
+
+<script src="../../../../assets/strings.js"></script>
+<script src="../../../../assets/site.js"></script>
+<script src="../../../../assets/videos.js"></script>
+</body>
+</html>
